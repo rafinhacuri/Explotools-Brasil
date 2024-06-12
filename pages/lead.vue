@@ -22,8 +22,8 @@ async function salvarLead(){
   if(!res) return finish({ error: true })
 
   finish()
-  navigateTo('/obrigado')
-  return useToast().add({ title: res, icon: 'i-heroicons-check-badge', color: 'green' })
+  useToast().add({ title: res, icon: 'i-heroicons-check-badge', color: 'green' })
+  return navigateTo('/obrigado')
 }
 
 const items = computed(() => {
@@ -70,7 +70,7 @@ function ScrollToDiv(targetId: string){
           Como fabricantes, temos controle total sobre o processo, garantindo eficiência e competitividade. Proporcionamos a solução ideal para empresas que buscam <span class="text-[#FD0116]">aumentar a produtividade</span> e economizar em suas operações de sondagem, com resultados visíveis em apenas 30 dias de uso
         </p>
       </div>
-      <div id="card" class="flex max-h-[550px] justify-between space-x-10 p-12 ">
+      <div id="card" class="flex max-h-[500px] justify-between space-x-10 p-12 ">
         <UCard class="max-w-[500px]">
           <template #header>
             Inscreva-se aqui para mais informações:
