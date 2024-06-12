@@ -4,6 +4,23 @@ const email = ref('')
 const telefone = ref('')
 const empresa = ref('')
 const cargo = ref('')
+
+const items = computed(() => {
+  const fotos: string[] = [`/fundo.jpg`, `/fundo.jpg`, `/fundo.jpg`, `/fundo.jpg`, `/fundo.jpg`]
+
+  return fotos
+})
+
+const carouselRef = ref()
+onMounted(() => {
+  setInterval(() => {
+    if(!carouselRef.value) return
+
+    if(carouselRef.value.page === carouselRef.value.pages) return carouselRef.value.select(0)
+
+    carouselRef.value.next()
+  }, 3000)
+})
 </script>
 
 <template>
@@ -27,7 +44,7 @@ const cargo = ref('')
           Como fabricantes, temos controle total sobre o processo, garantindo eficiência e competitividade. Proporcionamos a solução ideal para empresas que buscam <span class="text-green-500">aumentar a produtividade</span> e economizar em suas operações de sondagem, com resultados visíveis em apenas 30 dias de uso
         </p>
       </div>
-      <div class="p-12">
+      <div class="flex justify-between space-x-10 p-12">
         <UCard class="max-w-[500px]">
           <template #header>
             inscreva-se aqui para mais informações
@@ -40,9 +57,12 @@ const cargo = ref('')
             <UInput v-model="cargo" color="primary" variant="outline" placeholder="Cargo" />
           </div>
           <template #footer>
-            <Placeholder class="h-8" />
+            <UButton icon="i-heroicons-pencil-square" size="sm" color="white" variant="solid" label="Quero ter acesso a esses produtos em primeira mão!" />
           </template>
         </UCard>
+        <UCarousel ref="carouselRef" v-slot="{ item }" :items="items" :ui="{ item: 'basis-full' }" class="w-full overflow-hidden rounded-lg md:w-3/5" arrows indicators>
+          <img :src="item" class="w-full" draggable="false" :alt="item">
+        </UCarousel>
       </div>
     </div>
   </section>
