@@ -21,7 +21,7 @@ async function login(){
     return finish()
   }
 
-  const res = await $fetch('/api/routes/autenticacao', { method: 'post', body: body.data })
+  const res = await $fetch('/auth', { method: 'post', body: body.data })
     .catch(error => { toast.add({ title: error.data.message, icon: 'i-heroicons-exclamation-triangle', color: 'red' }) })
 
   finish({ error: true })
