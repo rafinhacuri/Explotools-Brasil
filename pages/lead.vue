@@ -8,6 +8,15 @@ defineOgImageComponent('NuxtSeo', { theme: '#3FA1B0', colorMode: 'dark' })
 
 const { start, finish } = useLoadingIndicator()
 
+const selectedInterese = ref()
+const Interese = ref([
+  { name: 'New York' },
+  { name: 'Rome' },
+  { name: 'London' },
+  { name: 'Istanbul' },
+  { name: 'Paris' },
+])
+
 const newLead = ref<Lead>({ nome: '', email: '', telefone: '', empresa: '', cargo: '' })
 
 async function salvarLead(){
@@ -67,42 +76,43 @@ function ScrollToDiv(targetId: string){
         </p>
         <div class="flex flex-col items-center justify-center p-4">
           <p class="mt-10 max-w-[1000px] text-center text-sm font-semibold text-white md:text-lg">
-            Um dos <span class="text-[#FD0116]">maiores</span> desafios enfrentados pelas empresas de sondagem rotativa diamantada no Brasil é o <span class=" text-[#FD0116]">difícil</span> acesso a materiais de qualidade com preços justos. Muitas vezes, encontram-se produtos importados de alta qualidade, porém com <span class="text-[#FD0116]">valores elevados</span>, ou materiais nacionais mais acessíveis, porém de qualidade inferior.
+            Um dos maiores desafios enfrentados pelas <span class="text-[#FD0116]">empresas de sondagem rotativa diamantada</span> no Brasil é o difícil acesso a <span class="text-[#FD0116]">materiais de qualidade com preços justos</span>. Muitas vezes, encontram-se produtos importados de alta qualidade, porém com valores elevados, ou materiais nacionais mais acessíveis, porém de qualidade inferior.
           </p>
           <p class="mt-10 max-w-[1000px] text-center text-sm font-semibold text-white md:text-lg">
-            Nossa proposta é oferecer <span class="text-[#FD0116]">produtos de qualidade</span> importada para sondagem a <span class="text-[#FD0116]">preços acessíveis</span>, permitindo uma redução de custos significativa sem comprometer a qualidade e a produtividade.
+            <span class="text-[#FD0116]">Nossa proposta é oferecer produtos de qualidade importada para sondagem a preços acessíveis</span>, permitindo uma redução de custos significativa sem comprometer a qualidade e a produtividade.
           </p>
           <p class="mt-10 max-w-[1000px] text-center text-sm font-semibold text-white md:text-lg">
-            Como fabricantes, temos controle total sobre o processo, garantindo eficiência e competitividade. Proporcionamos a solução ideal para empresas que buscam <span class="text-[#FD0116]">aumentar a produtividade</span> e economizar em suas operações de sondagem, com resultados visíveis em apenas 30 dias de uso.
+            Como <span class="text-[#FD0116]">fabricantes</span>, temos controle total sobre o processo, <span class="text-[#FD0116]">garantindo eficiência e competitividade</span>. Proporcionamos a solução ideal para empresas que buscam aumentar a produtividade e economizar em suas operações de sondagem, com resultados visíveis em apenas 30 dias de uso.
           </p>
         </div>
 
         <div id="card" data-aos="fade-up" class="grid gap-10 p-12 md:grid-cols-2">
-          <div class="order-2 flex max-w-[500px] flex-col items-center justify-center space-y-6 rounded-xl bg-slate-950 md:order-1">
+          <div class="order-2 flex max-w-[500px] flex-col items-center justify-center space-y-6 rounded-xl bg-zinc-950 md:order-1">
             <p class="p-3 text-lg font-semibold text-white">
               Inscreva-se aqui para mais informações:
             </p>
-            <div class="space-y-6">
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:grid-rows-3">
               <FloatLabel>
-                <InputText id="nome" v-model="newLead.nome" class="border-2 border-red-500 bg-slate-950 p-1 text-white focus:border-red-500 focus:bg-slate-950" />
+                <InputText id="nome" v-model="newLead.nome" class="max-w-[200px] border-2 border-red-500 bg-zinc-950 p-1 text-white focus:border-red-500 focus:bg-zinc-950" />
                 <label for="nome">Nome</label>
               </FloatLabel>
               <FloatLabel>
-                <InputText id="email" v-model="newLead.email" class="border-2 border-red-500 bg-slate-950 p-1 text-white focus:border-red-500 focus:bg-slate-950" />
+                <InputText id="email" v-model="newLead.email" class="max-w-[200px] border-2 border-red-500 bg-zinc-950 p-1 text-white focus:border-red-500 focus:bg-zinc-950" />
                 <label for="email">Email</label>
               </FloatLabel>
               <FloatLabel>
-                <InputText id="telefone" v-model="newLead.telefone" class="border-2 border-red-500 bg-slate-950 p-1 text-white focus:border-red-500 focus:bg-slate-950" />
+                <InputText id="telefone" v-model="newLead.telefone" class="max-w-[200px] border-2 border-red-500 bg-zinc-950 p-1 text-white focus:border-red-500 focus:bg-zinc-950" />
                 <label for="telefone">Telefone</label>
               </FloatLabel>
               <FloatLabel>
-                <InputText id="empresa" v-model="newLead.empresa" class="border-2 border-red-500 bg-slate-950 p-1 text-white focus:border-red-500 focus:bg-slate-950" />
+                <InputText id="empresa" v-model="newLead.empresa" class="max-w-[200px] border-2 border-red-500 bg-zinc-950 p-1 text-white focus:border-red-500 focus:bg-zinc-950" />
                 <label for="empresa">Empresa</label>
               </FloatLabel>
               <FloatLabel>
-                <InputText id="Cargo" v-model="newLead.cargo" class="border-2 border-red-500 bg-slate-950 p-1 text-white focus:border-red-500 focus:bg-slate-950" />
+                <InputText id="Cargo" v-model="newLead.cargo" class="max-w-[200px] border-2 border-red-500 bg-zinc-950 p-1 text-white focus:border-red-500 focus:bg-zinc-950" />
                 <label for="Cargo">Cargo</label>
               </FloatLabel>
+              <MultiSelect v-model="selectedInterese" :options="Interese" option-label="name" filter placeholder="Select Cities" :max-selected-labels="3" class="max-w-[200px] border-2 border-red-500 bg-zinc-950 text-white focus:border-red-500 focus:bg-zinc-950" />
             </div>
             <div class="order-1 pb-3 md:order-2">
               <button class=" w-[290px] rounded-xl border-2 border-black bg-red-600 px-6 py-2 text-base font-bold tracking-wide text-white transition-all duration-200 ease-in-out hover:bg-red-500" @click="salvarLead()">
@@ -125,11 +135,11 @@ function ScrollToDiv(targetId: string){
       </div>
       <div class="flex flex-col items-center justify-center">
         <div class="max-w-[1000px] rounded-lg pb-10">
-          <h2 class="pb-5 text-center text-2xl font-bold tracking-wide text-white">
+          <h2 class="pb-5 text-center text-3xl font-bold tracking-wide text-white">
             Por que se cadastrar?
           </h2>
 
-          <p class="py-5 text-center text-base font-semibold text-white md:text-lg">
+          <p class="py-5 text-center text-base font-semibold text-white md:text-xl">
             📬 Benefícios Exclusivos ao se Cadastrar:
           </p>
           <ul class="m-3 space-y-5 md:m-0">
@@ -147,7 +157,7 @@ function ScrollToDiv(targetId: string){
 
         <div class="max-w-[1000px] rounded-lg pb-10">
           <div>
-            <p class="py-5 text-center text-base font-semibold text-white md:text-lg">
+            <p class="py-5 text-center text-base font-semibold text-white md:text-xl">
               🌟 Vantagens únicas:
             </p>
           </div>

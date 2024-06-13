@@ -10,7 +10,7 @@ export default defineNuxtConfig({
   },
   gtag: { id: GOOGLE_TAG },
   robots: { disallow: ['/lista', '/obrigado', '/login'] },
-  css: ['~/assets/global.sass', 'primevue/resources/primevue.min.css', 'primevue/resources/themes/aura-light-blue/theme.css'],
+  css: ['~/assets/global.sass', 'primevue/resources/primevue.min.css', 'primevue/resources/themes/aura-light-green/theme.css'],
   site: {
     url: SITE_URL,
     name: 'Explotools Brasil',
