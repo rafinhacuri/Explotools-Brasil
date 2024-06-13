@@ -9,15 +9,14 @@ export default defineEventHandler(async event => {
   const { user, senha } = body.data
 
   const existe = await Adm.findOne({ user })
-    .catch(() => { throw createError({ status: 500, message: 'Não foi possivel ler os cadastros do banco de dados' }) })
+    .catch(() => { throw createError({ status: 500, message: 'Não foi possivel ler os usuarios do banco de dados' }) })
 
   if(existe) throw createError({ status: 400, message: 'já cadastrado' })
 
   const senhaCrypt = sha512Crypt(senha)
-  const userCrypt = sha512Crypt(user)
 
-  await new Adm({ userCrypt, senhaCrypt }).save()
-    .catch(() => { throw createError({ status: 500, message: 'Não foi possivel inserir o cadastro do banco de dados' }) })
+  await new Adm({ user, senha: senhaCrypt }).save()
+    .catch(() => { throw createError({ status: 500, message: 'Não foi possivel inserir o usuario do banco de dados' }) })
 
   return 'Cadastro criado com Sucesso!'
 })

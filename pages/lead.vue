@@ -2,6 +2,10 @@
 import { LeadSchema } from '~/schemas/lead'
 import type { Lead } from '~/schemas/lead'
 
+useHead({ title: `Cadastrese` })
+
+defineOgImageComponent('NuxtSeo', { theme: '#3FA1B0', colorMode: 'dark' })
+
 const { start, finish } = useLoadingIndicator()
 
 const newLead = ref<Lead>({ nome: '', email: '', telefone: '', empresa: '', cargo: '' })
