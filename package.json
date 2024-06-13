@@ -13,14 +13,15 @@
     "lint:fix": "eslint . --fix && stylelint \"**/*.css\" --fix"
   },
   "dependencies": {
-    "@nuxt/ui": "^2.16.0",
     "@nuxtjs/seo": "2.0.0-rc.10",
     "ldap-passwords": "^3.0.2",
     "mongoose": "^8.4.1",
     "nuxt": "^3.12.1",
     "nuxt-auth-utils": "^0.0.25",
     "nuxt-gtag": "^2.0.6",
+    "nuxt-primevue": "^3.0.0",
     "nuxt-security": "2.0.0-rc.6",
+    "sass": "^1.77.5",
     "vue": "^3.4.27",
     "vue-router": "^4.3.3",
     "zod": "^3.23.8"
@@ -28,8 +29,10 @@
   "devDependencies": {
     "@dethdkn/eslint-config": "^1.4.6",
     "@nuxt/devtools": "^1.3.3",
+    "@nuxtjs/tailwindcss": "^6.12.0",
     "eslint": "^9.4.0",
     "stylelint": "^16.6.1",
-    "stylelint-config-standard": "^36.0.0"
+    "stylelint-config-standard": "^36.0.0",
+    "vue-tsc": "^2.0.21"
   }
 }
