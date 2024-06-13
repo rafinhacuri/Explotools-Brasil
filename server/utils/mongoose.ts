@@ -1,4 +1,5 @@
 import type { Lead } from '~/schemas/lead'
+import type { User } from '~/schemas/user'
 import mongoose, { Schema } from 'mongoose'
 
 const { MONGO_URL, MONGO_USERNAME, MONGO_PASSWORD, MONGO_DB_NAME } = useRuntimeConfig()
@@ -15,4 +16,9 @@ export const Leads = mongoose.model('lead', new Schema<Lead>({
   telefone: { type: String, required: true },
   empresa: { type: String, required: true },
   cargo: { type: String, required: true },
+}))
+
+export const Adm = mongoose.model('Adm', new Schema<User>({
+  user: { type: String, required: true },
+  senha: { type: String, required: true },
 }))

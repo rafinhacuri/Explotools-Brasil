@@ -7,10 +7,10 @@ export default defineEventHandler(async event => {
 
   const { nome, cargo, email, empresa, telefone } = body.data
 
-  const existe = await Leads.findOne({ nome })
+  const existe = await Leads.findOne({ email })
     .catch(() => { throw createError({ status: 500, message: 'Não foi possivel ler os cadastros do banco de dados' }) })
 
-  if(existe) throw createError({ status: 400, message: 'já cadastrado' })
+  if(existe) throw createError({ status: 400, message: 'Email já cadastrado' })
 
   await new Leads({ nome, cargo, email, empresa, telefone }).save()
     .catch(() => { throw createError({ status: 500, message: 'Não foi possivel inserir o cadastro do banco de dados' }) })
