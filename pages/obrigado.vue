@@ -8,17 +8,22 @@
           IMPORTANTE
         </h1>
       </div>
-      <div class="px-10 py-6">
+      <div class="px-4 py-6 md:px-32">
         <UProgress :value="90" indicator class="pb-4 font-bold" />
-        <p class="pt-20 text-center text-lg font-bold">
-          Agora, falta apenas um passo para você concluir sua inscrição e ter acesso a todas as novidades, ofertas e informações que vamos compartilhar!
-        </p>
+        <span class="flex justify-center">
+
+          <p class="max-w-[800px] pt-20 text-center text-lg font-bold">
+            Agora, falta apenas um passo para você concluir sua inscrição e ter acesso a todas as novidades, ofertas e informações que vamos compartilhar!
+          </p>
+        </span>
         <h2 class="pt-20 text-center text-3xl font-bold text-[#FD0116]">
           Siga Nossas Redes Sociais
         </h2>
-        <p class="pt-7 text-center text-lg font-bold">
-          Toque agora nos ícones abaixo, siga nossas redes sociais e fique por dentro de todos os materiais, avisos e conteúdos exclusivos que iremos compartilhar:
-        </p>
+        <span class="flex justify-center">
+          <p class="max-w-[800px] pt-7 text-center text-lg font-bold">
+            Toque agora nos ícones abaixo, siga nossas redes sociais e fique por dentro de todos os materiais, avisos e conteúdos exclusivos que iremos compartilhar:
+          </p>
+        </span>
         <UDivider label="Social" class="pt-20" />
         <h2 class="pt-4 text-center text-3xl font-bold text-[#FD0116]">
           🔗 Siga-nos nas Redes Sociais!
@@ -48,18 +53,17 @@
               </svg>
             </NuxtLink>
           </UTooltip>
-          <UTooltip text="Linkedin" :popper="{ placement: 'top' }">
-            <NuxtLink to="" external target="_blank" class="text-red-400 hover:text-red-900">
-              <svg class="size-10" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <title>LinkedIn</title>
-                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-              </svg>
+          <UTooltip text="Inicio" :popper="{ placement: 'top' }">
+            <NuxtLink to="/" class=" text-4xl text-red-400 hover:text-red-900">
+              <UIcon name="i-heroicons-home-solid" />
             </NuxtLink>
           </UTooltip>
         </div>
-        <p class="pt-7 text-center text-lg font-bold">
-          Agradecemos por se cadastrar! Estamos ansiosos para compartilhar com você as melhores dicas e novidades do setor de sondagem.
-        </p>
+        <span class="flex justify-center">
+          <p class="max-w-[800px] pt-7 text-center text-lg font-bold">
+            Agradecemos por se cadastrar! Estamos ansiosos para compartilhar com você as melhores dicas e novidades do setor de sondagem.
+          </p>
+        </span>
       </div>
     </div>
   </section>
