@@ -3,7 +3,7 @@ import process from 'node:process'
 const { PRODUCTION, SITE_URL, MONGO_URL, MONGO_USERNAME, MONGO_PASSWORD, MONGO_DB_NAME, DEV_URL, DEV_KEY, DEV_CERT, GOOGLE_TAG } = process.env
 
 export default defineNuxtConfig({
-  modules: ['nuxt-auth-utils', '@nuxtjs/seo', '@nuxtjs/tailwindcss', 'nuxt-gtag', 'nuxt-security', 'nuxt-primevue'],
+  modules: ['nuxt-auth-utils', '@nuxtjs/seo', '@nuxtjs/tailwindcss', 'nuxt-gtag', 'nuxt-security', 'nuxt-primevue', 'nuxt-icon'],
   app: {
     head: { templateParams: { separator: '•' } },
     pageTransition: { name: 'slide-left', mode: 'out-in' },
