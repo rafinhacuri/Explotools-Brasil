@@ -6,18 +6,19 @@ useHead({ title: `Cadastrese` })
 
 defineOgImageComponent('NuxtSeo', { theme: '#3FA1B0', colorMode: 'dark' })
 
+const toast = useToast()
+
 const { start, finish } = useLoadingIndicator()
 
-const selectedInterese = ref()
 const Interese = ref([
-  { name: 'New York' },
-  { name: 'Rome' },
-  { name: 'London' },
-  { name: 'Istanbul' },
-  { name: 'Paris' },
+  { nome: 'New York' },
+  { nome: 'Rome' },
+  { nome: 'London' },
+  { nome: 'Istanbul' },
+  { nome: 'Paris' },
 ])
 
-const newLead = ref<Lead>({ nome: '', email: '', telefone: '', empresa: '', cargo: '' })
+const newLead = ref<Lead>({ nome: '', email: '', telefone: '', empresa: '', cargo: '', interesse: [] })
 
 async function salvarLead(){
   start()
@@ -25,17 +26,17 @@ async function salvarLead(){
   const body = LeadSchema.safeParse(newLead.value)
 
   if(!body.success){
-    useToast().add({ detail: body.error.errors[0].message, severity: 'error', life: 10000 })
+    toast.add({ severity: 'error', detail: body.error.errors[0].message, summary: 'Erro', life: 10000 })
     return finish({ error: true })
   }
 
   const res = await $fetch('/api/insert/lead', { method: 'POST', body: body.data })
-    .catch(error => { useToast().add({ detail: error.data.message, severity: 'error', life: 10000 }) })
+    .catch(error => { toast.add({ severity: 'error', detail: error.data.message, summary: 'Erro', life: 10000 }) })
 
   if(!res) return finish({ error: true })
 
   finish()
-  useToast().add({ detail: res, severity: 'success', life: 10000 })
+  toast.add({ severity: 'success', detail: res, summary: 'Sucesso', life: 10000 })
   return navigateTo('/obrigado')
 }
 
@@ -93,27 +94,27 @@ function ScrollToDiv(targetId: string){
             </p>
             <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:grid-rows-3">
               <FloatLabel>
-                <InputText id="nome" v-model="newLead.nome" class="max-w-[200px] border-2 border-red-500 bg-zinc-950 p-1 text-white focus:border-red-500 focus:bg-zinc-950" />
+                <InputText id="nome" v-model="newLead.nome" class="max-w-[200px] border-2 border-red-500 bg-zinc-950 p-1 text-white focus:bg-zinc-950 focus:outline-none focus:ring-2 focus:ring-red-500" />
                 <label for="nome">Nome</label>
               </FloatLabel>
               <FloatLabel>
-                <InputText id="email" v-model="newLead.email" class="max-w-[200px] border-2 border-red-500 bg-zinc-950 p-1 text-white focus:border-red-500 focus:bg-zinc-950" />
+                <InputText id="email" v-model="newLead.email" class="max-w-[200px] border-2 border-red-500 bg-zinc-950 p-1 text-white focus:bg-zinc-950 focus:outline-none focus:ring-2 focus:ring-red-500" />
                 <label for="email">Email</label>
               </FloatLabel>
               <FloatLabel>
-                <InputText id="telefone" v-model="newLead.telefone" class="max-w-[200px] border-2 border-red-500 bg-zinc-950 p-1 text-white focus:border-red-500 focus:bg-zinc-950" />
+                <InputText id="telefone" v-model="newLead.telefone" class="max-w-[200px] border-2 border-red-500 bg-zinc-950 p-1 text-white focus:bg-zinc-950 focus:outline-none focus:ring-2 focus:ring-red-500" />
                 <label for="telefone">Telefone</label>
               </FloatLabel>
               <FloatLabel>
-                <InputText id="empresa" v-model="newLead.empresa" class="max-w-[200px] border-2 border-red-500 bg-zinc-950 p-1 text-white focus:border-red-500 focus:bg-zinc-950" />
+                <InputText id="empresa" v-model="newLead.empresa" class="max-w-[200px] border-2 border-red-500 bg-zinc-950 p-1 text-white focus:bg-zinc-950 focus:outline-none focus:ring-2 focus:ring-red-500" />
                 <label for="empresa">Empresa</label>
               </FloatLabel>
               <FloatLabel>
-                <InputText id="Cargo" v-model="newLead.cargo" class="max-w-[200px] border-2 border-red-500 bg-zinc-950 p-1 text-white focus:border-red-500 focus:bg-zinc-950" />
+                <InputText id="Cargo" v-model="newLead.cargo" class="max-w-[200px] border-2 border-red-500 bg-zinc-950 p-1 text-white focus:bg-zinc-950 focus:outline-none focus:ring-2 focus:ring-red-500" />
                 <label for="Cargo">Cargo</label>
               </FloatLabel>
-              <MultiSelect v-model="selectedInterese" :options="Interese" option-label="name" filter placeholder="Select Cities" :max-selected-labels="3" class="max-w-[200px] border-2 border-red-500 bg-zinc-950 text-white focus:border-red-500 focus:bg-zinc-950" />
             </div>
+            <MultiSelect v-model="newLead.interesse" :options="Interese" option-label="nome" filter placeholder="Categorias de interesse" :max-selected-labels="5" class=" w-full max-w-[429px] border-2 border-red-500 bg-zinc-950 text-white focus:bg-zinc-950 focus:outline-none focus:ring-2 focus:ring-red-500" />
             <div class="order-1 pb-3 md:order-2">
               <button class=" w-[290px] rounded-xl border-2 border-black bg-red-600 px-6 py-2 text-base font-bold tracking-wide text-white transition-all duration-200 ease-in-out hover:bg-red-500" @click="salvarLead()">
                 Quero ter acesso a esses produtos em primeira mão!
@@ -188,19 +189,19 @@ function ScrollToDiv(targetId: string){
 
           <ul class="m-3 space-y-5 md:m-0">
             <li class="text-center text-sm text-white md:text-base">
-              Como fabricantes, investimos em alta tecnologia e maquinário computadorizado para assegurar que nossos produtos atendam aos mais altos padrões de qualidade, impulsionando assim a sua produtividade.
+              Como fabricantes, <span class="font-semibold text-[#FD0116]">investimos em alta tecnologia e maquinário computadorizado</span> para assegurar que nossos produtos atendam aos mais <span class="font-semibold text-[#FD0116]">altos padrões de qualidade</span>, impulsionando assim a sua produtividade.
             </li>
             <li class="text-center text-sm text-white md:text-base">
-              Presença global em mais de 13 países, atendendo com excelência às necessidades de clientes em todo o mundo.
+              <span class="font-semibold text-[#FD0116]">Presença global em mais de 13 países</span>, atendendo com excelência às necessidades de clientes em todo o mundo.
             </li>
             <li class="text-center text-sm text-white md:text-base">
-              Fundada por um especialista com mais de 20 anos de experiência no mercado de sondagem, nossa empresa possui um histórico comprovado de sucesso e excelência.
+              Fundada por um especialista com <span class="font-semibold text-[#FD0116]">mais de 20 anos de experiência</span> no mercado de sondagem, nossa empresa possui um histórico comprovado de sucesso e excelência.
             </li>
             <li class="text-center text-sm text-white md:text-base">
-              Todos os nossos produtos são importados e submetidos a rigorosos padrões de qualidade, garantindo desempenho superior e durabilidade, permitindo que você atinja metas de produtividade de forma consistente e confiável.
+              Todos os nossos <span class="font-semibold text-[#FD0116]">produtos são importados e submetidos a rigorosos padrões de qualidade</span>, garantindo desempenho superior e durabilidade, permitindo que você atinja metas de produtividade de forma consistente e confiável.
             </li>
             <li class="text-center text-sm text-white md:text-base">
-              Contamos com uma equipe dedicada de pesquisa e desenvolvimento, que nos permite permanecer na vanguarda da inovação, oferecendo sempre as soluções mais avançadas aos nossos clientes, impulsionando assim a sua produtividade com tecnologias de ponta.
+              Contamos com uma equipe dedicada de <span class="font-semibold text-[#FD0116]">pesquisa e desenvolvimento</span>, que nos permite permanecer na <span class="font-semibold text-[#FD0116]">vanguarda da inovação</span>, oferecendo sempre as soluções mais avançadas aos nossos clientes, impulsionando assim a sua produtividade com tecnologias de ponta.
             </li>
           </ul>
           <div class="flex items-center justify-center text-white">

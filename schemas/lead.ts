@@ -6,6 +6,7 @@ export const LeadSchema = z.object({
   telefone: z.string().trim().min(1, { message: 'Selecione a telefone' }),
   empresa: z.string().trim().min(1, { message: 'Selecione a empresa' }),
   cargo: z.string().trim().min(1, { message: 'Selecione a cargo' }),
+  interesse: z.array(z.object({ nome: z.string().trim().min(1, { message: 'Selecione o titulo' }) })),
 })
 
 export type Lead = z.infer<typeof LeadSchema>

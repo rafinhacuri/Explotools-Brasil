@@ -1,0 +1,21 @@
+import { IdSchema } from '~/schemas/id'
+
+export default defineEventHandler(async event => {
+  await requireUserSession(event, { statusCode: 401, message: 'Você não tem pemissão para executar essa ação' })
+
+  const body = await readValidatedBody(event, IdSchema.safeParse)
+
+  if(!body.success) throw createError({ status: 401, message: body.error.errors[0].message })
+
+  const { _id } = body.data
+
+  const lead = await Leads.findOne({ _id })
+    .catch(() => { throw createError({ status: 500, message: 'Não foi possivel ler o lead do banco de dados' }) })
+
+  if(!lead) throw createError({ status: 404, message: 'lead não encontrado' })
+
+  await Leads.findByIdAndDelete(_id)
+    .catch(() => { throw createError({ status: 500, message: 'Não foi possivel deletar a pagina do banco de dados' }) })
+
+  return 'lead excluido com susseso!'
+})
