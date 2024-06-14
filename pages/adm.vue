@@ -3,6 +3,8 @@ import { type Id, IdSchema } from '~/schemas/id'
 import { UserSchema } from '~/schemas/user'
 import type { User } from '~/schemas/user'
 
+const { clear } = useUserSession()
+
 const toast = useToast()
 
 const { start, finish } = useLoadingIndicator()
@@ -19,6 +21,12 @@ const filtros = ref({
   empresa: { value: null, matchMode: FilterMatchMode.CONTAINS },
   cargo: { value: null, matchMode: FilterMatchMode.CONTAINS },
 })
+
+function sair(){
+  clear()
+  toast.add({ severity: 'success', summary: `Deslogado`, detail: 'Você foi deslogado com sucesso!', life: 10000 })
+  return navigateTo('/login')
+}
 
 const modalInsertUser = ref(false)
 const novoAdm = ref<User>({ user: '', senha: '' })
@@ -182,6 +190,16 @@ watch(modalDeletLead, nv => {
     </Dialog>
 
     <div class="p-5">
+      <div class="flex items-center justify-end px-7 py-5">
+        <div class="rounded-md transition-all duration-500 ease-in-out hover:bg-slate-500">
+          <Button v-tooltip.bottom="'Deslogar'" class="p-1" @click="sair">
+            <template #icon>
+              <Icon name="i-heroicons-arrow-left-on-rectangle" color="white" size="30" />
+            </template>
+          </Button>
+        </div>
+      </div>
+
       <Panel header="Leads" toggleable>
         <DataTable v-model:filters="filtros" :value="response" paginator :rows="10" :rows-per-page-options="[5, 10, 20, 50]" removable-sort :table-style="{ 'min-width': '50rem' }" filter-display="menu">
           <Column field="nome" header="Nome" sortable>
