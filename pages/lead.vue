@@ -87,8 +87,8 @@ function ScrollToDiv(targetId: string){
           </p>
         </div>
 
-        <div id="card" data-aos="fade-up" class="grid gap-10 p-12 md:grid-cols-2">
-          <div class="order-2 flex max-w-[500px] flex-col items-center justify-center space-y-6 rounded-xl bg-zinc-950 md:order-1">
+        <div id="card" class="grid gap-5 p-12 md:grid-cols-2">
+          <div v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="order-2 flex max-w-[500px] flex-col items-center justify-center space-y-6 rounded-xl bg-zinc-950 transition-all duration-1000 ease-in-out md:order-1">
             <p class="p-3 text-lg font-semibold text-white">
               Inscreva-se aqui para mais informações:
             </p>
@@ -115,42 +115,42 @@ function ScrollToDiv(targetId: string){
               </FloatLabel>
             </div>
             <MultiSelect v-model="newLead.interesse" :options="Interese" option-label="nome" filter placeholder="Categorias de interesse" :max-selected-labels="5" class=" w-full max-w-[429px] border-2 border-red-500 bg-zinc-950 text-white focus:bg-zinc-950 focus:outline-none focus:ring-2 focus:ring-red-500" />
-            <div class="order-1 pb-3 md:order-2">
-              <button class=" w-[290px] rounded-xl border-2 border-black bg-red-600 px-6 py-2 text-base font-bold tracking-wide text-white transition-all duration-200 ease-in-out hover:bg-red-500" @click="salvarLead()">
-                Quero ter acesso a esses produtos em primeira mão!
-              </button>
-            </div>
+            <button class=" w-[290px] rounded-xl border-2 border-black bg-red-600 px-6 py-2 text-base font-bold tracking-wide text-white transition-all duration-200 ease-in-out hover:bg-red-500" @click="salvarLead()">
+              Quero ter acesso a esses produtos em primeira mão!
+            </button>
           </div>
-          <Carousel :value="items" :num-visible="1" :num-scroll="1" orientation="vertical" vertical-view-port-height="330px" container-class="flex items-center">
-            <template #item="slotProps">
-              <div class="m-2 rounded border p-4">
-                <div class="mb-4">
-                  <div class="relative mx-auto">
-                    <img :src="slotProps.data" :alt="slotProps.data" class="w-full rounded">
+          <div v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="order-1 pb-3 transition-all duration-200 ease-in-out md:order-2">
+            <Carousel :value="items" :num-visible="1" :num-scroll="1" orientation="vertical" vertical-view-port-height="330px" container-class="flex items-center ">
+              <template #item="slotProps">
+                <div class="m-2 rounded border p-4">
+                  <div class="mb-4">
+                    <div class="relative mx-auto">
+                      <img :src="slotProps.data" :alt="slotProps.data" class="w-full rounded">
+                    </div>
                   </div>
                 </div>
-              </div>
-            </template>
-          </Carousel>
+              </template>
+            </Carousel>
+          </div>
         </div>
       </div>
       <div class="flex flex-col items-center justify-center">
         <div class="max-w-[1000px] rounded-lg pb-10">
-          <h2 class="pb-5 text-center text-3xl font-bold tracking-wide text-white">
+          <h2 v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="pb-5 text-center text-3xl font-bold tracking-wide text-white transition-all duration-1000 ease-in-out">
             Por que se cadastrar?
           </h2>
 
-          <p class="py-5 text-center text-base font-semibold text-white md:text-xl">
+          <p v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="py-5 text-center text-base font-semibold text-white transition-all duration-1000 ease-in-out md:text-xl">
             📬 Benefícios Exclusivos ao se Cadastrar:
           </p>
-          <ul class="m-3 space-y-5 md:m-0">
-            <li class=" text-center text-sm text-white md:text-base">
+          <ul class="m-3 space-y-5 transition-all duration-1000 ease-in-out md:m-0">
+            <li v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class=" text-center text-sm text-white transition-all duration-1000 ease-in-out md:text-base">
               <span class="font-semibold text-[#FD0116]">Ofertas exclusivas: </span>Desfrute de promoções especiais que só encontrará conosco, ajudando a maximizar sua produtividade com economia.
             </li>
-            <li class=" text-center text-sm text-white md:text-base">
+            <li v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class=" text-center text-sm text-white transition-all duration-1000 ease-in-out md:text-base">
               <span class="font-semibold text-[#FD0116]">Acesso antecipado aos catálogos: </span>Seja o primeiro a explorar nossos produtos de qualidade, planejando suas operações de sondagem de forma mais eficiente.
             </li>
-            <li class=" text-center text-sm text-white md:text-base">
+            <li v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class=" text-center text-sm text-white transition-all duration-1000 ease-in-out md:text-base">
               <span class="font-semibold text-[#FD0116]">Participação em pré-vendas: </span>Garanta prioridade e preços especiais em nossos lançamentos, impulsionando sua produtividade com acesso privilegiado.
             </li>
           </ul>
@@ -158,19 +158,19 @@ function ScrollToDiv(targetId: string){
 
         <div class="max-w-[1000px] rounded-lg pb-10">
           <div>
-            <p class="py-5 text-center text-base font-semibold text-white md:text-xl">
+            <p v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="py-5 text-center text-base font-semibold text-white transition-all duration-1000 ease-in-out md:text-xl">
               🌟 Vantagens únicas:
             </p>
           </div>
 
           <ul class="m-3 space-y-5 md:m-0">
-            <li class="text-center text-sm text-white md:text-base">
+            <li v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="text-center text-sm text-white transition-all duration-1000 ease-in-out md:text-base">
               <span class="font-semibold text-[#FD0116]">Acesso antecipado aos melhores produtos: </span>Seja o primeiro a ter acesso aos produtos de última geração, aumentando sua produtividade antes de todos.
             </li>
-            <li class="text-center text-sm text-white md:text-base">
+            <li v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="text-center text-sm text-white transition-all duration-1000 ease-in-out md:text-base">
               <span class="font-semibold text-[#FD0116]">Preços exclusivos e condições especiais: </span>Garanta tarifas exclusivas e condições especiais que otimizam seus custos de sondagem, maximizando sua produtividade com economia.
             </li>
-            <li class="text-center text-sm text-white md:text-base">
+            <li v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="text-center text-sm text-white transition-all duration-1000 ease-in-out md:text-base">
               <span class="font-semibold text-[#FD0116]">Inovações em primeira mão:</span>Seja pioneiro ao aproveitar nossas inovações mais recentes, impulsionando sua produtividade com tecnologias de ponta.
             </li>
           </ul>
@@ -183,24 +183,24 @@ function ScrollToDiv(targetId: string){
         </div>
 
         <div class="max-w-[1000px] rounded-lg pb-10">
-          <h2 class="pb-5 text-center text-2xl font-bold tracking-wide text-white">
+          <h2 v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="pb-5 text-center text-2xl font-bold tracking-wide text-white transition-all duration-1000 ease-in-out">
             🔧 Explotools: A escolha certa para empresas que valorizam qualidade, inovação e resultados excepcionais em suas operações de sondagem.
           </h2>
 
           <ul class="m-3 space-y-5 md:m-0">
-            <li class="text-center text-sm text-white md:text-base">
+            <li v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="text-center text-sm text-white transition-all duration-1000 ease-in-out md:text-base">
               Como fabricantes, <span class="font-semibold text-[#FD0116]">investimos em alta tecnologia e maquinário computadorizado</span> para assegurar que nossos produtos atendam aos mais <span class="font-semibold text-[#FD0116]">altos padrões de qualidade</span>, impulsionando assim a sua produtividade.
             </li>
-            <li class="text-center text-sm text-white md:text-base">
+            <li v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="text-center text-sm text-white transition-all duration-1000 ease-in-out md:text-base">
               <span class="font-semibold text-[#FD0116]">Presença global em mais de 13 países</span>, atendendo com excelência às necessidades de clientes em todo o mundo.
             </li>
-            <li class="text-center text-sm text-white md:text-base">
+            <li v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="text-center text-sm text-white transition-all duration-1000 ease-in-out md:text-base">
               Fundada por um especialista com <span class="font-semibold text-[#FD0116]">mais de 20 anos de experiência</span> no mercado de sondagem, nossa empresa possui um histórico comprovado de sucesso e excelência.
             </li>
-            <li class="text-center text-sm text-white md:text-base">
+            <li v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="text-center text-sm text-white transition-all duration-1000 ease-in-out md:text-base">
               Todos os nossos <span class="font-semibold text-[#FD0116]">produtos são importados e submetidos a rigorosos padrões de qualidade</span>, garantindo desempenho superior e durabilidade, permitindo que você atinja metas de produtividade de forma consistente e confiável.
             </li>
-            <li class="text-center text-sm text-white md:text-base">
+            <li v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="text-center text-sm text-white transition-all duration-1000 ease-in-out md:text-base">
               Contamos com uma equipe dedicada de <span class="font-semibold text-[#FD0116]">pesquisa e desenvolvimento</span>, que nos permite permanecer na <span class="font-semibold text-[#FD0116]">vanguarda da inovação</span>, oferecendo sempre as soluções mais avançadas aos nossos clientes, impulsionando assim a sua produtividade com tecnologias de ponta.
             </li>
           </ul>
