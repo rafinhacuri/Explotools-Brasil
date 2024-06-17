@@ -129,7 +129,7 @@ watch(modalDeletLead, nv => {
 </script>
 
 <template>
-  <section class="h-full bg-slate-900" :class="">
+  <section class=" h-full bg-slate-900">
     <Dialog v-model:visible="modalInsertUser" modal class="w-[50rem]" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
       <template #container>
         <div class="flex flex-col items-center rounded-md bg-white p-5">
