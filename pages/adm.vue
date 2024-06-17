@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { type Id, IdSchema } from '~/schemas/id'
+import { EditLeadSchema } from '~/schemas/lead'
+import type { EditLead } from '~/schemas/lead'
 import { UserSchema } from '~/schemas/user'
 import type { User } from '~/schemas/user'
 
@@ -24,8 +26,8 @@ const filtros = ref({
 
 function sair(){
   clear()
-  toast.add({ severity: 'success', summary: `Deslogado`, detail: 'Você foi deslogado com sucesso!', life: 10000 })
-  return navigateTo('/login')
+  navigateTo('/login')
+  return toast.add({ severity: 'success', summary: `Deslogado`, detail: 'Você foi deslogado com sucesso!', life: 10000 })
 }
 
 const modalInsertUser = ref(false)
@@ -126,6 +128,49 @@ watch(modalDeletLead, nv => {
     deletLead.value = { _id: '' }
   }
 })
+
+const Interese = ref([
+  { nome: 'New York' },
+  { nome: 'Rome' },
+  { nome: 'London' },
+  { nome: 'Istanbul' },
+  { nome: 'Paris' },
+])
+
+const modalEditLead = ref(false)
+const editLead = ref<EditLead>({ _id: '', nome: '', email: '', telefone: '', empresa: '', cargo: '', interesse: undefined })
+
+function getLead(_id: string, nome: string, email: string, telefone: string, empresa: string, cargo: string){
+  modalEditLead.value = true
+  editLead.value = { _id, nome, email, telefone, empresa, cargo }
+}
+
+async function confirmEdit(){
+  start()
+
+  const body = EditLeadSchema.safeParse(editLead.value)
+
+  if(!body.success){
+    finish({ error: true })
+    return toast.add({ severity: 'error', detail: body.error.errors[0].message, summary: 'Erro', life: 10000 })
+  }
+
+  const res = await $fetch(`/api/update/lead`, { method: 'post', body: body.data })
+    .catch(error => { toast.add({ severity: 'error', summary: 'Erro genérico', detail: error.data.message, life: 10000 }) })
+
+  if(!res) return finish({ error: true })
+
+  await refreshLead()
+  modalEditLead.value = false
+  finish()
+  return toast.add({ severity: 'success', detail: res, summary: 'Sucesso', life: 10000 })
+}
+
+watch(modalEditLead, nv => {
+  if(!nv){
+    editLead.value = { _id: '', nome: '', email: '', telefone: '', empresa: '', cargo: '', interesse: undefined }
+  }
+})
 </script>
 
 <template>
@@ -166,8 +211,8 @@ watch(modalDeletLead, nv => {
           <span class="mb-2 mt-4 block text-center text-2xl font-bold">Tem certeza que deseja deletar o administrador ? </span>
 
           <div class="flex items-center justify-center space-x-5">
-            <Button label="Confirmar" class="m-6 bg-blue-100 p-3 tracking-wider " severity="info" raised :loading="loadingDelet" @click="confirmDelete" />
-            <Button label="Cancelar" class="m-6 bg-blue-100 p-3 tracking-wider " severity="info" raised outlined :disabled="loadingDelet" @click="modalDelet = false" />
+            <Button label="Confirmar" class="m-6 bg-blue-100 p-3 tracking-wider " severity="info" raised @click="confirmDelete" />
+            <Button label="Cancelar" class="m-6 bg-blue-100 p-3 tracking-wider " severity="info" raised outlined @click="modalDelet = false" />
           </div>
         </div>
       </template>
@@ -182,8 +227,46 @@ watch(modalDeletLead, nv => {
           <span class="mb-2 mt-4 block text-center text-2xl font-bold">Tem certeza que deseja deletar o {{ nomeLead }} ? </span>
 
           <div class="flex items-center justify-center space-x-5">
-            <Button label="Confirmar" class="m-6 bg-blue-100 p-3 tracking-wider " severity="info" raised :loading="loadingDelet" @click="confirmDeleteLead" />
-            <Button label="Cancelar" class="m-6 bg-blue-100 p-3 tracking-wider " severity="info" raised outlined :disabled="loadingDelet" @click="modalDeletLead = false" />
+            <Button label="Confirmar" class="m-6 bg-blue-100 p-3 tracking-wider " severity="info" raised @click="confirmDeleteLead" />
+            <Button label="Cancelar" class="m-6 bg-blue-100 p-3 tracking-wider " severity="info" raised outlined @click="modalDeletLead = false" />
+          </div>
+        </div>
+      </template>
+    </Dialog>
+    <Dialog v-model:visible="modalEditLead" modal class="w-[50rem]" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
+      <template #container>
+        <div class="flex flex-col items-center rounded-md bg-white p-5">
+          <div class="-mt-16 inline-flex size-24 items-center justify-center rounded-full bg-blue-500">
+            <Icon name="pepicons-pop:pen" color="white" size="3rem" />
+          </div>
+          <span class="mb-2 mt-4 block text-center text-2xl font-bold">Editar Lead</span>
+          <div class="grid grid-cols-1 gap-6 pt-5 sm:grid-cols-2 sm:grid-rows-3">
+            <FloatLabel>
+              <InputText id="nome" v-model="editLead.nome" class=" border-2 border-blue-500 p-1 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              <label for="nome">Nome</label>
+            </FloatLabel>
+            <FloatLabel>
+              <InputText id="email" v-model="editLead.email" class=" border-2 border-blue-500 p-1 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              <label for="email">Email</label>
+            </FloatLabel>
+            <FloatLabel>
+              <InputText id="telefone" v-model="editLead.telefone" class=" border-2 border-blue-500 p-1 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              <label for="telefone">Telefone</label>
+            </FloatLabel>
+            <FloatLabel>
+              <InputText id="empresa" v-model="editLead.empresa" class=" border-2 border-blue-500 p-1 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              <label for="empresa">Empresa</label>
+            </FloatLabel>
+            <FloatLabel>
+              <InputText id="Cargo" v-model="editLead.cargo" class=" border-2 border-blue-500 p-1 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              <label for="Cargo">Cargo</label>
+            </FloatLabel>
+          </div>
+          <MultiSelect v-model="editLead.interesse" :options="Interese" option-label="nome" filter placeholder="Categorias de interesse" :max-selected-labels="5" class=" mt-4 w-full max-w-[429px] border-2 border-blue-500  focus:outline-none focus:ring-2 focus:ring-blue-500" />
+
+          <div class="flex items-center justify-center space-x-5">
+            <Button label="Confirmar" class="m-6 bg-blue-100 p-3 tracking-wider " severity="info" raised @click="confirmEdit" />
+            <Button label="Cancelar" class="m-6 bg-blue-100 p-3 tracking-wider " severity="info" raised outlined @click="modalEditLead = false" />
           </div>
         </div>
       </template>
@@ -257,7 +340,7 @@ watch(modalDeletLead, nv => {
                     <Icon name="pepicons-pop:trash" color="white" size="30" />
                   </template>
                 </Button>
-                <Button v-tooltip.top="'Editar Lead'" class="rounded-full bg-blue-500 p-1">
+                <Button v-tooltip.top="'Editar Lead'" class="rounded-full bg-blue-500 p-1" @click="getLead(data._id, data.nome, data.email, data.telefone, data.empresa, data.cargo, data.interesse)">
                   <template #icon>
                     <Icon name="pepicons-pop:pen" color="white" size="30" />
                   </template>

@@ -10,3 +10,15 @@ export const LeadSchema = z.object({
 })
 
 export type Lead = z.infer<typeof LeadSchema>
+
+export const EditLeadSchema = z.object({
+  _id: z.string().trim().min(1, { message: 'Selecione o id' }),
+  nome: z.string().optional(),
+  email: z.string().optional(),
+  telefone: z.string().optional(),
+  empresa: z.string().optional(),
+  cargo: z.string().optional(),
+  interesse: z.array(z.object({ nome: z.string().trim().min(1, { message: 'Selecione o titulo' }) })).optional(),
+})
+
+export type EditLead = z.infer<typeof EditLeadSchema>
