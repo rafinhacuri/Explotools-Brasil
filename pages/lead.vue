@@ -114,7 +114,7 @@ function ScrollToDiv(targetId: string){
                 <label for="Cargo">Cargo</label>
               </FloatLabel>
             </div>
-            <MultiSelect v-model="newLead.interesse" :options="Interese" option-label="nome" filter placeholder="Categorias de interesse" :max-selected-labels="5" class=" w-full max-w-[429px] border-2 border-red-500 bg-zinc-950 text-white focus:bg-zinc-950 focus:outline-none focus:ring-2 focus:ring-red-500" />
+            <MultiSelect v-model="newLead.interesse" :options="Interese" option-label="nome" filter placeholder="Categorias de interesse" :max-selected-labels="3" class=" w-full max-w-[429px] border-2 border-red-500 bg-zinc-950 text-white focus:bg-zinc-950 focus:outline-none focus:ring-2 focus:ring-red-500" />
             <button class=" w-[290px] rounded-xl border-2 border-black bg-red-600 px-6 py-2 text-base font-bold tracking-wide text-white transition-all duration-200 ease-in-out hover:bg-red-500" @click="salvarLead()">
               Quero ter acesso a esses produtos em primeira mão!
             </button>
