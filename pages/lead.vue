@@ -64,7 +64,8 @@ function ScrollToDiv(targetId: string){
 </script>
 
 <template>
-  <section class="min-h-full bg-[url('/fundo.jpeg')] bg-cover bg-center bg-no-repeat">
+  <section class="relative min-h-[calc(100vh-131px)]">
+    <div class="absolute inset-0 z-0 min-h-[calc(100vh-131px)] bg-[url('/fundo.jpeg')] bg-cover bg-fixed bg-center bg-no-repeat" />
     <div class="relative z-10">
       <div class="flex flex-col items-center justify-center">
         <div class="flex items-center justify-center">

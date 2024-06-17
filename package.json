@@ -9,8 +9,8 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "typecheck": "nuxi typecheck",
-    "lint": "eslint . && stylelint \"**/*.css\"",
-    "lint:fix": "eslint . --fix && stylelint \"**/*.css\" --fix"
+    "lint": "eslint",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "@nuxtjs/seo": "2.0.0-rc.10",
