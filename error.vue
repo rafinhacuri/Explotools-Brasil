@@ -24,7 +24,7 @@ useHead({
         <p class="text-base font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
           {{ message }}
         </p>
-        <UButton icon="i-heroicons-home" label="Voltar ao início" @click="clearError({ redirect: '/' })" />
+        <button label="Voltar ao início" @click="clearError({ redirect: '/' })" />
       </div>
     </div>
   </section>

@@ -56,7 +56,7 @@
           </NuxtLink>
         </div>
         <span class="flex justify-center">
-          <p class="max-w-[800px] pt-7 text-center text-lg font-bold text-white">
+          <p class="max-w-[800px] pb-40 pt-7 text-center text-lg font-bold text-white md:pb-3">
             Agradecemos por se cadastrar! Estamos ansiosos para compartilhar com você as melhores dicas e novidades do setor de sondagem.
           </p>
         </span>

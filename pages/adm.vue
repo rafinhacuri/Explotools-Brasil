@@ -129,7 +129,7 @@ watch(modalDeletLead, nv => {
 </script>
 
 <template>
-  <section class="h-screen bg-slate-900">
+  <section class="h-full bg-slate-900" :class="">
     <Dialog v-model:visible="modalInsertUser" modal class="w-[50rem]" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
       <template #container>
         <div class="flex flex-col items-center rounded-md bg-white p-5">
@@ -266,6 +266,11 @@ watch(modalDeletLead, nv => {
             </template>
           </Column>
         </DataTable>
+        <Button v-if="response.length >= 1" label="Baixar planilha" class="rounded-lg bg-blue-500 p-3 tracking-wider text-white" @click="navigateTo(`/lead.xlsx`, { open: { target: '_blank' } })">
+          <template #icon>
+            <Icon name="pepicons-pop:cloud-down" color="white" size="30" />
+          </template>
+        </Button>
       </Panel>
       <Panel class="mt-8" header="administradores" toggleable>
         <div class="flex items-end justify-end px-7">

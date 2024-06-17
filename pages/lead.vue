@@ -175,7 +175,7 @@ function ScrollToDiv(targetId: string){
             </li>
           </ul>
           <div class="flex items-center justify-center text-white">
-            <button class="my-10 w-[430px] rounded-full border-2 border-black bg-[#FD0116] px-6 py-2 text-lg font-bold tracking-wide transition-all duration-200 ease-in-out hover:w-[470px] hover:text-xl" @click="ScrollToDiv('card')">
+            <button class="my-10 w-[430px] rounded-full border-2 border-black bg-[#FD0116] px-6 py-2 text-lg font-bold tracking-wide md:transition-all md:duration-200 md:ease-in-out md:hover:w-[470px] md:hover:text-xl" @click="ScrollToDiv('card')">
               Não perca essa chance! <br>
               Cadastre-se agora e saia na frente
             </button>
@@ -205,7 +205,7 @@ function ScrollToDiv(targetId: string){
             </li>
           </ul>
           <div class="flex items-center justify-center text-white">
-            <button class="my-10 w-[300px] rounded-full border-2 border-black bg-[#FD0116] px-6 py-2 text-lg font-bold tracking-wide transition-all duration-200 ease-in-out hover:w-[340px] hover:text-xl" @click="ScrollToDiv('card')">
+            <button class="m-10 mb-32 w-[300px] rounded-full border-2 border-black bg-[#FD0116] px-6 py-2 text-lg font-bold tracking-wide transition-all duration-200 ease-in-out hover:w-[340px] hover:text-xl md:my-10" @click="ScrollToDiv('card')">
               Quero aumentar minha produtividade!
             </button>
           </div>
