@@ -65,7 +65,7 @@ function ScrollToDiv(targetId: string){
         <div class="flex items-center justify-center">
           <img src="/explotools.png" alt="logo Explotools brasil" class="mt-7 h-[140px] w-[300px] md:h-[200px] md:w-[700px]">
         </div>
-        <p class=" text-center text-xl font-black italic tracking-wide text-white md:text-3xl">
+        <p class=" text-center text-lg font-black italic tracking-wide text-white md:text-3xl">
           Qualidade Internacional, Preços Nacionais:<br>
           Revolucione Sua Sondagem
         </p>
@@ -81,39 +81,39 @@ function ScrollToDiv(targetId: string){
           </p>
         </div>
 
-        <div id="card" class="grid gap-5 p-12 md:grid-cols-2">
+        <div class="grid gap-5 p-12 md:grid-cols-2">
           <div v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="order-2 flex max-w-[500px] flex-col items-center justify-center space-y-6 rounded-xl bg-zinc-950 transition-all duration-1000 ease-in-out md:order-1">
             <p class="p-3 text-lg font-semibold text-white">
               Inscreva-se aqui para mais informações:
             </p>
             <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:grid-rows-3">
               <FloatLabel>
-                <InputText id="nome" v-model="newLead.nome" class="max-w-[200px] border-2 border-red-500 bg-zinc-950 p-1 text-white focus:bg-zinc-950 focus:outline-none focus:ring-2 focus:ring-red-500" />
+                <InputText id="nome" v-model="newLead.nome" class="max-w-[260px] border-2 border-red-500 bg-zinc-950 p-1 text-white focus:bg-zinc-950 focus:outline-none focus:ring-2 focus:ring-red-500 md:max-w-[200px]" />
                 <label for="nome">Nome</label>
               </FloatLabel>
               <FloatLabel>
-                <InputText id="email" v-model="newLead.email" class="max-w-[200px] border-2 border-red-500 bg-zinc-950 p-1 text-white focus:bg-zinc-950 focus:outline-none focus:ring-2 focus:ring-red-500" />
+                <InputText id="email" v-model="newLead.email" class="max-w-[260px] border-2 border-red-500 bg-zinc-950 p-1 text-white focus:bg-zinc-950 focus:outline-none focus:ring-2 focus:ring-red-500 md:max-w-[200px]" />
                 <label for="email">Email</label>
               </FloatLabel>
               <FloatLabel>
-                <InputText id="telefone" v-model="newLead.telefone" class="max-w-[200px] border-2 border-red-500 bg-zinc-950 p-1 text-white focus:bg-zinc-950 focus:outline-none focus:ring-2 focus:ring-red-500" />
+                <InputMask id="telefone" v-model="newLead.telefone" mask="(99) 99999-9999" class="max-w-[260px] border-2 border-red-500 bg-zinc-950 p-1 text-white focus:bg-zinc-950 focus:outline-none focus:ring-2 focus:ring-red-500 md:max-w-[200px]" />
                 <label for="telefone">Telefone</label>
               </FloatLabel>
               <FloatLabel>
-                <InputText id="empresa" v-model="newLead.empresa" class="max-w-[200px] border-2 border-red-500 bg-zinc-950 p-1 text-white focus:bg-zinc-950 focus:outline-none focus:ring-2 focus:ring-red-500" />
+                <InputText id="empresa" v-model="newLead.empresa" class="max-w-[260px] border-2 border-red-500 bg-zinc-950 p-1 text-white focus:bg-zinc-950 focus:outline-none focus:ring-2 focus:ring-red-500 md:max-w-[200px]" />
                 <label for="empresa">Empresa</label>
               </FloatLabel>
               <FloatLabel>
-                <InputText id="Cargo" v-model="newLead.cargo" class="max-w-[200px] border-2 border-red-500 bg-zinc-950 p-1 text-white focus:bg-zinc-950 focus:outline-none focus:ring-2 focus:ring-red-500" />
+                <InputText id="Cargo" v-model="newLead.cargo" class="max-w-[260px] border-2 border-red-500 bg-zinc-950 p-1 text-white focus:bg-zinc-950 focus:outline-none focus:ring-2 focus:ring-red-500 md:max-w-[200px]" />
                 <label for="Cargo">Cargo</label>
               </FloatLabel>
             </div>
-            <MultiSelect v-model="newLead.interesse" :options="Interese" option-label="nome" filter placeholder="Categorias de interesse" :max-selected-labels="3" class=" w-full max-w-[429px] border-2 border-red-500 bg-zinc-950 text-white focus:bg-zinc-950 focus:outline-none focus:ring-2 focus:ring-red-500" />
+            <MultiSelect v-model="newLead.interesse" :options="Interese" option-label="nome" filter placeholder="Categorias de interesse" :max-selected-labels="1" class=" w-full max-w-[260px] border-2 border-red-500 bg-zinc-950 text-white focus:bg-zinc-950 focus:outline-none focus:ring-2 focus:ring-red-500 md:max-w-[429px]" />
             <button class=" w-[290px] rounded-xl border-2 border-black bg-red-600 px-6 py-2 text-base font-bold tracking-wide text-white transition-all duration-200 ease-in-out hover:bg-red-500" @click="salvarLead()">
               Quero ter acesso a esses produtos em primeira mão!
             </button>
           </div>
-          <div v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="order-1 pb-3 transition-all duration-200 ease-in-out md:order-2">
+          <div id="card" v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="order-1 pb-3 transition-all duration-200 ease-in-out md:order-2">
             <Carousel :value="items" :num-visible="1" :num-scroll="1" orientation="vertical" vertical-view-port-height="330px" container-class="flex items-center ">
               <template #item="slotProps">
                 <div class="m-2 rounded border p-4">
