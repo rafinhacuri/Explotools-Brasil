@@ -18,6 +18,9 @@ const Interese = ref([
   { nome: 'Mordentes do mandril e morsa' },
 ])
 
+const images = ref([{ nome: `/foto1.jpeg` }, { nome: `/foto2.jpeg` }, { nome: `/foto3.jpeg` }, { nome: `/foto4.jpeg` }, { nome: `/foto5.jpeg` }, { nome: `/foto6.jpeg` }, { nome: `/foto7.jpeg` }, { nome: `/foto8.jpeg` }])
+const verdade = true
+
 const newLead = ref<Lead>({ nome: '', email: '', telefone: '', empresa: '', cargo: '', interesse: [] })
 
 async function salvarLead(){
@@ -65,7 +68,7 @@ function ScrollToDiv(targetId: string){
         <div class="flex items-center justify-center">
           <img src="/explotools.png" alt="logo Explotools brasil" class="mt-7 h-[140px] w-[300px] md:h-[200px] md:w-[700px]">
         </div>
-        <p class=" text-center text-lg font-black italic tracking-wide text-white md:text-3xl">
+        <p class=" text-center text-base font-black italic tracking-wide text-white md:text-3xl">
           Qualidade Internacional, Preços Nacionais:<br>
           Revolucione Sua Sondagem
         </p>
@@ -113,18 +116,12 @@ function ScrollToDiv(targetId: string){
               Quero ter acesso a esses produtos em primeira mão!
             </button>
           </div>
-          <div id="card" v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="order-1 pb-3 transition-all duration-200 ease-in-out md:order-2">
-            <Carousel :value="items" :num-visible="1" :num-scroll="1" orientation="vertical" vertical-view-port-height="330px" container-class="flex items-center ">
+          <div id="card" v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="order-1 max-w-[500px] pb-3 transition-all duration-200 ease-in-out md:order-2">
+            <Galleria :value="images" :circular="verdade" :show-item-navigators="verdade" :show-thumbnails="false" :auto-play="verdade" :transition-interval="2000">
               <template #item="slotProps">
-                <div class="m-2 rounded border p-4">
-                  <div class="mb-4">
-                    <div class="relative mx-auto">
-                      <img :src="slotProps.data" :alt="slotProps.data" class="w-full rounded">
-                    </div>
-                  </div>
-                </div>
+                <img :src="slotProps.item.nome" :alt="slotProps.item.nome" class="size-[300px] rounded-lg object-cover md:size-[500px]">
               </template>
-            </Carousel>
+            </Galleria>
           </div>
         </div>
       </div>
