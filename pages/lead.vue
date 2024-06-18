@@ -2,7 +2,7 @@
 import { LeadSchema } from '~/schemas/lead'
 import type { Lead } from '~/schemas/lead'
 
-useHead({ title: `Cadastrese` })
+useHead({ title: `Cadastresse` })
 
 defineOgImageComponent('NuxtSeo', { theme: '#3FA1B0', colorMode: 'dark' })
 
@@ -11,11 +11,11 @@ const toast = useToast()
 const { start, finish } = useLoadingIndicator()
 
 const Interese = ref([
-  { nome: 'New York' },
-  { nome: 'Rome' },
-  { nome: 'London' },
-  { nome: 'Istanbul' },
-  { nome: 'Paris' },
+  { nome: 'Cabeça de barrilete' },
+  { nome: 'Mola e caixa de mola' },
+  { nome: 'Overshot' },
+  { nome: 'Bomba de agua(Bomba de lama)' },
+  { nome: 'Mordentes do mandril e morsa' },
 ])
 
 const newLead = ref<Lead>({ nome: '', email: '', telefone: '', empresa: '', cargo: '', interesse: [] })
@@ -39,12 +39,6 @@ async function salvarLead(){
   toast.add({ severity: 'success', detail: res, summary: 'Sucesso', life: 10000 })
   return navigateTo('/obrigado')
 }
-
-const items = computed(() => {
-  const fotos: string[] = [`/fundo.jpeg`, `/fundo.jpeg`, `/fundo.jpeg`, `/fundo.jpeg`, `/fundo.jpeg`]
-
-  return fotos
-})
 
 const carouselRef = ref()
 onMounted(() => {
@@ -71,7 +65,7 @@ function ScrollToDiv(targetId: string){
         <div class="flex items-center justify-center">
           <img src="/explotools.png" alt="logo Explotools brasil" class="mt-7 h-[140px] w-[300px] md:h-[200px] md:w-[700px]">
         </div>
-        <p class=" text-center text-2xl font-black italic tracking-wide text-white md:text-3xl">
+        <p class=" text-center text-xl font-black italic tracking-wide text-white md:text-3xl">
           Qualidade Internacional, Preços Nacionais:<br>
           Revolucione Sua Sondagem
         </p>
