@@ -116,8 +116,8 @@ function ScrollToDiv(targetId: string){
               Quero ter acesso a esses produtos em primeira mão!
             </button>
           </div>
-          <div id="card" v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="order-1 max-w-[500px] pb-3 transition-all duration-200 ease-in-out md:order-2">
-            <Galleria :value="images" :circular="verdade" :show-item-navigators="verdade" :show-thumbnails="false" :auto-play="verdade" :transition-interval="2000">
+          <div v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="order-1 max-w-[500px] pb-3 transition-all duration-200 ease-in-out md:order-2">
+            <Galleria :value="images" :circular="verdade" :show-item-navigators="verdade" :show-thumbnails="false" :auto-play="verdade" :transition-interval="4000">
               <template #item="slotProps">
                 <img :src="slotProps.item.nome" :alt="slotProps.item.nome" class="size-[300px] rounded-lg object-cover md:size-[500px]">
               </template>
@@ -125,7 +125,7 @@ function ScrollToDiv(targetId: string){
           </div>
         </div>
       </div>
-      <div class="flex flex-col items-center justify-center">
+      <div id="card" class="flex flex-col items-center justify-center">
         <div class="max-w-[1000px] rounded-lg pb-10">
           <h2 v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="pb-5 text-center text-3xl font-bold tracking-wide text-white transition-all duration-1000 ease-in-out">
             Por que se cadastrar?
