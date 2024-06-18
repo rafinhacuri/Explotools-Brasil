@@ -10,18 +10,10 @@ const toast = useToast()
 
 const { start, finish } = useLoadingIndicator()
 
-const Interese = ref([
-  { nome: 'Cabeça de barrilete' },
-  { nome: 'Mola e caixa de mola' },
-  { nome: 'Overshot' },
-  { nome: 'Bomba de agua(Bomba de lama)' },
-  { nome: 'Mordentes do mandril e morsa' },
-])
-
 const images = ref([{ nome: `/foto1.jpeg` }, { nome: `/foto2.jpeg` }, { nome: `/foto3.jpeg` }, { nome: `/foto4.jpeg` }, { nome: `/foto5.jpeg` }, { nome: `/foto6.jpeg` }, { nome: `/foto7.jpeg` }, { nome: `/foto8.jpeg` }])
 const verdade = true
 
-const newLead = ref<Lead>({ nome: '', email: '', telefone: '', empresa: '', cargo: '', interesse: [] })
+const newLead = ref<Lead>({ nome: '', email: '', telefone: '', empresa: '', cargo: '' })
 
 async function salvarLead(){
   start()
@@ -85,7 +77,7 @@ function ScrollToDiv(targetId: string){
         </div>
 
         <div class="grid gap-5 p-12 md:grid-cols-2">
-          <div class="order-2 flex max-w-[500px] flex-col items-center justify-center space-y-6 rounded-xl bg-zinc-950 transition-all duration-1000 ease-in-out md:order-1">
+          <div id="card" class="order-2 flex max-w-[500px] flex-col items-center justify-center space-y-6 rounded-xl bg-zinc-950 transition-all duration-1000 ease-in-out md:order-1">
             <p class="p-3 text-lg font-semibold text-white">
               Inscreva-se aqui para mais informações:
             </p>
@@ -111,7 +103,6 @@ function ScrollToDiv(targetId: string){
                 <label for="Cargo">Cargo</label>
               </FloatLabel>
             </div>
-            <MultiSelect v-model="newLead.interesse" :options="Interese" option-label="nome" filter placeholder="Categorias de interesse" :max-selected-labels="1" class=" w-full max-w-[260px] border-2 border-red-500 bg-zinc-950 text-white focus:bg-zinc-950 focus:outline-none focus:ring-2 focus:ring-red-500 md:max-w-[429px]" />
             <button class=" w-[290px] rounded-xl border-2 border-black bg-red-600 px-6 py-2 text-base font-bold tracking-wide text-white transition-all duration-200 ease-in-out hover:bg-red-500" @click="salvarLead()">
               Quero ter acesso a esses produtos em primeira mão!
             </button>
@@ -125,7 +116,7 @@ function ScrollToDiv(targetId: string){
           </div>
         </div>
       </div>
-      <div id="card" class="flex flex-col items-center justify-center">
+      <div class="flex flex-col items-center justify-center">
         <div class="max-w-[1000px] rounded-lg pb-10">
           <h2 v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="pb-5 text-center text-3xl font-bold tracking-wide text-white transition-all duration-1000 ease-in-out">
             Por que se cadastrar?

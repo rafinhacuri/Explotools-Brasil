@@ -6,7 +6,6 @@ export const LeadSchema = z.object({
   telefone: z.string().trim().min(1, { message: 'Selecione a telefone' }),
   empresa: z.string().trim().min(1, { message: 'Selecione a empresa' }),
   cargo: z.string().trim().min(1, { message: 'Selecione a cargo' }),
-  interesse: z.array(z.object({ nome: z.string().trim().min(1, { message: 'Selecione o titulo' }) })),
 })
 
 export type Lead = z.infer<typeof LeadSchema>
@@ -18,7 +17,7 @@ export const EditLeadSchema = z.object({
   telefone: z.string().optional(),
   empresa: z.string().optional(),
   cargo: z.string().optional(),
-  interesse: z.array(z.object({ nome: z.string().trim().min(1, { message: 'Selecione o titulo' }) })).optional(),
+
 })
 
 export type EditLead = z.infer<typeof EditLeadSchema>
