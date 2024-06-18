@@ -129,14 +129,6 @@ watch(modalDeletLead, nv => {
   }
 })
 
-const Interese = ref([
-  { nome: 'New York' },
-  { nome: 'Rome' },
-  { nome: 'London' },
-  { nome: 'Istanbul' },
-  { nome: 'Paris' },
-])
-
 const modalEditLead = ref(false)
 const editLead = ref<EditLead>({ _id: '', nome: '', email: '', telefone: '', empresa: '', cargo: '' })
 
@@ -359,7 +351,7 @@ watch(modalEditLead, nv => {
               <label for="email">Email</label>
             </FloatLabel>
             <FloatLabel>
-              <InputText id="telefone" v-model="editLead.telefone" class=" border-2 border-blue-500 p-1 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              <InputMask id="telefone" v-model="editLead.telefone" mask="(99) 99999-9999" class=" border-2 border-blue-500 p-1 focus:outline-none focus:ring-2 focus:ring-blue-500" />
               <label for="telefone">Telefone</label>
             </FloatLabel>
             <FloatLabel>
@@ -371,7 +363,6 @@ watch(modalEditLead, nv => {
               <label for="Cargo">Cargo</label>
             </FloatLabel>
           </div>
-          <MultiSelect v-model="editLead.interesse" :options="Interese" option-label="nome" filter placeholder="Categorias de interesse" :max-selected-labels="5" class=" mt-4 w-full max-w-[429px] border-2 border-blue-500  focus:outline-none focus:ring-2 focus:ring-blue-500" />
 
           <div class="flex items-center justify-center space-x-5">
             <Button label="Confirmar" class="m-6 bg-blue-100 p-3 tracking-wider " severity="info" raised @click="confirmEdit" />

@@ -1,4 +1,4 @@
-export default defineNuxtRouteMiddleware(async to => {
+export default defineNuxtRouteMiddleware(async (to, from) => {
   const { loggedIn, fetch } = useUserSession()
 
   // * Atualizando a sessão
@@ -12,4 +12,7 @@ export default defineNuxtRouteMiddleware(async to => {
 
   // * tentando acessar index
   if(['/'].includes(to.fullPath)) return navigateTo('/lead')
+
+  // * Apenas permitir acesso à página de obrigado se vier da página de lead
+  if(to.fullPath === '/obrigado' && from.fullPath !== '/lead') return navigateTo('/lead')
 })
