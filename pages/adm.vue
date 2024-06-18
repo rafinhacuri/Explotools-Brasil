@@ -24,10 +24,10 @@ const filtros = ref({
   cargo: { value: null, matchMode: FilterMatchMode.CONTAINS },
 })
 
-function sair(){
-  clear()
+async function sair(){
+  await clear()
   navigateTo('/login')
-  return toast.add({ severity: 'success', summary: `Deslogado`, detail: 'Você foi deslogado com sucesso!', life: 10000 })
+  toast.add({ severity: 'success', summary: `Deslogado`, detail: 'Você foi deslogado com sucesso!', life: 10000 })
 }
 
 const modalInsertUser = ref(false)
@@ -138,7 +138,7 @@ const Interese = ref([
 ])
 
 const modalEditLead = ref(false)
-const editLead = ref<EditLead>({ _id: '', nome: '', email: '', telefone: '', empresa: '', cargo: '', interesse: undefined })
+const editLead = ref<EditLead>({ _id: '', nome: '', email: '', telefone: '', empresa: '', cargo: '' })
 
 function getLead(_id: string, nome: string, email: string, telefone: string, empresa: string, cargo: string){
   modalEditLead.value = true
@@ -168,13 +168,122 @@ async function confirmEdit(){
 
 watch(modalEditLead, nv => {
   if(!nv){
-    editLead.value = { _id: '', nome: '', email: '', telefone: '', empresa: '', cargo: '', interesse: undefined }
+    editLead.value = { _id: '', nome: '', email: '', telefone: '', empresa: '', cargo: '' }
   }
 })
 </script>
 
 <template>
-  <section class=" h-full bg-slate-900">
+  <section class=" h-full min-h-[calc(100vh-0px)] bg-slate-900">
+    <div class="p-5">
+      <div class="flex items-center justify-end px-7 py-5">
+        <div class="rounded-md transition-all duration-500 ease-in-out hover:bg-slate-500">
+          <Button v-tooltip.bottom="'Deslogar'" class="p-1" @click="sair">
+            <template #icon>
+              <Icon name="i-heroicons-arrow-left-on-rectangle" color="white" size="30" />
+            </template>
+          </Button>
+        </div>
+      </div>
+
+      <Panel header="Leads" toggleable>
+        <DataTable v-model:filters="filtros" :value="response" paginator :rows="10" :rows-per-page-options="[5, 10, 20, 50]" removable-sort :table-style="{ 'min-width': '50rem' }" filter-display="menu">
+          <Column field="nome" header="Nome" sortable>
+            <template #body="{ data }">
+              <span class="text-sm">{{ data.nome }}</span>
+            </template>
+            <template #filter="{ filterModel, filterCallback }">
+              <InputText v-model="filterModel.value" type="text" placeholder="Nome" @input="filterCallback()" />
+            </template>
+          </Column>
+          <Column field="email" header="Email" sortable>
+            <template #body="{ data }">
+              <span class="text-sm">{{ data.email }}</span>
+            </template>
+            <template #filter="{ filterModel, filterCallback }">
+              <InputText v-model="filterModel.value" type="text" placeholder="Email" @input="filterCallback()" />
+            </template>
+          </Column>
+          <Column field="telefone" header="Telefone" sortable>
+            <template #body="{ data }">
+              <span class="text-sm">{{ data.telefone }}</span>
+            </template>
+            <template #filter="{ filterModel, filterCallback }">
+              <InputText v-model="filterModel.value" type="text" placeholder="Telefone" @input="filterCallback()" />
+            </template>
+          </Column>
+          <Column field="empresa" header="Empresa" sortable>
+            <template #body="{ data }">
+              <span class="text-sm">{{ data.empresa }}</span>
+            </template>
+            <template #filter="{ filterModel, filterCallback }">
+              <InputText v-model="filterModel.value" type="text" placeholder="Empresa" @input="filterCallback()" />
+            </template>
+          </Column>
+          <Column field="cargo" header="cargo" sortable>
+            <template #body="{ data }">
+              <span class="text-sm">{{ data.cargo }}</span>
+            </template>
+            <template #filter="{ filterModel, filterCallback }">
+              <InputText v-model="filterModel.value" type="text" placeholder="cargo" @input="filterCallback()" />
+            </template>
+          </Column>
+
+          <Column header="Ações">
+            <template #body="{ data }">
+              <div class="space-x-2 ">
+                <Button v-tooltip.top="'Deletar lead'" class="rounded-full bg-red-500 p-1 tracking-wider text-white" @click="getIdLead(data._id, data.nome)">
+                  <template #icon>
+                    <Icon name="pepicons-pop:trash" color="white" size="30" />
+                  </template>
+                </Button>
+                <Button v-tooltip.top="'Editar Lead'" class="rounded-full bg-blue-500 p-1" @click="getLead(data._id, data.nome, data.email, data.telefone, data.empresa, data.cargo, data.interesse)">
+                  <template #icon>
+                    <Icon name="pepicons-pop:pen" color="white" size="30" />
+                  </template>
+                </Button>
+              </div>
+            </template>
+          </Column>
+        </DataTable>
+        <Button v-if="response.length >= 1" label="Baixar planilha" class="rounded-lg bg-blue-500 p-3 tracking-wider text-white" @click="navigateTo(`/lead.xlsx`, { open: { target: '_blank' } })">
+          <template #icon>
+            <Icon name="pepicons-pop:cloud-down" color="white" size="30" />
+          </template>
+        </Button>
+      </Panel>
+      <Panel class="mt-8" header="administradores" toggleable>
+        <div class="flex items-end justify-end px-7">
+          <Button v-tooltip.top="'Adicionar Adm'" class="rounded-full bg-blue-500 p-1" @click="modalInsertUser = true">
+            <template #icon>
+              <Icon name="pepicons-pop:plus" color="white" size="30" />
+            </template>
+          </Button>
+        </div>
+        <DataTable v-model:filters="filtros" :value="adms" paginator :rows="10" :rows-per-page-options="[5, 10, 20, 50]" removable-sort :table-style="{ 'min-width': '50rem' }" filter-display="menu">
+          <Column field="user" header="Adiministradores" sortable>
+            <template #body="{ data }">
+              <span class="text-sm">{{ data.user }}</span>
+            </template>
+            <template #filter="{ filterModel, filterCallback }">
+              <InputText v-model="filterModel.value" type="text" placeholder="Adiministradores" @input="filterCallback()" />
+            </template>
+          </Column>
+          <Column header="Ações">
+            <template #body="{ data }">
+              <div class="space-x-2 ">
+                <Button v-tooltip.top="'Deletar Adm'" class="rounded-full bg-red-500 p-1 tracking-wider text-white" @click="getId(data._id)">
+                  <template #icon>
+                    <Icon name="pepicons-pop:trash" color="white" size="30" />
+                  </template>
+                </Button>
+              </div>
+            </template>
+          </Column>
+        </DataTable>
+      </Panel>
+    </div>
+
     <Dialog v-model:visible="modalInsertUser" modal class="w-[50rem]" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
       <template #container>
         <div class="flex flex-col items-center rounded-md bg-white p-5">
@@ -271,120 +380,5 @@ watch(modalEditLead, nv => {
         </div>
       </template>
     </Dialog>
-
-    <div class="p-5">
-      <div class="flex items-center justify-end px-7 py-5">
-        <div class="rounded-md transition-all duration-500 ease-in-out hover:bg-slate-500">
-          <Button v-tooltip.bottom="'Deslogar'" class="p-1" @click="sair">
-            <template #icon>
-              <Icon name="i-heroicons-arrow-left-on-rectangle" color="white" size="30" />
-            </template>
-          </Button>
-        </div>
-      </div>
-
-      <Panel header="Leads" toggleable>
-        <DataTable v-model:filters="filtros" :value="response" paginator :rows="10" :rows-per-page-options="[5, 10, 20, 50]" removable-sort :table-style="{ 'min-width': '50rem' }" filter-display="menu">
-          <Column field="nome" header="Nome" sortable>
-            <template #body="{ data }">
-              <span class="text-sm">{{ data.nome }}</span>
-            </template>
-            <template #filter="{ filterModel, filterCallback }">
-              <InputText v-model="filterModel.value" type="text" placeholder="Nome" @input="filterCallback()" />
-            </template>
-          </Column>
-          <Column field="email" header="Email" sortable>
-            <template #body="{ data }">
-              <span class="text-sm">{{ data.email }}</span>
-            </template>
-            <template #filter="{ filterModel, filterCallback }">
-              <InputText v-model="filterModel.value" type="text" placeholder="Email" @input="filterCallback()" />
-            </template>
-          </Column>
-          <Column field="telefone" header="Telefone" sortable>
-            <template #body="{ data }">
-              <span class="text-sm">{{ data.telefone }}</span>
-            </template>
-            <template #filter="{ filterModel, filterCallback }">
-              <InputText v-model="filterModel.value" type="text" placeholder="Telefone" @input="filterCallback()" />
-            </template>
-          </Column>
-          <Column field="empresa" header="Empresa" sortable>
-            <template #body="{ data }">
-              <span class="text-sm">{{ data.empresa }}</span>
-            </template>
-            <template #filter="{ filterModel, filterCallback }">
-              <InputText v-model="filterModel.value" type="text" placeholder="Empresa" @input="filterCallback()" />
-            </template>
-          </Column>
-          <Column field="cargo" header="cargo" sortable>
-            <template #body="{ data }">
-              <span class="text-sm">{{ data.cargo }}</span>
-            </template>
-            <template #filter="{ filterModel, filterCallback }">
-              <InputText v-model="filterModel.value" type="text" placeholder="cargo" @input="filterCallback()" />
-            </template>
-          </Column>
-          <Column field="interesse" header="Interesses">
-            <template #body="{ data }">
-              <div v-for="int in data.interesse" :key="int.nome">
-                <span class="text-sm">{{ int.nome }}</span>
-              </div>
-            </template>
-          </Column>
-          <Column header="Ações">
-            <template #body="{ data }">
-              <div class="space-x-2 ">
-                <Button v-tooltip.top="'Deletar lead'" class="rounded-full bg-red-500 p-1 tracking-wider text-white" @click="getIdLead(data._id, data.nome)">
-                  <template #icon>
-                    <Icon name="pepicons-pop:trash" color="white" size="30" />
-                  </template>
-                </Button>
-                <Button v-tooltip.top="'Editar Lead'" class="rounded-full bg-blue-500 p-1" @click="getLead(data._id, data.nome, data.email, data.telefone, data.empresa, data.cargo, data.interesse)">
-                  <template #icon>
-                    <Icon name="pepicons-pop:pen" color="white" size="30" />
-                  </template>
-                </Button>
-              </div>
-            </template>
-          </Column>
-        </DataTable>
-        <Button v-if="response.length >= 1" label="Baixar planilha" class="rounded-lg bg-blue-500 p-3 tracking-wider text-white" @click="navigateTo(`/lead.xlsx`, { open: { target: '_blank' } })">
-          <template #icon>
-            <Icon name="pepicons-pop:cloud-down" color="white" size="30" />
-          </template>
-        </Button>
-      </Panel>
-      <Panel class="mt-8" header="administradores" toggleable>
-        <div class="flex items-end justify-end px-7">
-          <Button v-tooltip.top="'Adicionar Adm'" class="rounded-full bg-blue-500 p-1" @click="modalInsertUser = true">
-            <template #icon>
-              <Icon name="pepicons-pop:plus" color="white" size="30" />
-            </template>
-          </Button>
-        </div>
-        <DataTable v-model:filters="filtros" :value="adms" paginator :rows="10" :rows-per-page-options="[5, 10, 20, 50]" removable-sort :table-style="{ 'min-width': '50rem' }" filter-display="menu">
-          <Column field="user" header="Adiministradores" sortable>
-            <template #body="{ data }">
-              <span class="text-sm">{{ data.user }}</span>
-            </template>
-            <template #filter="{ filterModel, filterCallback }">
-              <InputText v-model="filterModel.value" type="text" placeholder="Adiministradores" @input="filterCallback()" />
-            </template>
-          </Column>
-          <Column header="Ações">
-            <template #body="{ data }">
-              <div class="space-x-2 ">
-                <Button v-tooltip.top="'Deletar Adm'" class="rounded-full bg-red-500 p-1 tracking-wider text-white" @click="getId(data._id)">
-                  <template #icon>
-                    <Icon name="pepicons-pop:trash" color="white" size="30" />
-                  </template>
-                </Button>
-              </div>
-            </template>
-          </Column>
-        </DataTable>
-      </Panel>
-    </div>
   </section>
 </template>

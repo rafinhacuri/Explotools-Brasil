@@ -77,7 +77,7 @@ function ScrollToDiv(targetId: string){
         </div>
 
         <div class="grid gap-5 p-12 md:grid-cols-2">
-          <div id="card" class="order-2 flex max-w-[500px] flex-col items-center justify-center space-y-6 rounded-xl bg-zinc-950 transition-all duration-1000 ease-in-out md:order-1">
+          <div id="card" class="order-2 flex max-w-[500px] flex-col items-center justify-center space-y-14 rounded-xl bg-zinc-950 transition-all duration-1000 ease-in-out md:order-1">
             <p class="p-3 text-lg font-semibold text-white">
               Inscreva-se aqui para mais informações:
             </p>
