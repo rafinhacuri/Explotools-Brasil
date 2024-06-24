@@ -12,8 +12,8 @@ export default defineNuxtConfig({
   css: ['~/assets/global.sass', 'primevue/resources/primevue.min.css', 'primevue/resources/themes/aura-light-green/theme.css'],
   site: {
     url: SITE_URL,
-    name: 'Explotools Brasil',
-    description: 'Nossa proposta é oferecer produtos de qualidade importada para sondagem a preços acessíveis, permitindo uma redução de custos significativa sem comprometer a qualidade e a produtividade',
+    name: 'Explotools Brasil | Ferramentas para Sondagem',
+    description: 'Líder na América Latina em materiais de sondagem. Com 20 anos de experiência, alta tecnologia e presença em mais de 13 países, oferecemos produtos de qualidade importada a preços competitivos. Aumente sua produtividade e eficiência com nossa inovação',
     identity: { type: 'Organization' },
   },
   imports: {
