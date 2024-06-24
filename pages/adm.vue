@@ -260,7 +260,7 @@ async function salvarLead(){
                     <Icon name="pepicons-pop:trash" color="white" size="30" />
                   </template>
                 </Button>
-                <Button v-tooltip.top="'Editar Lead'" class="rounded-full bg-blue-500 p-1" @click="getLead(data._id, data.nome, data.email, data.telefone, data.empresa, data.cargo, data.interesse)">
+                <Button v-tooltip.top="'Editar Lead'" class="rounded-full bg-blue-500 p-1" @click="getLead(data._id, data.nome, data.email, data.telefone, data.empresa, data.cargo)">
                   <template #icon>
                     <Icon name="pepicons-pop:pen" color="white" size="30" />
                   </template>
@@ -269,7 +269,7 @@ async function salvarLead(){
             </template>
           </Column>
         </DataTable>
-        <Button v-if="response.length >= 1" label="Baixar planilha" class="rounded-lg bg-blue-500 p-3 tracking-wider text-white" @click="navigateTo(`/lead.xlsx`, { open: { target: '_blank' } })">
+        <Button v-if="response && response.length >= 1" label="Baixar planilha" class="rounded-lg bg-blue-500 p-3 tracking-wider text-white" @click="navigateTo(`/lead.xlsx`, { open: { target: '_blank' } })">
           <template #icon>
             <Icon name="pepicons-pop:cloud-down" color="white" size="30" />
           </template>

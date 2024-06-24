@@ -46,6 +46,22 @@ onMounted(() => {
   }, 3000)
 })
 
+if(import.meta.client){
+  window.addEventListener('scroll', () => {
+    const btnScrollTop = document.querySelector('#scrollTopButton') as HTMLElement
+    if(window.innerWidth < 768){
+      const maxScrollPosition = document.body.offsetHeight - window.innerHeight
+      if(btnScrollTop){
+        if(window.pageYOffset > 0 && window.pageYOffset < maxScrollPosition - 100){
+          btnScrollTop.style.opacity = '1'
+        }
+        else {
+          btnScrollTop.style.opacity = '0'
+        }
+      }
+    }
+  })
+}
 function ScrollToDiv(targetId: string){
   const targetDiv = document.querySelector(`#${targetId}`) as HTMLElement
   if(targetDiv) window.scrollTo({ top: targetDiv.offsetTop - 65, behavior: 'smooth' })
@@ -195,5 +211,12 @@ function ScrollToDiv(targetId: string){
       </div>
     </div>
     <CookieConsent />
+    <div v-if="localStorage.getItem('cookieConsent')">
+      <div class="flex w-screen items-center justify-center">
+        <button id="scrollTopButton" class=" fixed bottom-0 z-50 block w-[420px] rounded-lg border-2 border-black bg-[#FD0116] py-6 text-lg font-bold tracking-wide text-white opacity-0 transition-opacity ease-in-out md:hidden" @click="ScrollToDiv('card')">
+          Quero aumentar minha produtividade!
+        </button>
+      </div>
+    </div>
   </section>
 </template>
