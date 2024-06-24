@@ -194,5 +194,6 @@ function ScrollToDiv(targetId: string){
         </div>
       </div>
     </div>
+    <CookieConsent />
   </section>
 </template>
