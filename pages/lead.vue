@@ -211,7 +211,7 @@ function ScrollToDiv(targetId: string){
       </div>
     </div>
     <div>
-      <div class="flex w-screen items-center justify-center">
+      <div class="flex items-center justify-center">
         <button id="scrollTopButton" class=" fixed bottom-0 z-50 block w-[380px] rounded-lg border-2 border-black bg-[#FD0116] py-6 text-lg font-bold tracking-wide text-white opacity-0 transition-opacity ease-in-out md:hidden" @click="ScrollToDiv('card')">
           Quero aumentar minha produtividade!
         </button>
