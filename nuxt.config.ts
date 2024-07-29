@@ -1,6 +1,6 @@
 import process from 'node:process'
 
-const { PRODUCTION, SITE_URL, MONGO_URL, MONGO_USERNAME, MONGO_PASSWORD, MONGO_DB_NAME, DEV_URL, DEV_KEY, DEV_CERT } = process.env
+const { PRODUCTION, SITE_URL, MONGO_URL, MONGO_USERNAME, MONGO_PASSWORD, MONGO_DB_NAME, DEV_URL } = process.env
 
 export default defineNuxtConfig({
   modules: ['nuxt-auth-utils', '@nuxtjs/seo', '@nuxtjs/tailwindcss', 'nuxt-gtag', 'nuxt-security', 'nuxt-primevue', 'nuxt-icon'],
@@ -9,7 +9,7 @@ export default defineNuxtConfig({
     pageTransition: { name: 'slide-left', mode: 'out-in' },
   },
   robots: { disallow: ['/lista', '/obrigado', '/login'] },
-  css: ['~/assets/global.sass', 'primevue/resources/primevue.min.css', 'primevue/resources/themes/aura-light-green/theme.css'],
+  css: ['~/assets/global.css', 'primevue/resources/primevue.min.css', 'primevue/resources/themes/aura-light-green/theme.css'],
   site: {
     url: SITE_URL,
     name: 'Explotools Brasil | Ferramentas para Sondagem',
@@ -37,7 +37,6 @@ export default defineNuxtConfig({
   },
   devServer: {
     host: DEV_URL,
-    https: { key: DEV_KEY, cert: DEV_CERT },
   },
   devtools: { enabled: true },
 })

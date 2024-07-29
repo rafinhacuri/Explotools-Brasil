@@ -2,6 +2,10 @@
 import { LeadSchema } from '~/schemas/lead'
 import type { Lead } from '~/schemas/lead'
 
+definePageMeta({
+  layout: false,
+})
+
 useHead({ title: `Cadastre-se` })
 
 defineOgImageComponent('NuxtSeo', { theme: '#3FA1B0', colorMode: 'dark' })

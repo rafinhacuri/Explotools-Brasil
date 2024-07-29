@@ -1,3 +1,9 @@
+<script setp lang="ts">
+definePageMeta({
+  layout: false,
+})
+</script>
+
 <template>
   <section class="min-h-screen bg-[url('/fundo.jpeg')] bg-cover bg-center bg-no-repeat">
     <div class="relative z-10">
