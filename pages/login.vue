@@ -4,6 +4,10 @@ import type { User } from '~/schemas/user'
 
 useHead({ title: `Login` })
 
+definePageMeta({
+  layout: false,
+})
+
 defineOgImageComponent('NuxtSeo', { theme: '#3FA1B0', colorMode: 'dark' })
 
 const toast = useToast()

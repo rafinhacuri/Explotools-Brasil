@@ -5,6 +5,10 @@ import type { EditLead, Lead } from '~/schemas/lead'
 import { UserSchema } from '~/schemas/user'
 import type { User } from '~/schemas/user'
 
+definePageMeta({
+  layout: false,
+})
+
 const { clear } = useUserSession()
 
 const toast = useToast()
