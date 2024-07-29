@@ -5,4 +5,5 @@
     <slot />
     <Toast position="bottom-right" class="max-w-[300px]" @contextmenu.prevent />
   </main>
+  <Footer />
 </template>

@@ -13,7 +13,7 @@ const menu = ref<{ nome: string, to: string }[]>([
       <img src="/explotools.png" alt="logo Explotools brasil" class="h-[150px] w-[450px]">
     </div>
     <div class="w-full">
-      <ul class="flex w-full justify-center space-x-6 bg-red-600">
+      <ul class="flex w-full justify-center space-x-6 bg-[#FD0116]">
         <template v-for="{nome, to} in menu" :key="to">
           <li class="rounded-lg p-1 uppercase text-white hover:font-bold hover:text-black">
             <NuxtLink :to="to" active-class="rounded-lg p-1 text-black font-bold">
