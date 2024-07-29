@@ -1,4 +1,4 @@
-<script setp lang="ts">
+<script setup lang="ts">
 definePageMeta({
   layout: false,
 })
