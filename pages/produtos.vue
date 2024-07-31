@@ -54,7 +54,7 @@ const images = ref([
     <div class=" flex flex-col items-center justify-center space-y-4 md:flex-row md:space-x-10 md:space-y-0">
       <div class="flex max-w-[500px] pt-3 md:ml-7 md:pt-0">
         <ClientOnly>
-          <Carousel :value="images" circular :autoplay-interval="3000" :num-visible="1" :num-scroll="1" :show-indicators="false">
+          <Carousel :value="images" circular :autoplay-interval="6000" :num-visible="1" :num-scroll="1" :show-indicators="false">
             <template #item="slotProps">
               <img :src="slotProps.data.nome" :alt="slotProps.data.nome" class="my-3 size-[430px] rounded-lg object-cover">
             </template>
