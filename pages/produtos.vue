@@ -47,18 +47,19 @@ const images = ref([
   { nome: `/produtos/45.jpg` },
   { nome: `/produtos/46.jpg` },
 ])
-const verdade = true
 </script>
 
 <template>
   <section>
     <div class=" grid items-center justify-center space-y-4 md:grid-cols-2 md:space-x-40 md:space-y-0">
       <div class="flex max-w-[500px] pt-3 md:ml-7 md:pt-0">
-        <Galleria :value="images" :circular="verdade" :show-item-navigators="verdade" :show-thumbnails="false" :auto-play="verdade" :transition-interval="3000">
-          <template #item="slotProps">
-            <img :src="slotProps.item.nome" :alt="slotProps.item.nome" class="size-[300px] rounded-lg object-cover md:size-[500px]">
-          </template>
-        </Galleria>
+        <ClientOnly>
+          <Carousel :value="images" circular :autoplay-interval="3000" :num-visible="1" :num-scroll="1" :show-indicators="false">
+            <template #item="slotProps">
+              <img :src="slotProps.data.nome" :alt="slotProps.data.nome" class="size-[300px] rounded-lg object-cover md:size-[500px]">
+            </template>
+          </Carousel>
+        </ClientOnly>
       </div>
       <div class="flex flex-col items-center">
         <NuxtLink to="/catalogos/catalogo1.pdf" download external target="_blank">
