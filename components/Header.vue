@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const menu = ref<{ nome: string, to: string }[]>([
   { nome: 'Empresa', to: '/' },
-  { nome: 'Catalogos', to: '/catalogos' },
+  { nome: 'Produtos', to: '/produtos' },
   { nome: 'Contatos', to: '/contatos' },
 ])
 </script>
