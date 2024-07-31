@@ -51,24 +51,33 @@ const verdade = true
 </script>
 
 <template>
-  <div class="ml-7 grid grid-cols-1 items-center justify-center space-y-4 md:grid-cols-2 md:space-x-40 md:space-y-0">
-    <div class="max-w-[500px]">
-      <Galleria :value="images" :circular="verdade" :show-item-navigators="verdade" :show-thumbnails="false" :auto-play="verdade" :transition-interval="3000">
-        <template #item="slotProps">
-          <img :src="slotProps.item.nome" :alt="slotProps.item.nome" class="size-[300px] rounded-lg object-cover md:size-[500px]">
-        </template>
-      </Galleria>
+  <section>
+    <div class=" grid items-center justify-center space-y-4 md:grid-cols-2 md:space-x-40 md:space-y-0">
+      <div class="flex max-w-[500px] pt-3 md:ml-7 md:pt-0">
+        <Galleria :value="images" :circular="verdade" :show-item-navigators="verdade" :show-thumbnails="false" :auto-play="verdade" :transition-interval="3000">
+          <template #item="slotProps">
+            <img :src="slotProps.item.nome" :alt="slotProps.item.nome" class="size-[300px] rounded-lg object-cover md:size-[500px]">
+          </template>
+        </Galleria>
+      </div>
+      <div class="flex flex-col items-center">
+        <NuxtLink to="/catalogos/catalogo1.pdf" download>
+          <img src="/catalogos/catalogo1foto.jpeg" alt="Baixar Catálogo" class="mx-6 my-5 size-[250px] rounded-2xl transition-all hover:size-[280px]">
+        </NuxtLink>
+        <NuxtLink to="/catalogos/catalogo2.pdf" download>
+          <img src="/catalogos/catalogo2foto.jpeg" alt="Baixar Catálogo" class="mx-6 mb-5 size-[250px] rounded-2xl transition-all hover:size-[280px]">
+        </NuxtLink>
+        <NuxtLink to="/catalogos/catalogo3.pdf" download>
+          <img src="/catalogos/catalogo3foto.jpeg" alt="Baixar Catálogo" class="mx-6 mb-5 size-[250px] rounded-2xl transition-all hover:size-[280px]">
+        </NuxtLink>
+      </div>
     </div>
-    <div class="flex flex-col items-center">
-      <NuxtLink to="/catalogos/catalogo1.pdf" download>
-        <img src="/catalogos/catalogo1foto.jpeg" alt="Baixar Catálogo" class="mx-6 my-5 size-[250px] rounded-2xl transition-all hover:size-[280px]">
-      </NuxtLink>
-      <NuxtLink to="/catalogos/catalogo2.pdf" download>
-        <img src="/catalogos/catalogo2foto.jpeg" alt="Baixar Catálogo" class="mx-6 mb-5 size-[250px] rounded-2xl transition-all hover:size-[280px]">
-      </NuxtLink>
-      <NuxtLink to="/catalogos/catalogo3.pdf" download>
-        <img src="/catalogos/catalogo3foto.jpeg" alt="Baixar Catálogo" class="mx-6 mb-5 size-[250px] rounded-2xl transition-all hover:size-[280px]">
-      </NuxtLink>
+    <div>
+      <div class="flex items-center justify-center text-white">
+        <NuxtLink class="mb-7 animate-pulse rounded-full border-2 border-black bg-green-500 p-3 text-lg font-bold tracking-wide" to="https://wa.link/vb9urm" external target="_blank">
+          Solicite um orçamento
+        </NuxtLink>
+      </div>
     </div>
-  </div>
+  </section>
 </template>
