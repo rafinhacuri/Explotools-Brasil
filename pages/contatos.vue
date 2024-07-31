@@ -5,7 +5,7 @@ const midias = ref([
   { href: 'https://www.instagram.com/explotools.brasil?igsh=MWc2OHBxc3ozejhsdA==', icon: 'line-md:instagram', text: 'Instagram' },
   { href: 'https://www.facebook.com/share/p1veqrfSK8BVwVUU/?mibextid=qi2Omg', icon: 'line-md:facebook', text: 'Facebook' },
   { href: 'https://www.linkedin.com/in/explotools-brasil-b6ba58273', icon: 'line-md:linkedin', text: 'LinkedIn' },
-  { href: 'https://www.flickr.com/photos/cbpf_mctic/albums', icon: 'line-md:map-marker', text: 'Google Maps' },
+  { href: 'https://maps.app.goo.gl/FGUcQ1ZqUXyxKMsT8', icon: 'line-md:map-marker', text: 'Google Maps' },
 ])
 </script>
 
