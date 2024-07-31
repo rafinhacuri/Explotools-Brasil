@@ -61,13 +61,13 @@ const verdade = true
         </Galleria>
       </div>
       <div class="flex flex-col items-center">
-        <NuxtLink to="/catalogos/catalogo1.pdf" download>
+        <NuxtLink to="/catalogos/catalogo1.pdf" download external target="_blank">
           <img src="/catalogos/catalogo1foto.jpeg" alt="Baixar Catálogo" class="mx-6 my-5 size-[250px] rounded-2xl transition-all hover:size-[280px]">
         </NuxtLink>
-        <NuxtLink to="/catalogos/catalogo2.pdf" download>
+        <NuxtLink to="/catalogos/catalogo2.pdf" download external target="_blank">
           <img src="/catalogos/catalogo2foto.jpeg" alt="Baixar Catálogo" class="mx-6 mb-5 size-[250px] rounded-2xl transition-all hover:size-[280px]">
         </NuxtLink>
-        <NuxtLink to="/catalogos/catalogo3.pdf" download>
+        <NuxtLink to="/catalogos/catalogo3.pdf" download external target="_blank">
           <img src="/catalogos/catalogo3foto.jpeg" alt="Baixar Catálogo" class="mx-6 mb-5 size-[250px] rounded-2xl transition-all hover:size-[280px]">
         </NuxtLink>
       </div>
