@@ -1,6 +1,5 @@
 <script setup lang="ts">
 const images = ref([
-  { nome: `/produtos/1.png` },
   { nome: `/produtos/2.jpg` },
   { nome: `/produtos/3.jpg` },
   { nome: `/produtos/4.png` },
@@ -56,7 +55,7 @@ const images = ref([
         <ClientOnly>
           <Carousel :value="images" circular :autoplay-interval="6000" :num-visible="1" :num-scroll="1" :show-indicators="false">
             <template #item="slotProps">
-              <img :src="slotProps.data.nome" :alt="slotProps.data.nome" class="my-3 h-[300px] rounded-lg object-cover md:h-[430px]">
+              <img :src="slotProps.data.nome" :alt="slotProps.data.nome" class="my-3 h-[300px] rounded-lg md:h-[430px]">
             </template>
           </Carousel>
           <template #fallback>
