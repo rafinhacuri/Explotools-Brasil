@@ -1,4 +1,8 @@
 <script setup lang="ts">
+useHead({ title: `Inicio` })
+
+defineOgImageComponent('NuxtSeo', { theme: '#3FA1B0', colorMode: 'dark' })
+
 const mutado = ref(false)
 </script>
 

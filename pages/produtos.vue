@@ -1,4 +1,8 @@
 <script setup lang="ts">
+useHead({ title: `Produtos` })
+
+defineOgImageComponent('NuxtSeo', { theme: '#3FA1B0', colorMode: 'dark' })
+
 const images = ref([
   { nome: `/produtos/2.jpg` },
   { nome: `/produtos/3.jpg` },

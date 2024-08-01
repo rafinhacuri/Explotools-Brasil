@@ -3,7 +3,7 @@
     <div class="mx-auto w-full">
       <div class="bg-[#FD0116] px-4 py-6 text-center md:flex md:items-center md:justify-between">
         <span class="text-sm text-gray-100 sm:text-center">© {{ new Date().getFullYear() }}
-          <NuxtLink>Explotools Brasil - Ferramentas de Sondagem de Alta Qualidade</NuxtLink>
+          Explotools Brasil - Ferramentas de Sondagem de Alta Qualidade. Todos os direitos reservados.
         </span>
         <div class="mr-6 mt-4 flex justify-center space-x-5 md:mt-0">
           <NuxtLink v-tooltip.top="'Instagram'" to="https://www.instagram.com/explotools.brasil?igsh=MWc2OHBxc3ozejhsdA==" external target="_blank" class="text-white hover:text-gray-900">
