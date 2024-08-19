@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { EditLead, Lead } from '~/schemas/lead'
-import type { User } from '~/schemas/user'
 import { type Id, IdSchema } from '~/schemas/id'
+import type { EditLead, Lead } from '~/schemas/lead'
 import { EditLeadSchema, LeadSchema } from '~/schemas/lead'
+import type { User } from '~/schemas/user'
 import { UserSchema } from '~/schemas/user'
 
 definePageMeta({
@@ -198,7 +198,7 @@ async function salvarLead(){
     <div class="p-5">
       <div class="flex items-center justify-end px-7 py-5">
         <div class="rounded-md transition-all duration-500 ease-in-out hover:bg-slate-500">
-          <Button v-tooltip.bottom="'Deslogar'" class="p-1" @click="sair">
+          <Button v-tooltip.bottom="'Deslogar'" class="p-1 text-white" @click="sair">
             <template #icon>
               <Icon name="i-heroicons-arrow-left-on-rectangle" color="white" size="30" />
             </template>
@@ -208,7 +208,7 @@ async function salvarLead(){
 
       <Panel header="Leads" toggleable>
         <div class="flex items-end justify-end px-7">
-          <Button v-tooltip.top="'Adicionar Lead'" class="rounded-full bg-blue-500 p-1" @click="modalInsertLead = true">
+          <Button v-tooltip.top="'Adicionar Lead'" class="rounded-full bg-blue-500 p-1 text-white" @click="modalInsertLead = true">
             <template #icon>
               <Icon name="pepicons-pop:plus" color="white" size="30" />
             </template>
@@ -264,7 +264,7 @@ async function salvarLead(){
                     <Icon name="pepicons-pop:trash" color="white" size="30" />
                   </template>
                 </Button>
-                <Button v-tooltip.top="'Editar Lead'" class="rounded-full bg-blue-500 p-1" @click="getLead(data._id, data.nome, data.email, data.telefone, data.empresa, data.cargo)">
+                <Button v-tooltip.top="'Editar Lead'" class="rounded-full bg-blue-500 p-1 text-white" @click="getLead(data._id, data.nome, data.email, data.telefone, data.empresa, data.cargo)">
                   <template #icon>
                     <Icon name="pepicons-pop:pen" color="white" size="30" />
                   </template>
@@ -281,7 +281,7 @@ async function salvarLead(){
       </Panel>
       <Panel class="mt-8" header="administradores" toggleable>
         <div class="flex items-end justify-end px-7">
-          <Button v-tooltip.top="'Adicionar Adm'" class="rounded-full bg-blue-500 p-1" @click="modalInsertUser = true">
+          <Button v-tooltip.top="'Adicionar Adm'" class="rounded-full bg-blue-500 p-1 text-white" @click="modalInsertUser = true">
             <template #icon>
               <Icon name="pepicons-pop:plus" color="white" size="30" />
             </template>

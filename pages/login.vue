@@ -33,6 +33,7 @@ async function login(){
   if(!res) return finish({ error: true })
 
   toast.add({ severity: 'success', detail: res, summary: 'Sucesso', life: 10000 })
+  finish()
   await navigateTo('/adm')
 }
 </script>
