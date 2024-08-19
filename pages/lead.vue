@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { LeadSchema } from '~/schemas/lead'
 import type { Lead } from '~/schemas/lead'
+import { LeadSchema } from '~/schemas/lead'
 
 definePageMeta({
   layout: false,

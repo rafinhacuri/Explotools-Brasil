@@ -1,5 +1,5 @@
-import { UserSchema } from '~/schemas/user'
 import { sha512Crypt } from 'ldap-passwords'
+import { UserSchema } from '~/schemas/user'
 
 export default defineEventHandler(async event => {
   await requireUserSession(event, { statusCode: 401, message: 'Você não tem pemissão para executar essa ação' })

@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import type { EditLead, Lead } from '~/schemas/lead'
+import type { User } from '~/schemas/user'
 import { type Id, IdSchema } from '~/schemas/id'
 import { EditLeadSchema, LeadSchema } from '~/schemas/lead'
-import type { EditLead, Lead } from '~/schemas/lead'
 import { UserSchema } from '~/schemas/user'
-import type { User } from '~/schemas/user'
 
 definePageMeta({
   layout: false,

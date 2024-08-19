@@ -15,16 +15,18 @@ useHead({
 </script>
 
 <template>
-  <section class="mx-auto flex min-h-screen flex-col items-center justify-center bg-[url('/fundo.jpeg')] bg-cover bg-center bg-no-repeat px-6">
-    <div class="w-full rounded-lg bg-white shadow sm:max-w-md md:mt-0 xl:p-0 dark:border dark:border-gray-700 dark:bg-gray-800">
-      <div class="space-y-4 p-6 text-center sm:p-8 md:space-y-6">
-        <h1 class="text-xl font-bold leading-tight tracking-tight text-red-500 md:text-2xl">
-          {{ statusCode }}
-        </h1>
-        <p class="text-base font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-          {{ message }}
-        </p>
-        <button label="Voltar ao início" @click="clearError({ redirect: '/' })" />
+  <section>
+    <div class="mx-auto flex min-h-[calc(100vh-131px)] flex-col items-center justify-center px-8">
+      <div class="w-full rounded-lg bg-gray-50 shadow sm:max-w-5xl">
+        <div class="space-y-4 p-8 text-center">
+          <h1 class="text-7xl font-bold leading-tight tracking-tight text-red-600">
+            {{ statusCode }}
+          </h1>
+          <p class="text-4xl font-bold leading-tight tracking-tight text-gray-900">
+            {{ message }}
+          </p>
+          <Button label="Voltar" @click="clearError({ redirect: '/' })" />
+        </div>
       </div>
     </div>
   </section>

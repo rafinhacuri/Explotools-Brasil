@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { UserSchema } from '~/schemas/user'
 import type { User } from '~/schemas/user'
+import { UserSchema } from '~/schemas/user'
 
 useHead({ title: `Login` })
 

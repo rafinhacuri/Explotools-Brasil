@@ -1,6 +1,6 @@
+import mongoose, { Schema } from 'mongoose'
 import type { Lead } from '~/schemas/lead'
 import type { User } from '~/schemas/user'
-import mongoose, { Schema } from 'mongoose'
 
 const { MONGO_URL, MONGO_USERNAME, MONGO_PASSWORD, MONGO_DB_NAME } = useRuntimeConfig()
 
