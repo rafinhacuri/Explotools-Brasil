@@ -25,7 +25,7 @@ const midias = ref([
           target="_blank"
           class="mb-4 flex items-center justify-start rounded-lg p-4 shadow-md transition-transform hover:scale-105 hover:bg-gray-100"
         >
-          <Icon :name="icon" size="24" class="text-teal-500" color="red" />
+          <Icon :name="icon" size="24" color="red" class="text-[#FD0116]" />
           <span class="ml-3 text-lg font-medium text-gray-800">{{ text }}</span>
         </NuxtLink>
       </div>
