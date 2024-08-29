@@ -10,7 +10,7 @@ const midias = ref([
   { href: 'https://www.facebook.com/share/p1veqrfSK8BVwVUU/?mibextid=qi2Omg', icon: 'line-md:facebook', text: 'Facebook' },
   { href: 'https://www.linkedin.com/in/explotools-brasil-b6ba58273', icon: 'line-md:linkedin', text: 'LinkedIn' },
   { href: 'https://maps.app.goo.gl/FGUcQ1ZqUXyxKMsT8', icon: 'line-md:map-marker', text: 'Google Maps' },
-  { href: 'https://www.tiktok.com/@explotools.brasil?_t=8pFnT9iDWli&_r=1', icon: 'ic:baseline-tiktok', text: 'TikTok' },
+  { href: 'https://www.tiktok.com/@explotools.brasil?_t=8pFnT9iDWli&_r=1', icon: 'line-md:tiktok', text: 'TikTok' },
 ])
 </script>
 
