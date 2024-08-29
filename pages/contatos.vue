@@ -5,12 +5,12 @@ defineOgImageComponent('NuxtSeo', { theme: '#3FA1B0', colorMode: 'dark' })
 
 const midias = ref([
   { href: 'https://wa.link/vb9urm', icon: 'ic:baseline-whatsapp', text: 'WhatsApp' },
-  { href: 'https://www.tiktok.com/@explotools.brasil?_t=8pFnT9iDWli&_r=1', icon: 'ic:baseline-tiktok', text: 'TikTok' },
   { href: 'mailto:ramon.curi@explotools.cl', icon: 'line-md:email', text: 'Email' },
   { href: 'https://www.instagram.com/explotools.brasil?igsh=MWc2OHBxc3ozejhsdA==', icon: 'line-md:instagram', text: 'Instagram' },
   { href: 'https://www.facebook.com/share/p1veqrfSK8BVwVUU/?mibextid=qi2Omg', icon: 'line-md:facebook', text: 'Facebook' },
   { href: 'https://www.linkedin.com/in/explotools-brasil-b6ba58273', icon: 'line-md:linkedin', text: 'LinkedIn' },
   { href: 'https://maps.app.goo.gl/FGUcQ1ZqUXyxKMsT8', icon: 'line-md:map-marker', text: 'Google Maps' },
+  { href: 'https://www.tiktok.com/@explotools.brasil?_t=8pFnT9iDWli&_r=1', icon: 'ic:baseline-tiktok', text: 'TikTok' },
 ])
 </script>
 
