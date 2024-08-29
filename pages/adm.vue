@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { type Id, IdSchema } from '~/schemas/id'
 import type { EditLead, Lead } from '~/schemas/lead'
-import { EditLeadSchema, LeadSchema } from '~/schemas/lead'
 import type { User } from '~/schemas/user'
+import { type Id, IdSchema } from '~/schemas/id'
+import { EditLeadSchema, LeadSchema } from '~/schemas/lead'
 import { UserSchema } from '~/schemas/user'
 
 definePageMeta({
@@ -343,7 +343,7 @@ async function salvarLead(){
           <div class="-mt-16 inline-flex size-24 items-center justify-center rounded-full bg-red-500">
             <Icon name="pepicons-pop:trash-circle" color="white" size="3rem" />
           </div>
-          <span class="mb-2 mt-4 block text-center text-2xl font-bold">Deletar a página</span>
+          <span class="mb-2 mt-4 block text-center text-2xl font-bold">Deletar o Usuario</span>
           <span class="mb-2 mt-4 block text-center text-2xl font-bold">Tem certeza que deseja deletar o administrador ? </span>
 
           <div class="flex items-center justify-center space-x-5">
@@ -359,7 +359,7 @@ async function salvarLead(){
           <div class="-mt-16 inline-flex size-24 items-center justify-center rounded-full bg-red-500">
             <Icon name="pepicons-pop:trash-circle" color="white" size="3rem" />
           </div>
-          <span class="mb-2 mt-4 block text-center text-2xl font-bold">Deletar a página</span>
+          <span class="mb-2 mt-4 block text-center text-2xl font-bold">Deletar o Usuario</span>
           <span class="mb-2 mt-4 block text-center text-2xl font-bold">Tem certeza que deseja deletar o {{ nomeLead }} ? </span>
 
           <div class="flex items-center justify-center space-x-5">
