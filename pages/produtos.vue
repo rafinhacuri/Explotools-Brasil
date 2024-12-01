@@ -68,7 +68,7 @@ const images = ref([
         </ClientOnly>
       </div>
       <div class="flex items-center justify-center text-white">
-        <NuxtLink class="my-10 flex animate-pulse items-center justify-center rounded-full border-2 border-black bg-green-500 p-3 text-lg font-bold tracking-wide md:hidden" to="https://wa.link/vb9urm" external target="_blank">
+        <NuxtLink class="my-10 flex animate-pulse items-center justify-center rounded-full border-2 border-black bg-green-500 p-3 text-lg font-bold tracking-wide md:hidden" to="https://wa.link/c1di0k" external target="_blank">
           <Icon name="ic:baseline-whatsapp" size="24" color="white" />
           Solicite um orçamento
         </NuxtLink>
@@ -90,7 +90,7 @@ const images = ref([
     </div>
     <div>
       <div class="flex items-center justify-center text-white">
-        <NuxtLink class="my-10 flex animate-pulse items-center justify-center rounded-full border-2 border-black bg-green-500 p-3 text-lg font-bold tracking-wide" to="https://wa.link/vb9urm" external target="_blank">
+        <NuxtLink class="my-10 flex animate-pulse items-center justify-center rounded-full border-2 border-black bg-green-500 p-3 text-lg font-bold tracking-wide" to="https://wa.link/c1di0k" external target="_blank">
           <Icon name="ic:baseline-whatsapp" size="24" color="white" />
           Solicite um orçamento
         </NuxtLink>
