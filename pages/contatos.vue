@@ -5,7 +5,7 @@ defineOgImageComponent('NuxtSeo', { theme: '#3FA1B0', colorMode: 'dark' })
 
 const midias = ref([
   { href: 'https://wa.link/c1di0k', icon: 'ic:baseline-whatsapp', text: 'WhatsApp' },
-  { href: 'mailto:ramon.curi@explotools.cl', icon: 'line-md:email', text: 'Email' },
+  { href: 'mailto:ramoncuri@explotools.com.br', icon: 'line-md:email', text: 'Email' },
   { href: 'https://www.instagram.com/explotools.brasil?igsh=MWc2OHBxc3ozejhsdA==', icon: 'line-md:instagram', text: 'Instagram' },
   { href: 'https://www.facebook.com/share/p1veqrfSK8BVwVUU/?mibextid=qi2Omg', icon: 'line-md:facebook', text: 'Facebook' },
   { href: 'https://www.linkedin.com/in/explotools-brasil-b6ba58273', icon: 'line-md:linkedin', text: 'LinkedIn' },
