@@ -10,6 +10,11 @@ mongoose.connect(MONGO_URL, {
   dbName: MONGO_DB_NAME,
 })
 
+console.log(MONGO_DB_NAME)
+console.log(MONGO_URL)
+console.log(MONGO_USERNAME)
+console.log(MONGO_PASSWORD)
+
 export const Leads = mongoose.model('lead', new Schema<Lead>({
   nome: { type: String, required: true },
   email: { type: String, required: true },
