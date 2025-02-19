@@ -54,7 +54,7 @@ const images = ref([
 
 <template>
   <section>
-    <div class=" flex flex-col items-center justify-center space-y-4 md:flex-row md:space-x-10 md:space-y-0">
+    <div class=" mt-5 flex flex-col items-center justify-center space-y-4 md:flex-row md:space-x-10 md:space-y-0">
       <div class="flex max-w-[500px] pt-3 md:ml-7 md:pt-0">
         <ClientOnly>
           <Carousel :value="images" circular :autoplay-interval="6000" :num-visible="1" :num-scroll="1" :show-indicators="false">
@@ -74,6 +74,10 @@ const images = ref([
         </NuxtLink>
       </div>
       <div class="flex flex-col items-center">
+        <NuxtLink to="/catalogos/catalogo2025.pdf" download external target="_blank">
+          <img src="/catalogos/catalogo2025foto.png" alt="Baixar Catálogo" class="mx-6 mb-5 size-[250px] rounded-2xl transition-all hover:size-[280px] md:hidden border-2 border-black ">
+          <img src="/catalogos/catalogo2025foto2.png" alt="Baixar Catálogo" class="mx-6 mb-5 hidden h-[130px] w-[280px] rounded-2xl transition-all hover:h-[160px] hover:w-[310px] md:block">
+        </NuxtLink>
         <NuxtLink to="/catalogos/catalogo1.pdf" download external target="_blank">
           <img src="/catalogos/catalogo1foto.jpeg" alt="Baixar Catálogo" class="mx-6 my-5 size-[250px] rounded-2xl transition-all hover:size-[280px] md:hidden">
           <img src="/catalogos/catalogo1foto2.jpeg" alt="Baixar Catálogo" class="mx-6 my-5 hidden h-[130px]  w-[280px] rounded-2xl transition-all hover:h-[160px] hover:w-[310px] md:block">
