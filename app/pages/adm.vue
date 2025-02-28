@@ -1,10 +1,4 @@
 <script setup lang="ts">
-import type { EditLead, Lead } from '~/schemas/lead'
-import type { User } from '~/schemas/user'
-import { type Id, IdSchema } from '~/schemas/id'
-import { EditLeadSchema, LeadSchema } from '~/schemas/lead'
-import { UserSchema } from '~/schemas/user'
-
 definePageMeta({
   layout: false,
 })
@@ -42,7 +36,7 @@ async function insertAdm(){
 
   const body = UserSchema.safeParse(novoAdm.value)
   if(!body.success){
-    toast.add({ severity: 'error', detail: body.error.errors[0].message, summary: 'Erro', life: 10000 })
+    toast.add({ severity: 'error', detail: body.error.errors[0]?.message || '', summary: 'Erro', life: 10000 })
     return finish()
   }
 
@@ -77,7 +71,7 @@ async function confirmDelete(){
 
   if(!body.success){
     finish({ error: true })
-    return toast.add({ severity: 'error', detail: body.error.errors[0].message, summary: 'Erro', life: 10000 })
+    return toast.add({ severity: 'error', detail: body.error.errors[0]?.message || '', summary: 'Erro', life: 10000 })
   }
 
   const res = await $fetch(`/api/delete/user`, { method: 'post', body: body.data })
@@ -112,7 +106,7 @@ async function confirmDeleteLead(){
 
   if(!body.success){
     finish({ error: true })
-    return toast.add({ severity: 'error', detail: body.error.errors[0].message, summary: 'Erro', life: 10000 })
+    return toast.add({ severity: 'error', detail: body.error.errors[0]?.message || '', summary: 'Erro', life: 10000 })
   }
 
   const res = await $fetch(`/api/delete/lead`, { method: 'post', body: body.data })
@@ -148,7 +142,7 @@ async function confirmEdit(){
 
   if(!body.success){
     finish({ error: true })
-    return toast.add({ severity: 'error', detail: body.error.errors[0].message, summary: 'Erro', life: 10000 })
+    return toast.add({ severity: 'error', detail: body.error.errors[0]?.message || '', summary: 'Erro', life: 10000 })
   }
 
   const res = await $fetch(`/api/update/lead`, { method: 'post', body: body.data })
@@ -177,7 +171,7 @@ async function salvarLead(){
   const body = LeadSchema.safeParse(newLead.value)
 
   if(!body.success){
-    toast.add({ severity: 'error', detail: body.error.errors[0].message, summary: 'Erro', life: 10000 })
+    toast.add({ severity: 'error', detail: body.error.errors[0]?.message || '', summary: 'Erro', life: 10000 })
     return finish({ error: true })
   }
 

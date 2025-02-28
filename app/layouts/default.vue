@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { SpeedInsights } from '@vercel/speed-insights/vue'
 </script>
 
 <template>
-  <SpeedInsights />
   <Header />
   <main class="min-h-[calc(100vh-267px)]">
     <slot />

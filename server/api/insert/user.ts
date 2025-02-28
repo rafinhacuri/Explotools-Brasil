@@ -1,12 +1,11 @@
 import { sha512Crypt } from 'ldap-passwords'
-import { UserSchema } from '~/schemas/user'
 
 export default defineEventHandler(async event => {
   await requireUserSession(event, { statusCode: 401, message: 'Você não tem pemissão para executar essa ação' })
 
   const body = await readValidatedBody(event, UserSchema.safeParse)
 
-  if(!body.success) throw createError({ status: 400, message: body.error.errors[0].message })
+  if(!body.success) throw createError({ status: 400, message: body.error.errors[0]?.message || '' })
 
   const { user, senha } = body.data
 

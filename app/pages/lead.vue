@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import type { Lead } from '~/schemas/lead'
-import { LeadSchema } from '~/schemas/lead'
+import { useWindowScroll, useWindowSize } from '@vueuse/core'
 
 definePageMeta({
   layout: false,
@@ -25,7 +24,7 @@ async function salvarLead(){
   const body = LeadSchema.safeParse(newLead.value)
 
   if(!body.success){
-    toast.add({ severity: 'error', detail: body.error.errors[0].message, summary: 'Erro', life: 10000 })
+    toast.add({ severity: 'error', detail: body.error.errors[0]?.message || '', summary: 'Erro', life: 10000 })
     return finish({ error: true })
   }
 
@@ -50,25 +49,29 @@ onMounted(() => {
   }, 3000)
 })
 
-if(import.meta.client){
-  window.addEventListener('scroll', () => {
-    const btnScrollTop = document.querySelector('#scrollTopButton') as HTMLElement
-    if(window.innerWidth < 768){
-      const maxScrollPosition = document.body.offsetHeight - window.innerHeight
-      if(btnScrollTop){
-        if(window.pageYOffset > 0 && window.pageYOffset < maxScrollPosition - 100){
-          btnScrollTop.style.opacity = '1'
-        }
-        else {
-          btnScrollTop.style.opacity = '0'
-        }
+const { y: scrollY } = useWindowScroll()
+const { width } = useWindowSize()
+
+const btnScrollTop = ref<HTMLElement | null>(null)
+
+onMounted(() => {
+  btnScrollTop.value = document.querySelector('#scrollTopButton') as HTMLElement
+
+  watch([scrollY, width], () => {
+    if(width.value < 768){
+      const maxScrollPosition = document.body.offsetHeight - document.documentElement.clientHeight
+      if(btnScrollTop.value){
+        btnScrollTop.value.style.opacity = scrollY.value > 0 && scrollY.value < maxScrollPosition - 100 ? '1' : '0'
       }
     }
   })
-}
+})
+
 function ScrollToDiv(targetId: string){
   const targetDiv = document.querySelector(`#${targetId}`) as HTMLElement
-  if(targetDiv) window.scrollTo({ top: targetDiv.offsetTop - 65, behavior: 'smooth' })
+  if(targetDiv){
+    targetDiv.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
 }
 </script>
 

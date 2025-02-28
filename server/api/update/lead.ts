@@ -1,11 +1,9 @@
-import { EditLeadSchema } from '~/schemas/lead'
-
 export default defineEventHandler(async event => {
   await requireUserSession(event, { statusCode: 401, message: 'Você não tem pemissão para executar essa ação' })
 
   const body = await readValidatedBody(event, EditLeadSchema.safeParse)
 
-  if(!body.success) throw createError({ status: 400, message: body.error.errors[0].message })
+  if(!body.success) throw createError({ status: 400, message: body.error.errors[0]?.message || '' })
 
   const { nome, cargo, _id, email, empresa, telefone } = body.data
 

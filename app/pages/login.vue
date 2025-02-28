@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import type { User } from '~/schemas/user'
-import { UserSchema } from '~/schemas/user'
-
 useHead({ title: `Login` })
 
 definePageMeta({
@@ -21,7 +18,7 @@ async function login(){
 
   const body = UserSchema.safeParse(state.value)
   if(!body.success){
-    toast.add({ severity: 'error', detail: body.error.errors[0].message, summary: 'Erro', life: 10000 })
+    toast.add({ severity: 'error', detail: body.error.errors[0]?.message || '', summary: 'Erro', life: 10000 })
     return finish()
   }
 

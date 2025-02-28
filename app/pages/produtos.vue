@@ -75,7 +75,7 @@ const images = ref([
       </div>
       <div class="flex flex-col items-center">
         <NuxtLink to="/catalogos/catalogo2025.pdf" download external target="_blank">
-          <img src="/catalogos/catalogo2025foto.png" alt="Baixar Catálogo" class="mx-6 mb-5 size-[250px] rounded-2xl transition-all hover:size-[280px] md:hidden border-2 border-black ">
+          <img src="/catalogos/catalogo2025foto.png" alt="Baixar Catálogo" class="mx-6 mb-5 size-[250px] rounded-2xl border-2 border-black transition-all hover:size-[280px] md:hidden ">
           <img src="/catalogos/catalogo2025foto2.png" alt="Baixar Catálogo" class="mx-6 mb-5 hidden h-[130px] w-[280px] rounded-2xl transition-all hover:h-[160px] hover:w-[310px] md:block">
         </NuxtLink>
         <NuxtLink to="/catalogos/catalogo1.pdf" download external target="_blank">
