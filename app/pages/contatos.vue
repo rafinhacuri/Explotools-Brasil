@@ -15,12 +15,16 @@ const midias = ref([
 </script>
 
 <template>
-  <div class="mx-6 flex h-screen items-center justify-center">
+  <div class="flex min-h-screen items-center justify-center bg-gray-100 px-4">
     <div class="w-full max-w-md rounded-lg bg-black p-6 shadow-lg">
       <h2 class="mb-6 text-center text-2xl font-bold text-white">
         Entre em Contato
       </h2>
-      <div v-for="{href, icon, text} in midias" :key="text" class="rounded-lg bg-white">
+      <div
+        v-for="{ href, icon, text } in midias"
+        :key="text"
+        class="rounded-lg bg-white"
+      >
         <NuxtLink
           :href="href"
           target="_blank"

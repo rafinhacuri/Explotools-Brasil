@@ -1,54 +1,39 @@
 <script setup lang="ts">
-useHead({ title: `Produtos` })
+useHead({ title: 'Produtos' })
 
 defineOgImageComponent('NuxtSeo', { theme: '#3FA1B0', colorMode: 'dark' })
 
 const images = ref([
-  { nome: `/produtos/2.jpg` },
-  { nome: `/produtos/3.jpg` },
-  { nome: `/produtos/4.png` },
-  { nome: `/produtos/5.jpg` },
-  { nome: `/produtos/6.jpg` },
-  { nome: `/produtos/7.jpg` },
-  { nome: `/produtos/8.jpg` },
-  { nome: `/produtos/9.jpg` },
-  { nome: `/produtos/10.jpg` },
-  { nome: `/produtos/11.jpg` },
-  { nome: `/produtos/12.jpg` },
-  { nome: `/produtos/13.png` },
-  { nome: `/produtos/14.jpg` },
-  { nome: `/produtos/15.jpg` },
-  { nome: `/produtos/16.jpg` },
-  { nome: `/produtos/17.jpg` },
-  { nome: `/produtos/18.png` },
-  { nome: `/produtos/19.jpg` },
-  { nome: `/produtos/20.jpg` },
-  { nome: `/produtos/21.jpg` },
-  { nome: `/produtos/22.jpg` },
-  { nome: `/produtos/23.jpg` },
-  { nome: `/produtos/24.jpg` },
-  { nome: `/produtos/25.jpg` },
-  { nome: `/produtos/26.jpg` },
-  { nome: `/produtos/27.jpg` },
-  { nome: `/produtos/28.jpg` },
-  { nome: `/produtos/29.jpg` },
-  { nome: `/produtos/30.jpg` },
-  { nome: `/produtos/31.jpg` },
-  { nome: `/produtos/32.jpg` },
-  { nome: `/produtos/33.jpg` },
-  { nome: `/produtos/34.jpg` },
-  { nome: `/produtos/35.jpg` },
-  { nome: `/produtos/36.jpg` },
-  { nome: `/produtos/37.jpg` },
-  { nome: `/produtos/38.jpg` },
-  { nome: `/produtos/39.jpg` },
-  { nome: `/produtos/40.jpg` },
-  { nome: `/produtos/41.jpg` },
-  { nome: `/produtos/42.jpg` },
-  { nome: `/produtos/43.jpg` },
-  { nome: `/produtos/44.jpg` },
-  { nome: `/produtos/45.jpg` },
-  { nome: `/produtos/46.jpg` },
+  '/produtos/1.jpg',
+  '/produtos/2.jpg',
+  '/produtos/3.jpg',
+  '/produtos/4.png',
+  '/produtos/5.png',
+  '/produtos/6.jpg',
+  '/produtos/7.jpg',
+  '/produtos/8.jpg',
+  '/produtos/9.png',
+  '/produtos/10.jpeg',
+  '/produtos/11.jpeg',
+  '/produtos/12.jpg',
+  '/produtos/13.jpg',
+  '/produtos/14.png',
+  '/produtos/15.png',
+  '/produtos/16.jpeg',
+  '/produtos/17.jpg',
+  '/produtos/18.jpg',
+  '/produtos/19.jpg',
+  '/produtos/20.jpg',
+  '/produtos/21.jpg',
+  '/produtos/22.jpg',
+  '/produtos/23.jpg',
+  '/produtos/24.jpg',
+  '/produtos/25.jpg',
+  '/produtos/26.jpg',
+  '/produtos/27.jpg',
+  '/produtos/28.jpg',
+  '/produtos/29.jpg',
+  '/produtos/30.jpg',
 ])
 </script>
 
@@ -59,7 +44,7 @@ const images = ref([
         <ClientOnly>
           <Carousel :value="images" circular :autoplay-interval="6000" :num-visible="1" :num-scroll="1" :show-indicators="false">
             <template #item="slotProps">
-              <img :src="slotProps.data.nome" :alt="slotProps.data.nome" class="my-3 h-[300px] rounded-lg md:h-[430px]">
+              <img :src="slotProps.data" :alt="slotProps.data" class="my-3 h-[300px] rounded-lg md:h-[430px]">
             </template>
           </Carousel>
           <template #fallback>
