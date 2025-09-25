@@ -6,7 +6,12 @@ export default defineNuxtConfig({
   modules: ['nuxt-auth-utils', '@nuxtjs/seo', '@nuxtjs/tailwindcss', 'nuxt-security', 'nuxt-primevue', 'nuxt-icon'],
   imports: { imports: [{ name: 'useToast', from: 'primevue/usetoast' }, { name: 'FilterMatchMode', from: 'primevue/api' }] },
   devtools: { enabled: true },
-  app: { head: { templateParams: { separator: '•' } } },
+  app: {
+    head: {
+      templateParams: { separator: '•' },
+      meta: [{ name: 'facebook-domain-verification', content: '2aur1h4ul3t9qi39592a7ogeuekoig' }],
+    },
+  },
   css: ['primevue/resources/primevue.min.css', 'primevue/resources/themes/aura-light-green/theme.css'],
   site: {
     url: SITE_URL,
