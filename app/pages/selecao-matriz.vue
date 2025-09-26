@@ -4,6 +4,8 @@ definePageMeta({
   colorMode: 'dark',
 })
 
+const isMobile = useMediaQuery('(max-width: 768px)')
+
 const rochas = [
   'Calcário - Mohs 3',
   'Calcário dolomítico - Mohs 3.8',
@@ -243,12 +245,14 @@ watch(selectedRocha, nv => {
         </NuxtLink>
       </template>
       <template #right>
-        <UButton icon="ic-baseline-whatsapp" to="'https://wa.link/c1di0k'" variant="ghost" class="text-white" size="xl" />
+        <NuxtLink to="'https://wa.link/c1di0k'" external target="_blank">
+          <UIcon name="ic-baseline-whatsapp" class="size-9 rounded-2xl hover:bg-slate-400" color="white" />
+        </NuxtLink>
       </template>
     </UHeader>
     <div class="min-h-screen  bg-slate-950 p-4 text-white">
-      <div class="mx-auto grid w-full max-w-7xl grid-cols-1 gap-4 md:grid-cols-2">
-        <div class="mx-auto w-full  rounded-xl bg-slate-900 p-6 shadow-lg">
+      <div class=" mx-auto grid w-full max-w-7xl grid-cols-1 gap-4 md:grid-cols-2">
+        <div class="col-span-2 mx-auto w-full rounded-xl bg-slate-900 p-6 shadow-lg md:col-span-1">
           <h2 class="text-lg font-bold">
             1) Identifique a rocha
           </h2>
@@ -274,24 +278,24 @@ watch(selectedRocha, nv => {
               <label for="abrasividade" class="font-bold">
                 Abrasividade
               </label>
-              <URadioGroup id="abrasividade" v-model="selectedAbrasividade" orientation="horizontal" color="error" variant="card" :items="abrasividadeOptions" />
+              <URadioGroup id="abrasividade" v-model="selectedAbrasividade" orientation="horizontal" color="error" :variant="isMobile ? 'list' : 'card'" :items="abrasividadeOptions" />
             </div>
           </div>
           <div class="mb-4">
             <label for="diametro" class="font-bold">
               Diâmetro da coroa
             </label>
-            <URadioGroup id="diametro" v-model="selectedDiametro" orientation="horizontal" color="error" variant="card" :items="diametroOptions" />
+            <URadioGroup id="diametro" v-model="selectedDiametro" orientation="horizontal" color="error" :variant="isMobile ? 'list' : 'card'" :items="diametroOptions" />
           </div>
           <div class="mb-4">
             <label for="granulometria" class="font-bold">
               Granulometria
             </label>
-            <URadioGroup id="granulometria" v-model="selectedGranulometria" orientation="horizontal" color="info" variant="card" :items="granulometriaOptions" />
+            <URadioGroup id="granulometria" v-model="selectedGranulometria" orientation="horizontal" color="info" :variant="isMobile ? 'list' : 'card'" :items="granulometriaOptions" />
           </div>
         </div>
 
-        <div class="mx-auto w-full  rounded-xl bg-slate-900 p-6 shadow-lg">
+        <div class="col-span-2 mx-auto w-full rounded-xl bg-slate-900 p-6 shadow-lg md:col-span-1">
           <h2 class="text-lg font-bold">
             2) Característica da formação
           </h2>
@@ -300,7 +304,7 @@ watch(selectedRocha, nv => {
           </p>
 
           <div class="mb-5">
-            <URadioGroup id="estado" v-model="selectedEstado" orientation="horizontal" color="error" variant="card" :items="estadoOptions" />
+            <URadioGroup id="estado" v-model="selectedEstado" orientation="horizontal" color="error" :variant="isMobile ? 'list' : 'card'" :items="estadoOptions" />
           </div>
 
           <UButton label="Obter recomendação" class="flex w-full justify-center bg-red-500 p-2 font-bold text-white" color="error" @click="gerarRecomendacao = true" />
