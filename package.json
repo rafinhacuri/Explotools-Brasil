@@ -1,7 +1,7 @@
 {
   "name": "explotools-brasil",
   "type": "module",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "private": true,
   "packageManager": "pnpm@10.14.0",
   "description": "Our proposal is to offer imported quality products for drilling at affordable prices, allowing a significant cost reduction without compromising quality and productivity.",
