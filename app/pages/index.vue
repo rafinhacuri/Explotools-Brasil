@@ -1,4 +1,7 @@
 <script setup lang="ts">
+definePageMeta({
+  colorMode: 'light',
+})
 useHead({ title: `Inicio` })
 
 defineOgImageComponent('NuxtSeo', { theme: '#3FA1B0', colorMode: 'dark' })
