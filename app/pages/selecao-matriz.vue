@@ -245,7 +245,7 @@ watch(selectedRocha, nv => {
         </NuxtLink>
       </template>
       <template #right>
-        <NuxtLink to="'https://wa.link/c1di0k'" external target="_blank">
+        <NuxtLink to="https://wa.link/c1di0k" external target="_blank">
           <UIcon name="ic-baseline-whatsapp" class="size-9 rounded-2xl hover:bg-slate-400" color="white" />
         </NuxtLink>
       </template>
