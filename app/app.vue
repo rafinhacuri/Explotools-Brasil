@@ -1,10 +1,11 @@
 <template>
-  <NuxtRouteAnnouncer />
-  <NuxtLoadingIndicator color="repeating-linear-gradient(to right,#1d4ed8 0%,#60a5fa 100%)" />
-  <NuxtLayout>
-    <NuxtPage :transition="{ name: 'page', mode: 'out-in' }" />
-    <Toast position="bottom-right" />
-  </NuxtLayout>
+  <UApp :toaster="{expand: false}">
+    <NuxtRouteAnnouncer />
+    <NuxtLoadingIndicator color="repeating-linear-gradient(to right,#1d4ed8 0%,#60a5fa 100%)" />
+    <NuxtLayout>
+      <NuxtPage :transition="{ name: 'page', mode: 'out-in' }" />
+    </NuxtLayout>
+  </UApp>
 </template>
 
 <!-- eslint-disable-next-line vue/no-restricted-block -->

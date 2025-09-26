@@ -14,7 +14,7 @@ const menu = ref<{ nome: string, to: string }[]>([
     <div class="w-full">
       <ul class="flex w-full justify-center space-x-6 bg-[#FD0116]">
         <template v-for="{nome, to} in menu" :key="to">
-          <li class="rounded-lg p-1 uppercase text-white hover:font-bold hover:text-black">
+          <li class="rounded-lg p-1 text-white uppercase hover:font-bold hover:text-black">
             <NuxtLink :to="to" active-class="rounded-lg p-1 text-black font-bold">
               {{ nome }}
             </NuxtLink>

@@ -5,7 +5,7 @@ export default defineEventHandler(async event => {
 
   const body = await readValidatedBody(event, UserSchema.safeParse)
 
-  if(!body.success) throw createError({ status: 400, message: body.error.errors[0]?.message || '' })
+  if(!body.success) throw createError({ status: 400, message: body.error.issues[0]?.message || '' })
 
   const { user, senha } = body.data
 

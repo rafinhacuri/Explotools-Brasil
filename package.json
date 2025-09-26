@@ -1,7 +1,27 @@
 {
   "name": "explotools-brasil",
   "type": "module",
+  "version": "2.0.0",
   "private": true,
+  "packageManager": "pnpm@10.14.0",
+  "description": "Our proposal is to offer imported quality products for drilling at affordable prices, allowing a significant cost reduction without compromising quality and productivity.",
+  "author": {
+    "name": "Rafael Curi",
+    "email": "rafael@curi.dev.br",
+    "url": "https://curi.dev.br"
+  },
+  "license": "MIT",
+  "funding": "https://github.com/rafinhacuri/",
+  "homepage": "https://git.cbpf.br/rafaelcuri/Explotools-Brasil",
+  "repository": {
+    "type": "git",
+    "url": "git+https://git.cbpf.br/rafaelcuri/Explotools-Brasil.git"
+  },
+  "bugs": "https://git.cbpf.br/rafaelcuri/Explotools-Brasil/-/issues",
+  "keywords": [
+    "explotools",
+    "brasil"
+  ],
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
@@ -10,28 +30,34 @@
     "postinstall": "nuxt prepare",
     "typecheck": "nuxi typecheck",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "release": "pnpm typecheck && pnpm lint && bumpp"
   },
   "dependencies": {
-    "@nuxt/icon": "^1.11.0",
-    "@nuxtjs/seo": "3.0.1",
-    "@nuxtjs/tailwindcss": "^6.13.2",
+    "@iconify-json/heroicons": "^1.2.3",
+    "@iconify-json/ic": "^1.2.4",
+    "@iconify-json/line-md": "^1.2.11",
+    "@iconify-json/lucide": "^1.2.68",
+    "@nuxt/ui": "^4.0.0",
+    "@nuxtjs/seo": "3.2.2",
+    "@vueuse/nuxt": "^13.9.0",
     "exceljs": "^4.4.0",
-    "ldap-passwords": "^3.0.5",
+    "ldap-passwords": "^4.0.1",
+    "maska": "^3.2.0",
     "mongoose": "^8.12.1",
-    "nuxt": "^3.16.1",
+    "nuxt": "^4.0.3",
+    "nuxt-aos": "^1.2.5",
     "nuxt-auth-utils": "^0.5.17",
-    "nuxt-icon": "1.0.0-beta.7",
-    "nuxt-primevue": "^3.0.0",
-    "nuxt-security": "2.2.0",
+    "nuxt-security": "2.4.0",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0",
-    "zod": "^3.24.2"
+    "zod": "^4.1.11"
   },
   "devDependencies": {
-    "@dethdkn/eslint-config": "^2.2.0",
+    "@dethdkn/eslint-config": "^4.0.0",
     "@vercel/analytics": "^1.5.0",
+    "bumpp": "^10.2.3",
     "eslint": "^9.22.0",
-    "vue-tsc": "^2.2.8"
+    "vue-tsc": "^3.0.8"
   }
 }

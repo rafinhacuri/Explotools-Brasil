@@ -39,22 +39,15 @@ const images = ref([
 
 <template>
   <section>
-    <div class=" mt-5 flex flex-col items-center justify-center space-y-4 md:flex-row md:space-x-10 md:space-y-0">
-      <div class="flex max-w-[500px] pt-3 md:ml-7 md:pt-0">
-        <ClientOnly>
-          <Carousel :value="images" circular :autoplay-interval="6000" :num-visible="1" :num-scroll="1" :show-indicators="false">
-            <template #item="slotProps">
-              <img :src="slotProps.data" :alt="slotProps.data" class="my-3 h-[300px] rounded-lg md:h-[430px]">
-            </template>
-          </Carousel>
-          <template #fallback>
-            <Skeleton class="mr-3 size-[500px]" />
-          </template>
-        </ClientOnly>
+    <div class=" mt-5 flex flex-col items-center justify-center space-y-4 md:flex-row md:space-y-0 md:space-x-10">
+      <div class=" flex max-w-[500px] pt-3 md:ml-7 md:pt-0">
+        <UCarousel v-slot="{ item }" loop :items="images" auto-scroll :ui="{ item: 'basis-2/3' } ">
+          <img :src="item" width="320" height="320" class="m-auto rounded-lg" alt="Imagem do Produto">
+        </UCarousel>
       </div>
       <div class="flex items-center justify-center text-white">
         <NuxtLink class="my-10 flex animate-pulse items-center justify-center rounded-full border-2 border-black bg-green-500 p-3 text-lg font-bold tracking-wide md:hidden" to="https://wa.link/c1di0k" external target="_blank">
-          <Icon name="ic:baseline-whatsapp" size="24" color="white" />
+          <UIcon name="ic-baseline-whatsapp" size="24" color="white" />
           Solicite um orçamento
         </NuxtLink>
       </div>
@@ -74,14 +67,6 @@ const images = ref([
         <NuxtLink to="/catalogos/catalogo3.pdf" download external target="_blank">
           <img src="/catalogos/catalogo3foto.jpeg" alt="Baixar Catálogo" class="mx-6 mb-5 size-[250px] rounded-2xl transition-all hover:size-[280px] md:hidden">
           <img src="/catalogos/catalogo3foto2.jpeg" alt="Baixar Catálogo" class="mx-6 mb-5 hidden h-[130px]  w-[280px] rounded-2xl transition-all  hover:h-[160px] hover:w-[310px] md:block">
-        </NuxtLink>
-      </div>
-    </div>
-    <div>
-      <div class="flex items-center justify-center text-white">
-        <NuxtLink class="my-10 flex animate-pulse items-center justify-center rounded-full border-2 border-black bg-green-500 p-3 text-lg font-bold tracking-wide" to="https://wa.link/c1di0k" external target="_blank">
-          <Icon name="ic:baseline-whatsapp" size="24" color="white" />
-          Solicite um orçamento
         </NuxtLink>
       </div>
     </div>

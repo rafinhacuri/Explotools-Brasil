@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { useWindowScroll, useWindowSize } from '@vueuse/core'
+import { vMaska } from 'maska/vue'
 
 definePageMeta({
   layout: false,
+  colorMode: 'dark',
 })
 
-useHead({ title: `Cadastre-se` })
+useHead({ title: 'Cadastre-se' })
 
 defineOgImageComponent('NuxtSeo', { theme: '#3FA1B0', colorMode: 'dark' })
 
@@ -13,8 +14,7 @@ const toast = useToast()
 
 const { start, finish } = useLoadingIndicator()
 
-const images = ref([{ nome: `/foto1.jpeg` }, { nome: `/foto2.jpeg` }, { nome: `/foto3.jpeg` }, { nome: `/foto4.jpeg` }, { nome: `/foto5.jpeg` }, { nome: `/foto6.jpeg` }, { nome: `/foto7.jpeg` }, { nome: `/foto8.jpeg` }])
-const verdade = true
+const images = ref(['/foto1.jpeg', '/foto2.jpeg', '/foto3.jpeg', '/foto4.jpeg', '/foto5.jpeg', '/foto6.jpeg', '/foto7.jpeg', '/foto8.jpeg'])
 
 const newLead = ref<Lead>({ nome: '', email: '', telefone: '', empresa: '', cargo: '' })
 
@@ -24,53 +24,27 @@ async function salvarLead(){
   const body = LeadSchema.safeParse(newLead.value)
 
   if(!body.success){
-    toast.add({ severity: 'error', detail: body.error.errors[0]?.message || '', summary: 'Erro', life: 10000 })
+    toast.add({ title: body.error.issues[0]?.message || '', icon: 'i-heroicons-exclamation-triangle', color: 'error' })
     return finish({ error: true })
   }
 
   const res = await $fetch('/api/insert/lead', { method: 'POST', body: body.data })
-    .catch(error => { toast.add({ severity: 'error', detail: error.data.message, summary: 'Erro', life: 10000 }) })
+    .catch(error => { toast.add({ title: error.data.message, icon: 'i-heroicons-exclamation-triangle', color: 'error' }) })
 
   if(!res) return finish({ error: true })
 
   finish()
-  toast.add({ severity: 'success', detail: res, summary: 'Sucesso', life: 10000 })
+  toast.add({ title: res, icon: 'i-heroicons-check-circle', color: 'success' })
   return navigateTo('/obrigado')
 }
 
-const carouselRef = ref()
-onMounted(() => {
-  setInterval(() => {
-    if(!carouselRef.value) return
+const destiny = useTemplateRef<HTMLElement>('destiny')
 
-    if(carouselRef.value.page === carouselRef.value.pages) return carouselRef.value.select(0)
+const { y } = useWindowScroll({ behavior: 'smooth' })
 
-    carouselRef.value.next()
-  }, 3000)
-})
-
-const { y: scrollY } = useWindowScroll()
-const { width } = useWindowSize()
-
-const btnScrollTop = ref<HTMLElement | null>(null)
-
-onMounted(() => {
-  btnScrollTop.value = document.querySelector('#scrollTopButton') as HTMLElement
-
-  watch([scrollY, width], () => {
-    if(width.value < 768){
-      const maxScrollPosition = document.body.offsetHeight - document.documentElement.clientHeight
-      if(btnScrollTop.value){
-        btnScrollTop.value.style.opacity = scrollY.value > 0 && scrollY.value < maxScrollPosition - 100 ? '1' : '0'
-      }
-    }
-  })
-})
-
-function ScrollToDiv(targetId: string){
-  const targetDiv = document.querySelector(`#${targetId}`) as HTMLElement
-  if(targetDiv){
-    targetDiv.scrollIntoView({ behavior: 'smooth', block: 'start' })
+function scrollToDestiny(){
+  if(destiny.value){
+    y.value = destiny.value.scrollHeight
   }
 }
 </script>
@@ -83,7 +57,7 @@ function ScrollToDiv(targetId: string){
         <div class="flex items-center justify-center">
           <img src="/explotools.png" alt="logo Explotools brasil" class="mt-7 h-[140px] w-[300px] md:h-[200px] md:w-[700px]">
         </div>
-        <p class=" text-center text-base font-black italic tracking-wide text-white md:text-3xl">
+        <p class=" text-center text-base font-black tracking-wide text-white italic md:text-3xl">
           Qualidade Internacional, Preços Nacionais:<br>
           Revolucione Sua Sondagem
         </p>
@@ -100,62 +74,55 @@ function ScrollToDiv(targetId: string){
         </div>
 
         <div class="grid gap-5 p-12 md:grid-cols-2">
-          <div id="card" class="order-2 flex max-w-[500px] flex-col items-center justify-center space-y-6 rounded-xl bg-zinc-950 transition-all duration-1000 ease-in-out md:order-1 md:space-y-14">
+          <div ref="destiny" class="order-2 flex max-w-[500px] flex-col items-center justify-center space-y-6 rounded-xl bg-zinc-950 p-4 transition-all duration-1000 ease-in-out md:order-1 md:space-y-14">
             <p class="p-3 text-lg font-semibold text-white">
               Inscreva-se aqui para mais informações:
             </p>
-            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:grid-rows-3">
-              <FloatLabel>
-                <InputText id="nome" v-model="newLead.nome" class="max-w-[260px] border-2 border-red-500 bg-zinc-950 p-1 text-white focus:bg-zinc-950 focus:outline-none focus:ring-2 focus:ring-red-500 md:max-w-[200px]" />
-                <label for="nome">Nome</label>
-              </FloatLabel>
-              <FloatLabel>
-                <InputText id="email" v-model="newLead.email" class="max-w-[260px] border-2 border-red-500 bg-zinc-950 p-1 text-white focus:bg-zinc-950 focus:outline-none focus:ring-2 focus:ring-red-500 md:max-w-[200px]" />
-                <label for="email">Email</label>
-              </FloatLabel>
-              <FloatLabel>
-                <InputMask id="telefone" v-model="newLead.telefone" mask="(99) 99999-9999" class="max-w-[260px] border-2 border-red-500 bg-zinc-950 p-1 text-white focus:bg-zinc-950 focus:outline-none focus:ring-2 focus:ring-red-500 md:max-w-[200px]" />
-                <label for="telefone">Telefone</label>
-              </FloatLabel>
-              <FloatLabel>
-                <InputText id="empresa" v-model="newLead.empresa" class="max-w-[260px] border-2 border-red-500 bg-zinc-950 p-1 text-white focus:bg-zinc-950 focus:outline-none focus:ring-2 focus:ring-red-500 md:max-w-[200px]" />
-                <label for="empresa">Empresa</label>
-              </FloatLabel>
-              <FloatLabel>
-                <InputText id="Cargo" v-model="newLead.cargo" class="max-w-[260px] border-2 border-red-500 bg-zinc-950 p-1 text-white focus:bg-zinc-950 focus:outline-none focus:ring-2 focus:ring-red-500 md:max-w-[200px]" />
-                <label for="Cargo">Cargo</label>
-              </FloatLabel>
-            </div>
-            <button class=" w-[290px] rounded-xl border-2 border-black bg-red-600 px-6 py-2 text-base font-bold tracking-wide text-white transition-all duration-200 ease-in-out hover:bg-red-500" @click="salvarLead()">
+            <UForm :schema="LeadSchema" :state="newLead" class="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:grid-rows-3">
+              <UFormField label="Nome" name="nome">
+                <UInput v-model="newLead.nome" color="error" @keydown.enter="salvarLead" />
+              </UFormField>
+              <UFormField label="Email" name="email">
+                <UInput v-model="newLead.email" color="error" @keydown.enter="salvarLead" />
+              </UFormField>
+              <UFormField label="Telefone" name="telefone">
+                <UInput v-model="newLead.telefone" v-maska="'(##) #####-####'" placeholder="(99) 99999-9999" color="error" @keydown.enter="salvarLead" />
+              </UFormField>
+              <UFormField label="Empresa" name="empresa">
+                <UInput v-model="newLead.empresa" color="error" @keydown.enter="salvarLead" />
+              </UFormField>
+              <UFormField label="Cargo" name="cargo">
+                <UInput v-model="newLead.cargo" color="error" @keydown.enter="salvarLead" />
+              </UFormField>
+            </UForm>
+            <button class=" mb-5 w-[290px] rounded-xl border-2 border-black bg-red-600 px-6 py-2 text-base font-bold tracking-wide text-white transition-all duration-200 ease-in-out hover:bg-red-500" @click="salvarLead()">
               Quero ter acesso a esses produtos em primeira mão!
             </button>
           </div>
-          <div v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="order-1 max-w-[500px] pb-3 transition-all duration-200 ease-in-out md:order-2">
-            <Galleria :value="images" :circular="verdade" :show-item-navigators="verdade" :show-thumbnails="false" :auto-play="verdade" :transition-interval="4000">
-              <template #item="slotProps">
-                <img :src="slotProps.item.nome" :alt="slotProps.item.nome" class="size-[300px] rounded-lg object-cover md:size-[500px]">
-              </template>
-            </Galleria>
+          <div data-aos="zoom-in" class="order-1 max-w-[500px] pb-3 transition-all duration-200 ease-in-out md:order-2">
+            <UCarousel v-slot="{ item }" :items="images" loop auto-scroll :ui="{ item: 'basis-2/3' } ">
+              <img :src="item" width="320" height="320" class="m-auto rounded-lg" alt="Imagem do Produto">
+            </UCarousel>
           </div>
         </div>
       </div>
       <div class="flex flex-col items-center justify-center">
         <div class="max-w-[1000px] rounded-lg pb-10">
-          <h2 v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="pb-5 text-center text-3xl font-bold tracking-wide text-white transition-all duration-1000 ease-in-out">
+          <h2 data-aos="zoom-in" class="pb-5 text-center text-3xl font-bold tracking-wide text-white transition-all duration-1000 ease-in-out">
             Por que se cadastrar?
           </h2>
 
-          <p v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="py-5 text-center text-base font-semibold text-white transition-all duration-1000 ease-in-out md:text-xl">
+          <p data-aos="zoom-in" class="py-5 text-center text-base font-semibold text-white transition-all duration-1000 ease-in-out md:text-xl">
             📬 Benefícios Exclusivos ao se Cadastrar:
           </p>
           <ul class="m-3 space-y-5 transition-all duration-1000 ease-in-out md:m-0">
-            <li v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class=" text-center text-sm text-white transition-all duration-1000 ease-in-out md:text-base">
+            <li data-aos="zoom-in" class=" text-center text-sm text-white transition-all duration-1000 ease-in-out md:text-base">
               <span class="font-semibold text-[#FD0116]">Ofertas exclusivas: </span>Desfrute de promoções especiais que só encontrará conosco, ajudando a maximizar sua produtividade com economia.
             </li>
-            <li v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class=" text-center text-sm text-white transition-all duration-1000 ease-in-out md:text-base">
+            <li data-aos="zoom-in" class=" text-center text-sm text-white transition-all duration-1000 ease-in-out md:text-base">
               <span class="font-semibold text-[#FD0116]">Acesso antecipado aos catálogos: </span>Seja o primeiro a explorar nossos produtos de qualidade, planejando suas operações de sondagem de forma mais eficiente.
             </li>
-            <li v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class=" text-center text-sm text-white transition-all duration-1000 ease-in-out md:text-base">
+            <li data-aos="zoom-in" class=" text-center text-sm text-white transition-all duration-1000 ease-in-out md:text-base">
               <span class="font-semibold text-[#FD0116]">Participação em pré-vendas: </span>Garanta prioridade e preços especiais em nossos lançamentos, impulsionando sua produtividade com acesso privilegiado.
             </li>
           </ul>
@@ -163,24 +130,24 @@ function ScrollToDiv(targetId: string){
 
         <div class="max-w-[1000px] rounded-lg pb-10">
           <div>
-            <p v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="py-5 text-center text-base font-semibold text-white transition-all duration-1000 ease-in-out md:text-xl">
+            <p data-aos="zoom-in" class="py-5 text-center text-base font-semibold text-white transition-all duration-1000 ease-in-out md:text-xl">
               🌟 Vantagens únicas:
             </p>
           </div>
 
           <ul class="m-3 space-y-5 md:m-0">
-            <li v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="text-center text-sm text-white transition-all duration-1000 ease-in-out md:text-base">
+            <li data-aos="zoom-in" class="text-center text-sm text-white transition-all duration-1000 ease-in-out md:text-base">
               <span class="font-semibold text-[#FD0116]">Acesso antecipado aos melhores produtos: </span>Seja o primeiro a ter acesso aos produtos de última geração, aumentando sua produtividade antes de todos.
             </li>
-            <li v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="text-center text-sm text-white transition-all duration-1000 ease-in-out md:text-base">
+            <li data-aos="zoom-in" class="text-center text-sm text-white transition-all duration-1000 ease-in-out md:text-base">
               <span class="font-semibold text-[#FD0116]">Preços exclusivos e condições especiais: </span>Garanta tarifas exclusivas e condições especiais que otimizam seus custos de sondagem, maximizando sua produtividade com economia.
             </li>
-            <li v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="text-center text-sm text-white transition-all duration-1000 ease-in-out md:text-base">
+            <li data-aos="zoom-in" class="text-center text-sm text-white transition-all duration-1000 ease-in-out md:text-base">
               <span class="font-semibold text-[#FD0116]">Inovações em primeira mão:</span>Seja pioneiro ao aproveitar nossas inovações mais recentes, impulsionando sua produtividade com tecnologias de ponta.
             </li>
           </ul>
           <div class="flex items-center justify-center text-white">
-            <button class="my-10 w-[380px] rounded-full border-2 border-black bg-[#FD0116] px-6 py-2 text-lg font-bold tracking-wide md:transition-all md:duration-200 md:ease-in-out md:hover:w-[470px] md:hover:text-xl" @click="ScrollToDiv('card')">
+            <button class="my-10 w-[380px] rounded-full border-2 border-black bg-[#FD0116] px-6 py-2 text-lg font-bold tracking-wide md:transition-all md:duration-200 md:ease-in-out md:hover:w-[470px] md:hover:text-xl" @click="scrollToDestiny">
               Não perca essa chance! <br>
               Cadastre-se agora e saia na frente
             </button>
@@ -188,29 +155,29 @@ function ScrollToDiv(targetId: string){
         </div>
 
         <div class="max-w-[1000px] rounded-lg pb-10">
-          <h2 v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="pb-5 text-center text-2xl font-bold tracking-wide text-white transition-all duration-1000 ease-in-out">
+          <h2 data-aos="zoom-in" class="pb-5 text-center text-2xl font-bold tracking-wide text-white transition-all duration-1000 ease-in-out">
             🔧 Explotools: A escolha certa para empresas que valorizam qualidade, inovação e resultados excepcionais em suas operações de sondagem.
           </h2>
 
           <ul class="m-3 space-y-5 md:m-0">
-            <li v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="text-center text-sm text-white transition-all duration-1000 ease-in-out md:text-base">
+            <li data-aos="zoom-in" class="text-center text-sm text-white transition-all duration-1000 ease-in-out md:text-base">
               Como fabricantes, <span class="font-semibold text-[#FD0116]">investimos em alta tecnologia e maquinário computadorizado</span> para assegurar que nossos produtos atendam aos mais <span class="font-semibold text-[#FD0116]">altos padrões de qualidade</span>, impulsionando assim a sua produtividade.
             </li>
-            <li v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="text-center text-sm text-white transition-all duration-1000 ease-in-out md:text-base">
+            <li data-aos="zoom-in" class="text-center text-sm text-white transition-all duration-1000 ease-in-out md:text-base">
               <span class="font-semibold text-[#FD0116]">Presença global em mais de 13 países</span>, atendendo com excelência às necessidades de clientes em todo o mundo.
             </li>
-            <li v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="text-center text-sm text-white transition-all duration-1000 ease-in-out md:text-base">
+            <li data-aos="zoom-in" class="text-center text-sm text-white transition-all duration-1000 ease-in-out md:text-base">
               Fundada por um especialista com <span class="font-semibold text-[#FD0116]">mais de 20 anos de experiência</span> no mercado de sondagem, nossa empresa possui um histórico comprovado de sucesso e excelência.
             </li>
-            <li v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="text-center text-sm text-white transition-all duration-1000 ease-in-out md:text-base">
+            <li data-aos="zoom-in" class="text-center text-sm text-white transition-all duration-1000 ease-in-out md:text-base">
               Todos os nossos <span class="font-semibold text-[#FD0116]">produtos são importados e submetidos a rigorosos padrões de qualidade</span>, garantindo desempenho superior e durabilidade, permitindo que você atinja metas de produtividade de forma consistente e confiável.
             </li>
-            <li v-animateonscroll="{ enterClass: 'animate-zoomin', leaveClass: 'animate-fadeout' }" class="text-center text-sm text-white transition-all duration-1000 ease-in-out md:text-base">
+            <li data-aos="zoom-in" class="text-center text-sm text-white transition-all duration-1000 ease-in-out md:text-base">
               Contamos com uma equipe dedicada de <span class="font-semibold text-[#FD0116]">pesquisa e desenvolvimento</span>, que nos permite permanecer na <span class="font-semibold text-[#FD0116]">vanguarda da inovação</span>, oferecendo sempre as soluções mais avançadas aos nossos clientes, impulsionando assim a sua produtividade com tecnologias de ponta.
             </li>
           </ul>
           <div class="flex items-center justify-center text-white">
-            <button class="m-10 mb-32 w-[300px] rounded-full border-2 border-black bg-[#FD0116] px-6 py-2 text-lg font-bold tracking-wide transition-all duration-200 ease-in-out hover:w-[340px] hover:text-xl md:my-10" @click="ScrollToDiv('card')">
+            <button class="m-10 mb-32 w-[300px] rounded-full border-2 border-black bg-[#FD0116] px-6 py-2 text-lg font-bold tracking-wide transition-all duration-200 ease-in-out hover:w-[340px] hover:text-xl md:my-10" @click="scrollToDestiny">
               Quero aumentar minha produtividade!
             </button>
           </div>
@@ -219,11 +186,10 @@ function ScrollToDiv(targetId: string){
     </div>
     <div>
       <div class="flex items-center justify-center">
-        <button id="scrollTopButton" class=" fixed bottom-0 z-50 block w-[380px] rounded-lg border-2 border-black bg-[#FD0116] py-6 text-lg font-bold tracking-wide text-white opacity-0 transition-opacity ease-in-out md:hidden" @click="ScrollToDiv('card')">
+        <button id="scrollTopButton" class=" fixed bottom-0 z-50 block w-[380px] rounded-lg border-2 border-black bg-[#FD0116] py-6 text-lg font-bold tracking-wide text-white opacity-0 transition-opacity ease-in-out md:hidden" @click="scrollToDestiny">
           Quero aumentar minha produtividade!
         </button>
       </div>
     </div>
-    <CookieConsent />
   </section>
 </template>

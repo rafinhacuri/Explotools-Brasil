@@ -15,9 +15,9 @@ const mutado = ref(false)
       </video>
     </div>
     <div class="flex items-center justify-center text-white">
-      <Icon v-if="mutado" name="heroicons:speaker-wave" size="30" class="m-1 text-black" />
-      <Icon v-else name="heroicons:speaker-x-mark" size="30" class="m-1 text-black" />
-      <InputSwitch v-model="mutado" />
+      <UIcon v-if="mutado" name="heroicons-speaker-wave" size="30" class="m-1 text-black" />
+      <UIcon v-else name="heroicons-speaker-x-mark" size="30" class="m-1 text-black" />
+      <USwitch v-model="mutado" unchecked-icon="i-lucide-x" checked-icon="i-lucide-check" />
     </div>
 
     <p class="px-3 py-6 text-justify md:px-20">

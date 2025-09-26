@@ -4,13 +4,13 @@ useHead({ title: `Contatos` })
 defineOgImageComponent('NuxtSeo', { theme: '#3FA1B0', colorMode: 'dark' })
 
 const midias = ref([
-  { href: 'https://wa.link/c1di0k', icon: 'ic:baseline-whatsapp', text: 'WhatsApp' },
-  { href: 'mailto:ramoncuri@explotools.com.br', icon: 'line-md:email', text: 'Email' },
-  { href: 'https://www.instagram.com/explotools.brasil?igsh=MWc2OHBxc3ozejhsdA==', icon: 'line-md:instagram', text: 'Instagram' },
-  { href: 'https://www.facebook.com/share/p1veqrfSK8BVwVUU/?mibextid=qi2Omg', icon: 'line-md:facebook', text: 'Facebook' },
-  { href: 'https://www.linkedin.com/in/explotools-brasil-b6ba58273', icon: 'line-md:linkedin', text: 'LinkedIn' },
-  { href: 'https://maps.app.goo.gl/FGUcQ1ZqUXyxKMsT8', icon: 'line-md:map-marker', text: 'Google Maps' },
-  { href: 'https://www.tiktok.com/@explotools.brasil?_t=8pFnT9iDWli&_r=1', icon: 'line-md:tiktok', text: 'TikTok' },
+  { href: 'https://wa.link/c1di0k', icon: 'ic-baseline-whatsapp', text: 'WhatsApp' },
+  { href: 'mailto:ramoncuri@explotools.com.br', icon: 'line-md-email', text: 'Email' },
+  { href: 'https://www.instagram.com/explotools.brasil?igsh=MWc2OHBxc3ozejhsdA==', icon: 'line-md-instagram', text: 'Instagram' },
+  { href: 'https://www.facebook.com/share/p1veqrfSK8BVwVUU/?mibextid=qi2Omg', icon: 'line-md-facebook', text: 'Facebook' },
+  { href: 'https://www.linkedin.com/in/explotools-brasil-b6ba58273', icon: 'line-md-linkedin', text: 'LinkedIn' },
+  { href: 'https://maps.app.goo.gl/FGUcQ1ZqUXyxKMsT8', icon: 'line-md-map-marker', text: 'Google Maps' },
+  { href: 'https://www.tiktok.com/@explotools.brasil?_t=8pFnT9iDWli&_r=1', icon: 'line-md-tiktok', text: 'TikTok' },
 ])
 </script>
 
@@ -30,7 +30,7 @@ const midias = ref([
           target="_blank"
           class="mb-4 flex items-center justify-start rounded-lg p-4 shadow-md transition-transform hover:scale-105 hover:bg-gray-100"
         >
-          <Icon :name="icon" size="24" color="red" class="text-[#FD0116]" />
+          <UIcon :name="icon" size="24" color="red" class="text-[#FD0116]" />
           <span class="ml-3 text-lg font-medium text-gray-800">{{ text }}</span>
         </NuxtLink>
       </div>
