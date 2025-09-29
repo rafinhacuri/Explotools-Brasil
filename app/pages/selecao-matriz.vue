@@ -22,7 +22,29 @@ const rochas = [
   'Conglomerado - Mohs 6.5',
   'Laterita - Mohs 5.5',
   'Basalto - Mohs 6',
+  'Quartzito - Mohs 7',
+  'Granito - Mohs 6.5',
+  'Diorito - Mohs 7',
+  'Gabro - Mohs 7',
+  'Riolito - Mohs 6.5',
+  'Andesito - Mohs 6',
+  'Traquito - Mohs 6',
+  'Fonólito - Mohs 6',
+  'Peridotito - Mohs 6.5',
+  'Xisto - Mohs 4',
+  'Filito - Mohs 4',
+  'Ardósia - Mohs 3.5',
+  'Gnaisse - Mohs 6.5',
+  'Mármore - Mohs 3.5',
+  'Dolomita - Mohs 3.5',
+  'Carvão betuminoso - Mohs 2.5',
+  'Antracito - Mohs 3',
+  'Chert - Mohs 7',
+  'Sílex - Mohs 7',
+  'Tufito - Mohs 4',
+  'Brecha - Mohs 6',
 ]
+
 const abrasividadeOptions = ['Baixa', 'Média', 'Alta']
 const granulometriaOptions = ['Fino', 'Médio', 'Grosso']
 const diametroOptions = ['BQ', 'NQ', 'NQ2', 'HQ', 'PQ']
