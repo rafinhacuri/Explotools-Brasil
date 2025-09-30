@@ -275,7 +275,7 @@ async function copyLink(uid: string){
 
             <UTable :data="recomendacao.boasPraticas" class="flex-1" />
 
-            <UButton label="Copiar link" :icon="linkCopied ? 'i-heroicons-check-circle' : 'i-heroicons-link'" class=" bg-red-500 font-bold text-white" color="error" :loading="isLoading" @click="copyLink(recomendacao.uid)" />
+            <UButton label="Copiar link" :icon="linkCopied ? 'i-heroicons-check-circle' : 'i-heroicons-link'" class=" mt-4 bg-red-500 font-bold text-white" color="error" :loading="isLoading" @click="copyLink(recomendacao.uid)" />
           </UCard>
         </div>
 
