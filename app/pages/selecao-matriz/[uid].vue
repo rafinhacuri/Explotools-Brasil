@@ -3,7 +3,7 @@ const { uid } = useRoute().params
 
 const id = Array.isArray(uid) ? uid[0] : uid
 
-const { data, error } = await useFetch('/api/fetch/recomendacao', { method: 'POST', body: { uid: id } })
+const { data, error } = await useFetch('/api/fetch/recomendacao', { method: 'POST', body: { _id: id } })
 
 if(!data.value || error.value) throw createError({ statusCode: 404, statusMessage: 'Recomendação não encontrada' })
 </script>
