@@ -9,42 +9,6 @@ const toast = useToast()
 
 const isMobile = useMediaQuery('(max-width: 768px)')
 
-const rochas = [
-  'Calcário - Mohs 3',
-  'Calcário dolomítico - Mohs 3.8',
-  'Marga - Mohs 3',
-  'Gesso - Mohs 2',
-  'Halita (sal-gema) - Mohs 2.5',
-  'Arenito - Mohs 6.5',
-  'Arenito ferruginoso - Mohs 6.8',
-  'Siltito - Mohs 3.5',
-  'Folhelho - Mohs 3',
-  'Conglomerado - Mohs 6.5',
-  'Laterita - Mohs 5.5',
-  'Basalto - Mohs 6',
-  'Quartzito - Mohs 7',
-  'Granito - Mohs 6.5',
-  'Diorito - Mohs 7',
-  'Gabro - Mohs 7',
-  'Riolito - Mohs 6.5',
-  'Andesito - Mohs 6',
-  'Traquito - Mohs 6',
-  'Fonólito - Mohs 6',
-  'Peridotito - Mohs 6.5',
-  'Xisto - Mohs 4',
-  'Filito - Mohs 4',
-  'Ardósia - Mohs 3.5',
-  'Gnaisse - Mohs 6.5',
-  'Mármore - Mohs 3.5',
-  'Dolomita - Mohs 3.5',
-  'Carvão betuminoso - Mohs 2.5',
-  'Antracito - Mohs 3',
-  'Chert - Mohs 7',
-  'Sílex - Mohs 7',
-  'Tufito - Mohs 4',
-  'Brecha - Mohs 6',
-]
-
 const abrasividadeOptions = ['Baixa', 'Média', 'Alta']
 const granulometriaOptions = ['Fino', 'Médio', 'Grosso']
 const diametroOptions = ['BQ', 'NQ', 'NQ2', 'HQ', 'PQ']
@@ -100,18 +64,11 @@ async function getRecomendacao(){
   finish()
 }
 
-const linkCopied = ref(false)
-async function copyLink(uid: string){
-  if(linkCopied.value) return
-  try {
-    await navigator.clipboard.writeText(`https://explotools.com.br/selecao-matriz/${uid}`)
-    linkCopied.value = true
-    toast.add({ title: 'Link copiado com sucesso!', icon: 'i-heroicons-check-circle', color: 'success' })
-  }
-  catch {
-    toast.add({ title: 'Erro ao copiar link', icon: 'i-heroicons-exclamation-triangle', color: 'error' })
-  }
-}
+const { SITE_URL } = useRuntimeConfig().public
+
+const source = computed(() => `${SITE_URL}/selecao-matriz/${recomendacao.value.uid}`)
+
+const { copy, copied } = useClipboard({ source })
 </script>
 
 <template>
@@ -119,7 +76,7 @@ async function copyLink(uid: string){
     <UHeader>
       <template #left>
         <NuxtLink to="/">
-          <img src="/explotools.png" alt="Logo" class="h-16">
+          <NuxtImg src="/explotools.png" alt="Logo" class="h-16" />
         </NuxtLink>
       </template>
       <template #right>
@@ -275,7 +232,7 @@ async function copyLink(uid: string){
 
             <UTable :data="recomendacao.boasPraticas" class="flex-1" />
 
-            <UButton label="Copiar link" :icon="linkCopied ? 'i-heroicons-check-circle' : 'i-heroicons-link'" class=" mt-4 bg-red-500 font-bold text-white" color="error" :loading="isLoading" @click="copyLink(recomendacao.uid)" />
+            <UButton label="Copiar link" :icon="copied ? 'i-heroicons-check-circle' : 'i-heroicons-link'" class=" mt-4 bg-red-500 font-bold text-white" color="error" :loading="isLoading" @click="copy(source)" />
           </UCard>
         </div>
 

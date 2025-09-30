@@ -9,7 +9,7 @@ const menu = ref<{ nome: string, to: string }[]>([
 <template>
   <nav class="flex flex-col items-center justify-between bg-black md:flex">
     <div class="flex w-full justify-center">
-      <img src="/explotools.png" alt="logo Explotools brasil" class="h-[150px] w-[450px]">
+      <NuxtImg src="/explotools.png" alt="logo Explotools brasil" class="h-[150px] w-[450px]" />
     </div>
     <div class="w-full">
       <ul class="flex w-full justify-center space-x-6 bg-[#FD0116]">

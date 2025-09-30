@@ -1,4 +1,5 @@
 <script setup lang="ts">
+useHead({ title: 'Recomendação' })
 definePageMeta({ layout: false, colorMode: 'dark' })
 const { uid } = useRoute().params
 

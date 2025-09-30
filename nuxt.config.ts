@@ -3,7 +3,7 @@ import process from 'node:process'
 const { PRODUCTION, SITE_URL, MONGO_URL, MONGO_USERNAME, MONGO_PASSWORD, MONGO_DB_NAME, DEV_URL, DEV_KEY, DEV_CERT } = process.env
 
 export default defineNuxtConfig({
-  modules: ['nuxt-auth-utils', '@nuxtjs/seo', 'nuxt-security', '@nuxt/ui', '@vueuse/nuxt', 'nuxt-aos'],
+  modules: ['nuxt-auth-utils', '@nuxtjs/seo', 'nuxt-security', '@nuxt/ui', '@vueuse/nuxt', 'nuxt-aos', '@nuxt/image'],
   devtools: { enabled: true },
   app: {
     head: {

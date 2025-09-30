@@ -55,7 +55,7 @@ function scrollToDestiny(){
     <div class="relative z-10">
       <div class="flex flex-col items-center justify-center">
         <div class="flex items-center justify-center">
-          <img src="/explotools.png" alt="logo Explotools brasil" class="mt-7 h-[140px] w-[300px] md:h-[200px] md:w-[700px]">
+          <NuxtImg src="/explotools.png" alt="logo Explotools brasil" class="mt-7 h-[140px] w-[300px] md:h-[200px] md:w-[700px]" />
         </div>
         <p class=" text-center text-base font-black tracking-wide text-white italic md:text-3xl">
           Qualidade Internacional, Preços Nacionais:<br>
@@ -101,7 +101,7 @@ function scrollToDestiny(){
           </div>
           <div data-aos="zoom-in" class="order-1 max-w-[500px] pb-3 transition-all duration-200 ease-in-out md:order-2">
             <UCarousel v-slot="{ item }" :items="images" loop auto-scroll :ui="{ item: 'basis-2/3' } ">
-              <img :src="item" width="320" height="320" class="m-auto rounded-lg" alt="Imagem do Produto">
+              <NuxtImg :src="item" width="320" height="320" class="m-auto rounded-lg" alt="Imagem do Produto" />
             </UCarousel>
           </div>
         </div>

@@ -10,7 +10,7 @@ const progress = ref(90)
   <section class="min-h-screen bg-[url('/fundo.jpeg')] bg-cover bg-center bg-no-repeat">
     <div class="relative z-10">
       <div class="flex items-center justify-center">
-        <img src="/explotools.png" alt="logo Explotools brasil" class="mt-7 h-[140px] w-[300px] md:h-[200px] md:w-[700px]">
+        <NuxtImg src="/explotools.png" alt="logo Explotools brasil" class="mt-7 h-[140px] w-[300px] md:h-[200px] md:w-[700px]" />
       </div>
       <div class="flex justify-center pt-10 text-5xl font-black tracking-wide text-red-600">
         <h1>
