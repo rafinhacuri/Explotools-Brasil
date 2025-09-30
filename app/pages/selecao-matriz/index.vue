@@ -53,6 +53,21 @@ const estadoOptions = ['Fracturada', 'Moderada', 'Sólida']
 const gerarRecomendacao = ref(false)
 const state = ref<RecomendacaoForm>({ rocha: '', mohs: 6.5, abrasividade: 'Média', formacao: 'Moderada', granulometria: 'Médio', diametro: 'NQ' })
 
+const blockMohs = ref(false)
+
+watch(() => state.value.rocha, nv => {
+  const rocha = rochas.find(r => r.startsWith(nv ?? ''))
+  if(!rocha) return
+  // eslint-disable-next-line security/detect-unsafe-regex
+  const mohsMatch = rocha.match(/Mohs (\d+(?:\.\d+)?)/)
+  if(mohsMatch && mohsMatch[1]){
+    state.value.mohs = Number.parseFloat(mohsMatch[1])
+  }
+
+  if(nv) blockMohs.value = true
+  else blockMohs.value = false
+})
+
 const perguntas = ref([
   {
     label: 'O que é série e o que é matriz?',
@@ -64,18 +79,18 @@ const perguntas = ref([
   },
 ])
 
-const recomendacao = ref<RecomendacaoReturn>({ rocha: '', serie: '', matriz: '', diCorpo: '', fordiaEpiroc: '', boartLongyear: '', rpm: '', wob: '', fluxoAgua: '', canal: '', diagnostico: [], boasPraticas: [] })
+const recomendacao = ref<RecomendacaoReturn>({ uid: '', rocha: '', serie: '', matriz: '', diCorpo: '', fordiaEpiroc: '', boartLongyear: '', rpm: '', wob: '', fluxoAgua: '', canal: '', diagnostico: [], boasPraticas: [] })
 
 async function getRecomendacao(){
   start()
 
-  const body = recomendacaoSchema.safeParse(state.value)
+  const body = RecomendacaoSchema.safeParse(state.value)
   if(!body.success){
     toast.add({ title: body.error.issues[0]?.message || '', icon: 'i-heroicons-exclamation-triangle', color: 'error' })
     return finish({ error: true })
   }
 
-  const res = await $fetch('/api/fetch/recomendacao', { method: 'POST', body: body.data })
+  const res = await $fetch('/api/insert/recomendacao', { method: 'POST', body: body.data })
     .catch(error => { toast.add({ title: error.data.message, icon: 'i-heroicons-exclamation-triangle', color: 'error' }) })
 
   if(!res) return finish({ error: true })
@@ -83,6 +98,19 @@ async function getRecomendacao(){
   recomendacao.value = res
   gerarRecomendacao.value = true
   finish()
+}
+
+const linkCopied = ref(false)
+async function copyLink(uid: string){
+  if(linkCopied.value) return
+  try {
+    await navigator.clipboard.writeText(`https://explotools.com.br/selecao-matriz/${uid}`)
+    linkCopied.value = true
+    toast.add({ title: 'Link copiado com sucesso!', icon: 'i-heroicons-check-circle', color: 'success' })
+  }
+  catch {
+    toast.add({ title: 'Erro ao copiar link', icon: 'i-heroicons-exclamation-triangle', color: 'error' })
+  }
 }
 </script>
 
@@ -122,7 +150,7 @@ async function getRecomendacao(){
               <label for="dureza" class="font-bold">
                 Dureza (Mohs)  <span class="text-slate-400">{{ state.mohs }}</span>
               </label>
-              <USlider id="dureza" v-model="state.mohs" tooltip color="info" class="mt-5" :min="1" :max="10" :step="0.1" />
+              <USlider id="dureza" v-model="state.mohs" :disabled="blockMohs" tooltip color="error" class="mt-5" :min="1" :max="10" :step="0.1" />
             </div>
             <div class="mb-4">
               <label for="abrasividade" class="font-bold">
@@ -141,7 +169,7 @@ async function getRecomendacao(){
             <label for="granulometria" class="font-bold">
               Granulometria
             </label>
-            <URadioGroup id="granulometria" v-model="state.granulometria" orientation="horizontal" color="info" :variant="isMobile ? 'list' : 'card'" :items="granulometriaOptions" />
+            <URadioGroup id="granulometria" v-model="state.granulometria" orientation="horizontal" color="error" :variant="isMobile ? 'list' : 'card'" :items="granulometriaOptions" />
           </div>
         </div>
 
@@ -246,6 +274,8 @@ async function getRecomendacao(){
             </p>
 
             <UTable :data="recomendacao.boasPraticas" class="flex-1" />
+
+            <UButton label="Copiar link" :icon="linkCopied ? 'i-heroicons-check-circle' : 'i-heroicons-link'" class=" bg-red-500 font-bold text-white" color="error" :loading="isLoading" @click="copyLink(recomendacao.uid)" />
           </UCard>
         </div>
 

@@ -1,4 +1,5 @@
 interface RecomendacaoReturn{
+  uid: string,
   rocha: string,
   serie: string,
   matriz: string,
