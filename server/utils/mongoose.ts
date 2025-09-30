@@ -23,6 +23,7 @@ export const Adm = mongoose.model('adm', new Schema<User>({
 
 export const Recomenacoes = mongoose.model('recomendacao', new Schema<RecomendacaoMongo>({
   uid: { type: String, required: true, unique: true },
+  email: { type: String, required: false },
   rocha: { type: String, required: true },
   mohs: { type: Number, required: true },
   abrasividade: { type: String, required: true },

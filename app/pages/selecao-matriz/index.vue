@@ -15,7 +15,7 @@ const diametroOptions = ['BQ', 'NQ', 'NQ2', 'HQ', 'PQ']
 const estadoOptions = ['Fracturada', 'Moderada', 'Sólida']
 
 const gerarRecomendacao = ref(false)
-const state = ref<RecomendacaoForm>({ rocha: '', mohs: 6.5, abrasividade: 'Média', formacao: 'Moderada', granulometria: 'Médio', diametro: 'NQ' })
+const state = ref<RecomendacaoForm>({ email: '', rocha: '', mohs: 6.5, abrasividade: 'Média', formacao: 'Moderada', granulometria: 'Médio', diametro: 'NQ' })
 
 const blockMohs = ref(false)
 
@@ -43,7 +43,7 @@ const perguntas = ref([
   },
 ])
 
-const recomendacao = ref<RecomendacaoReturn>({ uid: '', rocha: '', serie: '', matriz: '', diCorpo: '', fordiaEpiroc: '', boartLongyear: '', rpm: '', wob: '', fluxoAgua: '', canal: '', diagnostico: [], boasPraticas: [] })
+const recomendacao = ref<RecomendacaoMongo>({ uid: '', rocha: '', serie: '', matriz: '', diCorpo: '', fordiaEpiroc: '', boartLongyear: '', rpm: '', wob: '', fluxoAgua: '', canal: '', diagnostico: [], boasPraticas: [], abrasividade: '', granulometria: '', diametro: '', formacao: '', mohs: 0, email: '' })
 
 async function getRecomendacao(){
   start()
@@ -138,9 +138,18 @@ const { copy, copied } = useClipboard({ source })
             Defina o estado estrutural do maciço rochoso.
           </p>
 
-          <div class="mb-5">
+          <div class="my-5">
             <URadioGroup id="estado" v-model="state.formacao" orientation="horizontal" color="error" :variant="isMobile ? 'list' : 'card'" :items="estadoOptions" />
           </div>
+
+          <!--
+            <div v-if="!email" class="mb-5">
+            <label for="email" class="font-bold">
+            Email
+            </label>
+            <UInput id="email" v-model="state.email" placeholder="Digite seu email" color="error" class="w-full" />
+            </div>
+          -->
 
           <UButton label="Obter recomendação" class="flex w-full justify-center bg-red-500 p-2 font-bold text-white" color="error" :loading="isLoading" @click="getRecomendacao" />
 
@@ -154,7 +163,7 @@ const { copy, copied } = useClipboard({ source })
               </div>
               <div class="mt-2 text-slate-400">
                 <p class="word-break">
-                  Mohs <span class="font-bold">{{ state.mohs }}</span> · Abrasividade <span class="font-bold">{{ state.abrasividade }}</span> · Formação <span class="font-bold">{{ state.formacao }}</span> · Granulometria <span class="font-bold">{{ state.granulometria }}</span> · Diâmetro <span class="font-bold">{{ state.diametro }}</span>
+                  Mohs <span class="font-bold">{{ recomendacao.mohs }}</span> · Abrasividade <span class="font-bold">{{ recomendacao.abrasividade }}</span> · Formação <span class="font-bold">{{ recomendacao.formacao }}</span> · Granulometria <span class="font-bold">{{ recomendacao.granulometria }}</span> · Diâmetro <span class="font-bold">{{ recomendacao.diametro }}</span>
                 </p>
               </div>
             </template>

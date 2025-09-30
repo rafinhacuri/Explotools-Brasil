@@ -4,7 +4,7 @@ export default defineEventHandler(async event => {
   const body = await readValidatedBody(event, RecomendacaoSchema.safeParse)
   if(!body.success) throw createError({ status: 400, message: body.error.issues[0]?.message || '' })
 
-  const { abrasividade, granulometria, diametro, formacao, mohs, rocha } = body.data
+  const { abrasividade, granulometria, diametro, formacao, mohs, rocha, email } = body.data
 
   const mapAbra = (a: string): 'high' | 'low' | 'medium' => {
     const key = a.trim().toLowerCase()
@@ -150,7 +150,7 @@ export default defineEventHandler(async event => {
     obs: 'Evitar bentonita elevada com matrizes mais macias; monitorar retorno/temperatura.',
   })
 
-  const recomendacao: RecomendacaoReturn = {
+  const recomendacao: RecomendacaoMongo = {
     uid: v4(),
     rocha: rocha || '',
     serie: ds.serie,
@@ -164,9 +164,15 @@ export default defineEventHandler(async event => {
     canal: ops.waterway,
     diagnostico,
     boasPraticas,
+    abrasividade,
+    granulometria,
+    diametro,
+    formacao,
+    mohs,
+    email: email || '',
   }
 
-  await new Recomenacoes({ ...recomendacao, abrasividade, granulometria, diametro, formacao, mohs }).save()
+  await new Recomenacoes(recomendacao).save()
 
   return recomendacao
 })

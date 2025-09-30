@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 export const RecomendacaoSchema = z.object({
+  email: z.string().optional(),
   rocha: z.string().optional(),
   mohs: z.number().min(1, 'Selecione a dureza Mohs'),
   abrasividade: z.string().min(1, 'Selecione a abrasividade'),
@@ -13,6 +14,7 @@ export type RecomendacaoForm = z.infer<typeof RecomendacaoSchema>
 
 export const RecomendacaoMongoSchema = z.object({
   uid: z.string(),
+  email: z.string(),
   rocha: z.string().optional(),
   mohs: z.number(),
   abrasividade: z.string(),
