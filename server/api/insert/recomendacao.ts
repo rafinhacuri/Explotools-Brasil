@@ -25,17 +25,17 @@ export default defineEventHandler(async event => {
     return 'médio'
   }
 
-  type DiaKey = 'BQ' | 'HQ' | 'NQ' | 'NQ2' | 'PQ'
-  const DIAMETERS: Record<DiaKey, { rpm: [number, number], wob: [number, number], flow: [number, number], waterway: string }> = {
-    BQ: { rpm: [650, 1600], wob: [13, 24], flow: [8, 21], waterway: 'Standard/Hydra' },
-    NQ: { rpm: [500, 1250], wob: [20, 38], flow: [13, 34], waterway: 'Standard/Hydra' },
-    NQ2: { rpm: [500, 1250], wob: [20, 38], flow: [13, 34], waterway: 'Standard/Hydra' },
-    HQ: { rpm: [400, 1000], wob: [29, 58], flow: [19, 53], waterway: 'Hydra/Face Discharge' },
-    PQ: { rpm: [300, 800], wob: [44, 84], flow: [28, 76], waterway: 'Face Discharge/Wide' },
+  type DiaKey = 'bq' | 'hq' | 'nq' | 'nq2' | 'pq'
+  const diametros: Record<DiaKey, { rpm: [number, number], wob: [number, number], flow: [number, number], waterway: string }> = {
+    bq: { rpm: [650, 1600], wob: [13, 24], flow: [8, 21], waterway: 'Standard/Hydra' },
+    nq: { rpm: [500, 1250], wob: [20, 38], flow: [13, 34], waterway: 'Standard/Hydra' },
+    nq2: { rpm: [500, 1250], wob: [20, 38], flow: [13, 34], waterway: 'Standard/Hydra' },
+    hq: { rpm: [400, 1000], wob: [29, 58], flow: [19, 53], waterway: 'Hydra/Face Discharge' },
+    pq: { rpm: [300, 800], wob: [44, 84], flow: [28, 76], waterway: 'Face Discharge/Wide' },
   }
 
   function opNumbers(size: DiaKey, m: number, abra: 'high' | 'low' | 'medium', grain: 'fino' | 'grosso' | 'médio', form: 'compacta' | 'fracturada' | 'moderada'){
-    const p = DIAMETERS[size] ?? DIAMETERS.NQ
+    const p = diametros[size] ?? diametros.nq
     const rpm: [number, number] = [p.rpm[0], p.rpm[1]]
     const wob: [number, number] = [p.wob[0], p.wob[1]]
     const flow: [number, number] = [p.flow[0], p.flow[1]]
@@ -70,7 +70,7 @@ export default defineEventHandler(async event => {
   const abra = mapAbra(abrasividade)
   const form = mapForm(formacao)
   const grain = mapGrain(granulometria)
-  const size = (String(diametro).toUpperCase() as DiaKey) in DIAMETERS ? (String(diametro).toUpperCase() as DiaKey) : 'NQ'
+  const size = (String(diametro).toLowerCase() as DiaKey) in diametros ? (String(diametro).toLowerCase() as DiaKey) : 'nq'
 
   const matriz = String(approxMatrix(mohs, abra, form))
   const ds = decideSeries(mohs, abra, form)
