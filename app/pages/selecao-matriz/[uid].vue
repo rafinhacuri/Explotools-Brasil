@@ -1,11 +1,10 @@
 <script setup lang="ts">
+definePageMeta({ layout: false, colorMode: 'dark' })
 const { uid } = useRoute().params
 
 const id = Array.isArray(uid) ? uid[0] : uid
 
-const { data, error } = await useFetch('/api/fetch/recomendacao', { method: 'POST', body: { _id: id } })
-
-if(!data.value || error.value) throw createError({ statusCode: 404, statusMessage: 'Recomendação não encontrada' })
+const { data } = await useFetch('/api/fetch/recomendacao', { method: 'POST', body: { _id: id } })
 </script>
 
 <template>
@@ -100,7 +99,7 @@ if(!data.value || error.value) throw createError({ statusCode: 404, statusMessag
     </UCard>
 
     <div v-else class="flex h-96 items-center justify-center">
-      <USpinner size="lg" />
+      Nenhum dado encontrado.
     </div>
   </section>
 </template>
