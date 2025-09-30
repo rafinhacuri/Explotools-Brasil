@@ -45,6 +45,8 @@ const perguntas = ref([
 
 const recomendacao = ref<RecomendacaoMongo>({ uid: '', rocha: '', serie: '', matriz: '', diCorpo: '', fordiaEpiroc: '', boartLongyear: '', rpm: '', wob: '', fluxoAgua: '', canal: '', diagnostico: [], boasPraticas: [], abrasividade: '', granulometria: '', diametro: '', formacao: '', mohs: 0, email: '' })
 
+const emailPreenchido = ref(false)
+
 async function getRecomendacao(){
   start()
 
@@ -60,6 +62,7 @@ async function getRecomendacao(){
   if(!res) return finish({ error: true })
 
   recomendacao.value = res
+  if(body.data.email) emailPreenchido.value = true
   gerarRecomendacao.value = true
   finish()
 }
@@ -142,14 +145,12 @@ const { copy, copied } = useClipboard({ source })
             <URadioGroup id="estado" v-model="state.formacao" orientation="horizontal" color="error" :variant="isMobile ? 'list' : 'card'" :items="estadoOptions" />
           </div>
 
-          <!--
-            <div v-if="!email" class="mb-5">
+          <div v-if="!emailPreenchido" class="mb-5">
             <label for="email" class="font-bold">
-            Email
+              Email
             </label>
             <UInput id="email" v-model="state.email" placeholder="Digite seu email" color="error" class="w-full" />
-            </div>
-          -->
+          </div>
 
           <UButton label="Obter recomendação" class="flex w-full justify-center bg-red-500 p-2 font-bold text-white" color="error" :loading="isLoading" @click="getRecomendacao" />
 
