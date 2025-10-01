@@ -299,6 +299,8 @@ async function sair(){
           <label for="email">Digite o email que você usou para se cadastrar</label>
           <UInput id="email" v-model="stateLogin.email" color="error" />
         </div>
+
+        <UButton label="Cadastrar-se..." class="mt-5" variant="ghost" color="error" :loading="isLoading" to="/lead" />
       </template>
 
       <template #footer>
