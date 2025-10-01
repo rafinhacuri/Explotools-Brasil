@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { vMaska } from 'maska/vue'
+
 definePageMeta({
   layout: false,
   colorMode: 'dark',
@@ -103,6 +105,31 @@ async function sair(){
   await clear()
   await navigateTo('/')
   toast.add({ title: 'Deslogado com sucesso', icon: 'i-heroicons-check-badge', color: 'success' })
+}
+
+const modalCadastro = ref(false)
+const newLead = ref<Lead>({ nome: '', email: '', telefone: '', empresa: '', cargo: '' })
+
+async function salvarLead(){
+  start()
+
+  const body = LeadSchema.safeParse(newLead.value)
+
+  if(!body.success){
+    toast.add({ title: body.error.issues[0]?.message || '', icon: 'i-heroicons-exclamation-triangle', color: 'error' })
+    return finish({ error: true })
+  }
+
+  const res = await $fetch('/api/insert/lead', { method: 'POST', body: body.data })
+    .catch(error => { toast.add({ title: error.data.message, icon: 'i-heroicons-exclamation-triangle', color: 'error' }) })
+
+  if(!res) return finish({ error: true })
+
+  finish()
+  toast.add({ title: res, icon: 'i-heroicons-check-circle', color: 'success' })
+  modalCadastro.value = false
+  stateLogin.value.email = newLead.value.email
+  login()
 }
 </script>
 
@@ -300,7 +327,34 @@ async function sair(){
           <UInput id="email" v-model="stateLogin.email" color="error" />
         </div>
 
-        <UButton label="Cadastrar-se..." class="mt-5" variant="ghost" color="error" :loading="isLoading" to="/lead" />
+        <UModal v-model:open="modalCadastro" title="Cadastre-se" description="Por favor, preencha os dados abaixo para se cadastrar." :ui="{ footer: 'justify-end' }">
+          <UButton label="Cadastrar-se..." class="mt-5" variant="ghost" color="error" :loading="isLoading" />
+
+          <template #body>
+            <UForm :schema="LeadSchema" :state="newLead" class="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:grid-rows-3">
+              <UFormField label="Nome" name="nome">
+                <UInput v-model="newLead.nome" color="error" @keydown.enter="salvarLead" />
+              </UFormField>
+              <UFormField label="Email" name="email">
+                <UInput v-model="newLead.email" color="error" @keydown.enter="salvarLead" />
+              </UFormField>
+              <UFormField label="Telefone" name="telefone">
+                <UInput v-model="newLead.telefone" v-maska="'(##) #####-####'" placeholder="(99) 99999-9999" color="error" @keydown.enter="salvarLead" />
+              </UFormField>
+              <UFormField label="Empresa" name="empresa">
+                <UInput v-model="newLead.empresa" color="error" @keydown.enter="salvarLead" />
+              </UFormField>
+              <UFormField label="Cargo" name="cargo">
+                <UInput v-model="newLead.cargo" color="error" @keydown.enter="salvarLead" />
+              </UFormField>
+            </UForm>
+          </template>
+
+          <template #footer>
+            <UButton label="Cancelar" color="error" variant="outline" @click="modalCadastro = false" />
+            <UButton label="Confirmar" color="error" :loading="isLoading" @click="salvarLead" />
+          </template>
+        </UModal>
       </template>
 
       <template #footer>
