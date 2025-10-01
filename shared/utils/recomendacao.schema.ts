@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export const RecomendacaoSchema = z.object({
-  email: z.string().optional(),
+  email: z.email('Digite um email válido'),
   rocha: z.string().optional(),
   mohs: z.number().min(1, 'Selecione a dureza Mohs'),
   abrasividade: z.string().min(1, 'Selecione a abrasividade'),

@@ -7,6 +7,10 @@ definePageMeta({
 const { start, finish, isLoading } = useLoadingIndicator()
 const toast = useToast()
 
+const { loggedIn, user, fetch, clear } = useUserSession()
+
+const naoLogado = computed(() => !loggedIn.value)
+
 const isMobile = useMediaQuery('(max-width: 768px)')
 
 const abrasividadeOptions = ['Baixa', 'Média', 'Alta']
@@ -50,6 +54,8 @@ const emailPreenchido = ref(false)
 async function getRecomendacao(){
   start()
 
+  state.value.email = user.value?.email || ''
+
   const body = RecomendacaoSchema.safeParse(state.value)
   if(!body.success){
     toast.add({ title: body.error.issues[0]?.message || '', icon: 'i-heroicons-exclamation-triangle', color: 'error' })
@@ -72,6 +78,32 @@ const { SITE_URL } = useRuntimeConfig().public
 const source = computed(() => `${SITE_URL}/selecao-matriz/${recomendacao.value.uid}`)
 
 const { copy, copied } = useClipboard({ source })
+
+const stateLogin = ref<UserRec>({ email: '' })
+
+async function login(){
+  start()
+
+  const body = UserRecSchema.safeParse(stateLogin.value)
+  if(!body.success){
+    toast.add({ title: body.error.issues[0]?.message || '', icon: 'i-heroicons-exclamation-triangle', color: 'error' })
+    return finish({ error: true })
+  }
+
+  const res = await $fetch('/auth-recomendacao', { method: 'POST', body: body.data })
+    .catch(error => { toast.add({ title: error.data.message, icon: 'i-heroicons-exclamation-triangle', color: 'error' }) })
+
+  if(!res) return finish({ error: true })
+
+  await fetch()
+  finish()
+}
+
+async function sair(){
+  await clear()
+  await navigateTo('/')
+  toast.add({ title: 'Deslogado com sucesso', icon: 'i-heroicons-check-badge', color: 'success' })
+}
 </script>
 
 <template>
@@ -84,8 +116,9 @@ const { copy, copied } = useClipboard({ source })
       </template>
       <template #right>
         <NuxtLink to="https://wa.link/c1di0k" external target="_blank">
-          <UIcon name="ic-baseline-whatsapp" class="size-9 rounded-2xl hover:bg-slate-400" color="white" />
+          <UIcon name="ic-baseline-whatsapp" class="mt-2 size-8 rounded-2xl hover:bg-slate-400" color="white" />
         </NuxtLink>
+        <UButton icon="i-heroicons-arrow-left-on-rectangle" variant="ghost" class="p-1 text-white" size="xl" @click="sair" />
       </template>
     </UHeader>
     <div class="min-h-screen  bg-slate-950 p-4 text-white">
@@ -143,13 +176,6 @@ const { copy, copied } = useClipboard({ source })
 
           <div class="my-5">
             <URadioGroup id="estado" v-model="state.formacao" orientation="horizontal" color="error" :variant="isMobile ? 'list' : 'card'" :items="estadoOptions" />
-          </div>
-
-          <div v-if="!emailPreenchido" class="mb-5">
-            <label for="email" class="font-bold">
-              Email
-            </label>
-            <UInput id="email" v-model="state.email" placeholder="Digite seu email" color="error" class="w-full" />
           </div>
 
           <UButton label="Obter recomendação" class="flex w-full justify-center bg-red-500 p-2 font-bold text-white" color="error" :loading="isLoading" @click="getRecomendacao" />
@@ -266,5 +292,18 @@ const { copy, copied } = useClipboard({ source })
         </div>
       </div>
     </div>
+
+    <UModal v-model:open="naoLogado" :dismissible="false" title="Email" description="Por favor, insira seu email para continuar." :ui="{ footer: 'justify-end' }" :close="false">
+      <template #body>
+        <div class="flex flex-col">
+          <label for="email">Digite o email que você usou para se cadastrar</label>
+          <UInput id="email" v-model="stateLogin.email" color="error" />
+        </div>
+      </template>
+
+      <template #footer>
+        <UButton label="Confirmar" color="error" :loading="isLoading" @click="login" />
+      </template>
+    </UModal>
   </section>
 </template>

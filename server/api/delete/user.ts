@@ -1,5 +1,7 @@
 export default defineEventHandler(async event => {
-  await requireUserSession(event, { statusCode: 401, message: 'Você não tem pemissão para executar essa ação' })
+  const { user } = await requireUserSession(event, { statusCode: 401, message: 'Você não tem pemissão para executar essa ação' })
+
+  if(user.level !== 'admin') throw createError({ statusCode: 401, message: 'Você não tem pemissão para executar essa ação' })
 
   const body = await readValidatedBody(event, IdSchema.safeParse)
 

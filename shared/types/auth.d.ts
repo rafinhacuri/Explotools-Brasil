@@ -1,5 +1,6 @@
 declare module '#auth-utils'{
   interface User{
-    user: string,
+    email: string,
+    level: 'admin' | 'user',
   }
 }

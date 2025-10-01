@@ -1,6 +1,8 @@
 import { v4 } from 'uuid'
 
 export default defineEventHandler(async event => {
+  await requireUserSession(event, { statusCode: 401, message: 'Você não tem pemissão para executar essa ação' })
+
   const body = await readValidatedBody(event, RecomendacaoSchema.safeParse)
   if(!body.success) throw createError({ status: 400, message: body.error.issues[0]?.message || '' })
 
