@@ -30,18 +30,6 @@ export const RecomendacaoMongoSchema = z.object({
   wob: z.string(),
   fluxoAgua: z.string(),
   canal: z.string(),
-  diagnostico: z.array(z.object({
-    sintoma: z.string(),
-    causa: z.string(),
-    acao: z.string(),
-    ajuste: z.string(),
-  })),
-  boasPraticas: z.array(z.object({
-    parametro: z.string(),
-    regraBolso: z.string(),
-    comoAjustar: z.string(),
-    obs: z.string(),
-  })),
 })
 
 export type RecomendacaoMongo = z.infer<typeof RecomendacaoMongoSchema>

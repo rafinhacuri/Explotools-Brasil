@@ -79,79 +79,6 @@ export default defineEventHandler(async event => {
   const eq = equivalents(ds.serie, abra)
   const ops = opNumbers(size, mohs, abra, grain, form)
 
-  const diagnostico: { sintoma: string, causa: string, acao: string, ajuste: string }[] = []
-  diagnostico.push({
-    sintoma: 'Glazing (face lisa, sem corte)',
-    causa: 'Matriz muito dura; RPM alta com WOB baixo; liberação insuficiente',
-    acao: 'Aumente WOB por 30–60 s; faça "dress" curto',
-    ajuste: 'Reduza RPM 10–15% ou use matriz +1 (mais macia)',
-  }, {
-    sintoma: 'Vibração / chatter',
-    causa: 'Ressonância; estabilização deficiente (reaming shell/alinhamento)',
-    acao: 'Reduzir RPM 10–15%; leve incremento de WOB; checar estabilizadores',
-    ajuste: 'Operar no terço inferior do intervalo de RPM; preferir Hydra/Face',
-  })
-  if(form === 'fracturada'){
-    diagnostico.push({
-      sintoma: 'Perda de face / quebra de diamante',
-      causa: 'Impactos por fraturas; avanço longo no arranque',
-      acao: 'Cortes curtos; reduzir RPM/WOB no início; limpeza frequente',
-      ajuste: 'Série mais ampla (4–6); se preciso, matriz um passo mais macia',
-    })
-  }
-  diagnostico.push({
-    sintoma: 'Lavagem de núcleo (core wash)',
-    causa: 'Fluxo insuficiente; WOB alto com RPM alta',
-    acao: 'Aumente vazão e reduza RPM temporariamente; bombeios de limpeza',
-    ajuste: `Manter ${ops.flowRange[0]}–${ops.flowRange[1]} L/min; considerar Face Discharge`,
-  }, {
-    sintoma: 'Coroa empastada (packing)',
-    causa: 'Finos acumulados por fluido viscoso/baixo fluxo; canais estreitos',
-    acao: 'Parar avanço, bombear/limpar, retomar com maior fluxo',
-    ajuste: 'Face Discharge/Wide; reduzir viscosidade ou usar defloculante',
-  })
-  if(abra === 'high'){
-    diagnostico.push({
-      sintoma: 'Desgaste acelerado',
-      causa: 'Quartzo/hematita elevados; água insuficiente',
-      acao: 'Evitar topo do intervalo de RPM; maximizar limpeza de face',
-      ajuste: 'Variantes ABR; água limpa em alto volume; dress preventivo',
-    })
-  }
-
-  const boasPraticas: { parametro: string, regraBolso: string, comoAjustar: string, obs: string }[] = []
-  boasPraticas.push({
-    parametro: 'RPM',
-    regraBolso: `Começar no meio do intervalo (${ops.rpmRange[0]}–${ops.rpmRange[1]}) para ${size}`,
-    comoAjustar: 'Subir até cavacos uniformes/temperatura estável; reduzir 10–15% se houver vibração/polimento',
-    obs: `${form === 'fracturada' ? 'Em fracturada, use metade inferior do intervalo. ' : ''}Em abrasiva, evite topo por longos períodos.`,
-  }, {
-    parametro: 'WOB (kN)',
-    regraBolso: `Iniciar próximo de ${ops.wobRange[0]} kN e subir gradualmente`,
-    comoAjustar: 'Parar quando a taxa de penetração estabilizar sem travar o núcleo',
-    obs: 'Excesso arredonda diamantes e induz aquecimento/vibração.',
-  }, {
-    parametro: 'Fluxo (L/min)',
-    regraBolso: `Manter entre ${ops.flowRange[0]}–${ops.flowRange[1]} L/min`,
-    comoAjustar: 'Aumentar se cavacos secos/finos; reduzir se houver erosão de face',
-    obs: `${abra === 'high' ? 'Em abrasiva, some +2–5 L/min. ' : ''}Usar água limpa; checar sólidos/filtragem.`,
-  }, {
-    parametro: 'Canais de água',
-    regraBolso: ops.waterway,
-    comoAjustar: 'Usar Hydra/Face em alta carga de finos ou aquecimento de face',
-    obs: `Garantir pressão/caudal compatíveis com o diâmetro ${size}.`,
-  }, {
-    parametro: 'Quebra de aresta',
-    regraBolso: '2–3 min a ~50% RPM e ~50% WOB em coroa nova',
-    comoAjustar: 'Subir gradualmente para regime observando cavacos regulares',
-    obs: 'Crítico para vida útil e início estável; evite começar em plena carga.',
-  }, {
-    parametro: 'Fluido',
-    regraBolso: 'Água limpa; viscosidade mínima para transporte de finos',
-    comoAjustar: 'Reduzir viscosidade em rochas abrasivas; usar defloculantes quando necessário',
-    obs: 'Evitar bentonita elevada com matrizes mais macias; monitorar retorno/temperatura.',
-  })
-
   const recomendacao: RecomendacaoMongo = {
     uid: v4(),
     rocha: rocha || '',
@@ -164,8 +91,6 @@ export default defineEventHandler(async event => {
     wob: `${ops.wobRange[0]}–${ops.wobRange[1]}`,
     fluxoAgua: `${ops.flowRange[0]}–${ops.flowRange[1]}`,
     canal: ops.waterway,
-    diagnostico,
-    boasPraticas,
     abrasividade,
     granulometria,
     diametro,

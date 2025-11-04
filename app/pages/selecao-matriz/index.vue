@@ -49,7 +49,7 @@ const perguntas = ref([
   },
 ])
 
-const recomendacao = ref<RecomendacaoMongo>({ uid: '', rocha: '', serie: '', matriz: '', diCorpo: '', fordiaEpiroc: '', boartLongyear: '', rpm: '', wob: '', fluxoAgua: '', canal: '', diagnostico: [], boasPraticas: [], abrasividade: '', granulometria: '', diametro: '', formacao: '', mohs: 0, email: '' })
+const recomendacao = ref<RecomendacaoMongo>({ uid: '', rocha: '', serie: '', matriz: '', diCorpo: '', fordiaEpiroc: '', boartLongyear: '', rpm: '', wob: '', fluxoAgua: '', canal: '', abrasividade: '', granulometria: '', diametro: '', formacao: '', mohs: 0, email: '' })
 
 const emailPreenchido = ref(false)
 
@@ -222,6 +222,9 @@ async function salvarLead(){
               </div>
             </template>
 
+            <p class="mb-3 text-xl font-bold">
+              Quadro de séries por fabricante
+            </p>
             <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div class="rounded-2xl border border-slate-800 bg-slate-950 p-3">
                 <p class="font-bold">
@@ -230,25 +233,35 @@ async function salvarLead(){
                 <p>
                   Série: <span class="font-bold">{{ recomendacao.serie || '---' }}</span>
                 </p>
+              </div>
+              <div class="rounded-2xl border border-slate-800 bg-slate-950 p-3">
+                <p class="font-bold">
+                  Di-Corp
+                </p>
                 <p>
-                  Matriz: <span class="font-bold">{{ recomendacao.matriz || '---' }}</span>
+                  Série: <span class="font-bold">{{ recomendacao.diCorpo || '---' }}</span>
                 </p>
               </div>
               <div class="rounded-2xl border border-slate-800 bg-slate-950 p-3">
                 <p class="font-bold">
-                  Equivalentes
+                  Fordia/Epiroc
                 </p>
                 <p>
-                  Di-Corp: <span class="font-bold">{{ recomendacao.diCorpo || '---' }}</span>
+                  Série: <span class="font-bold">{{ recomendacao.fordiaEpiroc || '---' }}</span>
+                </p>
+              </div>
+              <div class="rounded-2xl border border-slate-800 bg-slate-950 p-3">
+                <p class="font-bold">
+                  Boart Longyear
                 </p>
                 <p>
-                  Fordia/Epiroc: <span class="font-bold">{{ recomendacao.fordiaEpiroc || '---' }}</span>
-                </p>
-                <p>
-                  Boart Longyear: <span class="font-bold">{{ recomendacao.boartLongyear || '---' }}</span>
+                  Série: <span class="font-bold">{{ recomendacao.boartLongyear || '---' }}</span>
                 </p>
               </div>
 
+              <p class="col-span-2 mt-3 text-xl font-bold">
+                Especificações padrão de operação
+              </p>
               <div class="rounded-2xl border border-slate-800 bg-slate-950 p-3">
                 <p class="text-slate-400">
                   RPM sugerido
@@ -282,18 +295,6 @@ async function salvarLead(){
                 </p>
               </div>
             </div>
-
-            <p class="pt-6 pb-3 font-bold">
-              Diagnóstico & Solução
-            </p>
-
-            <UTable :data="recomendacao.diagnostico" class="flex-1" />
-
-            <p class="pt-6 pb-3 font-bold">
-              Parâmetros & Boas práticas
-            </p>
-
-            <UTable :data="recomendacao.boasPraticas" class="flex-1" />
 
             <UButton label="Copiar link" :icon="copied ? 'i-heroicons-check-circle' : 'i-heroicons-link'" class=" mt-4 bg-red-500 font-bold text-white" color="error" :loading="isLoading" @click="copy(source)" />
           </UCard>

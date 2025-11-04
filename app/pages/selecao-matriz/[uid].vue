@@ -9,7 +9,7 @@ const { data } = await useFetch('/api/fetch/recomendacao', { method: 'POST', bod
 </script>
 
 <template>
-  <section>
+  <UContainer class="my-6">
     <UCard v-if="data">
       <template #header>
         <div class="flex items-center space-x-2">
@@ -25,6 +25,9 @@ const { data } = await useFetch('/api/fetch/recomendacao', { method: 'POST', bod
         </div>
       </template>
 
+      <p class="mb-3 text-xl font-bold">
+        Quadro de séries por fabricante
+      </p>
       <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div class="rounded-2xl border border-slate-800 bg-slate-950 p-3">
           <p class="font-bold">
@@ -33,25 +36,35 @@ const { data } = await useFetch('/api/fetch/recomendacao', { method: 'POST', bod
           <p>
             Série: <span class="font-bold">{{ data.serie || '---' }}</span>
           </p>
+        </div>
+        <div class="rounded-2xl border border-slate-800 bg-slate-950 p-3">
+          <p class="font-bold">
+            Di-Corp
+          </p>
           <p>
-            Matriz: <span class="font-bold">{{ data.matriz || '---' }}</span>
+            Série: <span class="font-bold">{{ data.diCorpo || '---' }}</span>
           </p>
         </div>
         <div class="rounded-2xl border border-slate-800 bg-slate-950 p-3">
           <p class="font-bold">
-            Equivalentes
+            Fordia/Epiroc
           </p>
           <p>
-            Di-Corp: <span class="font-bold">{{ data.diCorpo || '---' }}</span>
+            Série: <span class="font-bold">{{ data.fordiaEpiroc || '---' }}</span>
+          </p>
+        </div>
+        <div class="rounded-2xl border border-slate-800 bg-slate-950 p-3">
+          <p class="font-bold">
+            Boart Longyear
           </p>
           <p>
-            Fordia/Epiroc: <span class="font-bold">{{ data.fordiaEpiroc || '---' }}</span>
-          </p>
-          <p>
-            Boart Longyear: <span class="font-bold">{{ data.boartLongyear || '---' }}</span>
+            Série: <span class="font-bold">{{ data.boartLongyear || '---' }}</span>
           </p>
         </div>
 
+        <p class="col-span-2 mt-3 text-xl font-bold">
+          Especificações padrão de operação
+        </p>
         <div class="rounded-2xl border border-slate-800 bg-slate-950 p-3">
           <p class="text-slate-400">
             RPM sugerido
@@ -85,22 +98,10 @@ const { data } = await useFetch('/api/fetch/recomendacao', { method: 'POST', bod
           </p>
         </div>
       </div>
-
-      <p class="pt-6 pb-3 font-bold">
-        Diagnóstico & Solução
-      </p>
-
-      <UTable :data="data.diagnostico" class="flex-1" />
-
-      <p class="pt-6 pb-3 font-bold">
-        Parâmetros & Boas práticas
-      </p>
-
-      <UTable :data="data.boasPraticas" class="flex-1" />
     </UCard>
 
     <div v-else class="flex h-96 items-center justify-center">
       Nenhum dado encontrado.
     </div>
-  </section>
+  </UContainer>
 </template>
