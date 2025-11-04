@@ -29,11 +29,11 @@ export default defineEventHandler(async event => {
 
   type DiaKey = 'bq' | 'hq' | 'nq' | 'nq2' | 'pq'
   const diametros: Record<DiaKey, { rpm: [number, number], wob: [number, number], flow: [number, number], waterway: string }> = {
-    bq: { rpm: [650, 1600], wob: [13, 24], flow: [8, 21], waterway: 'Standard/Hydra' },
-    nq: { rpm: [500, 1250], wob: [20, 38], flow: [13, 34], waterway: 'Standard/Hydra' },
-    nq2: { rpm: [500, 1250], wob: [20, 38], flow: [13, 34], waterway: 'Standard/Hydra' },
-    hq: { rpm: [400, 1000], wob: [29, 58], flow: [19, 53], waterway: 'Hydra/Face Discharge' },
-    pq: { rpm: [300, 800], wob: [44, 84], flow: [28, 76], waterway: 'Face Discharge/Wide' },
+    bq: { rpm: [850, 1550], wob: [13, 24], flow: [8, 21], waterway: 'Standard/Hydra' },
+    nq: { rpm: [620, 1200], wob: [20, 38], flow: [13, 34], waterway: 'Standard/Hydra' },
+    nq2: { rpm: [620, 1200], wob: [20, 38], flow: [13, 34], waterway: 'Standard/Hydra' },
+    hq: { rpm: [420, 880], wob: [29, 58], flow: [19, 53], waterway: 'Hydra/Face Discharge' },
+    pq: { rpm: [300, 580], wob: [44, 84], flow: [28, 76], waterway: 'Face Discharge/Wide' },
   }
 
   function opNumbers(size: DiaKey, m: number, abra: 'high' | 'low' | 'medium', grain: 'fino' | 'grosso' | 'médio', form: 'compacta' | 'fracturada' | 'moderada'){
@@ -69,6 +69,35 @@ export default defineEventHandler(async event => {
     }
   }
 
+  function targetRPM(size: DiaKey, m: number, a: 'high' | 'low' | 'medium', f: 'compacta' | 'fracturada' | 'moderada', g: 'fino' | 'grosso' | 'médio'){
+    const p = diametros[size] ?? diametros.nq
+    const [min, max] = p.rpm
+    let pos = 0.55
+    const hard = Math.max(0, Math.min(1, (m - 5) / 3.5))
+    pos -= 0.15 * hard
+    if(f === 'compacta') pos += 0.1
+    if(f === 'fracturada') pos -= 0.1
+    if(a === 'high') pos -= 0.05
+    if(g === 'grosso') pos -= 0.03
+    if(a === 'low' && f === 'compacta') pos += 0.05
+    pos = Math.max(0.05, Math.min(0.95, pos))
+    return Math.round(min + pos * (max - min))
+  }
+  function rpmNarrow(size: DiaKey, target: number): [number, number]{
+    const p = diametros[size] ?? diametros.nq
+    const span = p.rpm[1] - p.rpm[0]
+    const half = Math.max(40, Math.round(span * 0.1))
+    let lo = Math.max(p.rpm[0], target - half)
+    let hi = Math.min(p.rpm[1], target + half)
+    const minWidth = Math.max(80, Math.round(span * 0.08))
+    if(hi - lo < minWidth){
+      const need = minWidth - (hi - lo)
+      lo = Math.max(p.rpm[0], lo - Math.ceil(need / 2))
+      hi = Math.min(p.rpm[1], hi + Math.floor(need / 2))
+    }
+    return [lo, hi]
+  }
+
   const abra = mapAbra(abrasividade)
   const form = mapForm(formacao)
   const grain = mapGrain(granulometria)
@@ -76,18 +105,22 @@ export default defineEventHandler(async event => {
 
   const matriz = String(approxMatrix(mohs, abra, form))
   const ds = decideSeries(mohs, abra, form)
-  const eq = equivalents(ds.serie, abra)
+  const ep = seriesEpiroc(mohs, abra, form)
+  const bo = seriesBoart(mohs, abra, form)
+  const di = seriesDicorp(mohs, abra, form)
   const ops = opNumbers(size, mohs, abra, grain, form)
+  const rpmTarget = targetRPM(size, mohs, abra, form, grain)
+  const rpmWindow = rpmNarrow(size, rpmTarget)
 
   const recomendacao: RecomendacaoMongo = {
     uid: v4(),
     rocha: rocha || '',
     serie: ds.serie,
     matriz,
-    diCorpo: eq.dicorp,
-    fordiaEpiroc: eq.fordia,
-    boartLongyear: eq.boart,
-    rpm: `${ops.rpmRange[0]}–${ops.rpmRange[1]}`,
+    diCorpo: di.serie,
+    fordiaEpiroc: ep.alt ? `${ep.serie} · Alternativa: ${ep.alt}` : ep.serie,
+    boartLongyear: bo.serie,
+    rpm: `${rpmWindow[0]}–${rpmWindow[1]}`,
     wob: `${ops.wobRange[0]}–${ops.wobRange[1]}`,
     fluxoAgua: `${ops.flowRange[0]}–${ops.flowRange[1]}`,
     canal: ops.waterway,
@@ -103,49 +136,6 @@ export default defineEventHandler(async event => {
 
   return recomendacao
 })
-
-function equivalents(serie: string, abra: 'high' | 'low' | 'medium'){
-  let dicorp = '—'
-  let fordia = '—'
-  let boart = '—'
-  if(serie === '2-4'){
-    dicorp = '2A/5'
-    fordia = 'HERO 3-5 · T-Xtreme 4-6'
-    boart = 'UMX 5'
-  }
-  else if(serie === '4-6'){
-    dicorp = '6/7'
-    fordia = 'HERO 5-7'
-    boart = 'UMX 7'
-  }
-  else if(serie === '7 ABR'){
-    dicorp = '7 (Abrasive)'
-    fordia = 'HERO Abrasive 7'
-    boart = 'UMX 7 Abrasive'
-  }
-  else if(serie === '6-9'){
-    dicorp = '7E/8/9'
-    fordia = 'HERO 8-9 · T‑Xtreme 6‑9'
-    boart = 'UMX 9'
-  }
-  else if(serie === '9 ABR'){
-    dicorp = '9 (Abrasive)'
-    fordia = 'HERO Abrasive 9'
-    boart = 'UMX 9 Abrasive'
-  }
-  else if(serie === '9-11'){
-    dicorp = '10/11'
-    fordia = 'HERO 11 · T‑Xtreme 9‑11'
-    boart = 'UMX 10'
-  }
-  else if(serie === '12-14' || serie.includes('11-14')){
-    dicorp = '12/13'
-    fordia = 'HERO 13 · T‑Xtreme 11‑14'
-    boart = 'UMX 12'
-  }
-  if(abra === 'high' && !/ABR/i.test(serie))fordia += ' · (HERO Abrasive)'
-  return { dicorp, fordia, boart }
-}
 
 function approxMatrix(m: number, abra: 'high' | 'low' | 'medium', form: 'compacta' | 'fracturada' | 'moderada'){
   let val = 0
@@ -163,24 +153,55 @@ function approxMatrix(m: number, abra: 'high' | 'low' | 'medium', form: 'compact
 }
 
 function decideSeries(m: number, abra: 'high' | 'low' | 'medium', form: 'compacta' | 'fracturada' | 'moderada'){
+  const mat = approxMatrix(m, abra, form)
   let serie = ''
   let alt = ''
-  if(m < 4){
-    serie = (form === 'fracturada') ? '2-4' : '4-6'
-    if(abra === 'high') alt = '7 ABR'
-  }
-  else if(m < 5.5){
-    if(form === 'fracturada') serie = '4-6'
-    else if(form === 'moderada') serie = (abra === 'high') ? '7 ABR' : '4-6'
-    else serie = (abra === 'high') ? '7 ABR' : '6-9'
-  }
-  else if(m <= 7){
-    serie = (form === 'compacta') ? '6-9' : '4-6'
-    if(abra === 'high') alt = '9 ABR'
-  }
-  else {
-    serie = (form === 'compacta') ? ((m > 7.5) ? '12-14' : '9-11') : '6-9'
-    if(abra === 'high' && form !== 'fracturada') alt = '11-14 (ABR)'
+  if(mat <= 3) serie = '2-4'
+  else if(mat <= 5) serie = '4-6'
+  else if(mat <= 7) serie = '6-9'
+  else if(mat <= 8.5) serie = '9-11'
+  else serie = '12-14'
+
+  if(abra === 'high'){
+    if(serie === '4-6') alt = '7 ABR'
+    if(serie === '6-9') alt = '9 ABR'
   }
   return { serie, alt }
+}
+
+function seriesEpiroc(m: number, a: 'high' | 'low' | 'medium', f: 'compacta' | 'fracturada' | 'moderada'){
+  let hero = ''
+  let alt = ''
+  if(m < 4){
+    hero = 'HERO 3–5'
+  }
+  else if(m < 5.5){
+    hero = (f === 'compacta') ? (a === 'high' ? 'HERO Abrasive 7' : 'HERO 7') : (a === 'high' ? 'HERO Abrasive 5–7' : 'HERO 5–7')
+  }
+  else if(m <= 7){
+    hero = (f === 'compacta') ? (a === 'high' ? 'HERO 8 Abrasive' : 'HERO 8') : (a === 'high' ? 'HERO Abrasive 7' : 'HERO 7')
+  }
+  else {
+    hero = (f === 'compacta') ? 'HERO 11–13' : 'HERO 9–11'
+    if(a === 'high' && f !== 'fracturada') alt = 'HERO Abrasive 11'
+  }
+  return { serie: hero, alt }
+}
+
+function seriesBoart(m: number, a: 'high' | 'low' | 'medium', f: 'compacta' | 'fracturada' | 'moderada'){
+  let s = ''
+  if(m < 4) s = 'UMX 5'
+  else if(m < 5.5) s = (f === 'compacta') ? 'UMX 7' : 'UMX 5'
+  else if(m <= 7) s = (f === 'compacta') ? (a === 'high' ? 'UMX 9 Abrasive' : 'UMX 9') : 'UMX 7'
+  else s = (f === 'compacta') ? 'UMX 10–12' : 'UMX 9'
+  return { serie: s }
+}
+
+function seriesDicorp(m: number, a: 'high' | 'low' | 'medium', f: 'compacta' | 'fracturada' | 'moderada'){
+  let s = ''
+  if(m < 4) s = '2A/5'
+  else if(m < 5.5) s = (f === 'compacta') ? '6/7' : '2A/5'
+  else if(m <= 7) s = (f === 'compacta') ? (a === 'high' ? '9 (Abrasive)' : '7E/8/9') : '6/7'
+  else s = (f === 'compacta') ? '10/11–12/13' : '7E/8/9'
+  return { serie: s }
 }
