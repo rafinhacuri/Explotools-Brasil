@@ -286,8 +286,8 @@ async function salvarLead(){
 
             <UButton label="Copiar link" :icon="copied ? 'i-heroicons-check-circle' : 'i-heroicons-link'" class=" mt-4 bg-red-500 font-bold text-white" color="error" :loading="isLoading" @click="copy(source)" />
 
-            <NuxtLink to="/catalogos/catalogo3.pdf" external target="_blank" label="Veja o catálogo" class="mt-5 flex w-full justify-center rounded-lg bg-red-500 p-2 font-bold text-white">
-              Veja o catálogo competo
+            <NuxtLink to="/catalogos/catalogo2025.pdf" external target="_blank" label="Veja o catálogo" class="mt-5 flex w-full justify-center rounded-lg bg-red-500 p-2 font-bold text-white">
+              Veja o catálogo competo!
             </NuxtLink>
           </UCard>
         </div>
