@@ -40,12 +40,20 @@ watch(() => state.value.rocha, nv => {
 
 const perguntas = ref([
   {
-    label: 'O que é série e o que é matriz?',
-    content: 'Série (ex.: 2-4, 4-6, 6-9, 9-11, 12-14) é a família operacional do produto. Matriz (1–9) é a dureza da liga metálica que libera os diamantes: números menores são mais duros; números maiores são mais macios.',
+    label: 'O que é a Explotools?',
+    content: 'A Explotools é uma fabricante brasileira especializada em ferramentas de alta performance para sondagem diamantada (Wireline). Nosso propósito é garantir eficiência, durabilidade e disponibilidade operacional, oferecendo soluções completas e acessíveis para o setor de perfuração mineral.',
   },
   {
-    label: 'O que é ABR?',
-    content: 'ABR identifica variantes para terrenos abrasivos. Em rochas com muito quartzo/hematita, considere 7 ABR ou 9 ABR.',
+    label: 'Qual é o catálogo de produtos da Explotools?',
+    content: 'Nosso portfólio inclui: Cabeçotes e Overshots completos, Bomba d’Água 435, Cabeças d’Água UNV e Compact Plus, Cortadores de Hastes e Revestimentos, Além de componentes e reposições compatíveis com os principais padrões wireline (BW, NW, HW).',
+  },
+  {
+    label: 'Quais são os diferenciais da Explotools?',
+    content: 'Como fabricante internacional, temos controle total sobre cada etapa do processo produtivo — da seleção da matéria-prima ao acabamento final. Utilizamos aço 4340 de alta resistência, usinagem CNC de precisão, tratamentos térmicos rigorosos e projeto otimizado para máxima durabilidade. Por sermos a própria fábrica, oferecemos preços diretos de origem, unindo qualidade premium e custo competitivo — um verdadeiro avanço para o setor de sondagem no Brasil',
+  },
+  {
+    label: 'A Explotools atende todo o Brasil?',
+    content: 'Sim. Atendemos clientes em todo o território nacional por meio de transportadoras parceiras e logística eficiente, garantindo agilidade no envio, estoque local e redução de prazos — evitando paradas de sondagem por falta de material.',
   },
 ])
 
@@ -142,9 +150,6 @@ async function salvarLead(){
         </NuxtLink>
       </template>
       <template #right>
-        <NuxtLink to="https://wa.link/c1di0k" external target="_blank">
-          <UIcon name="ic-baseline-whatsapp" class="mt-2 size-8 rounded-2xl hover:bg-slate-400" color="white" />
-        </NuxtLink>
         <UButton icon="i-heroicons-arrow-left-on-rectangle" variant="ghost" class="p-1 text-white" size="xl" @click="sair" />
       </template>
     </UHeader>
@@ -280,6 +285,10 @@ async function salvarLead(){
             </div>
 
             <UButton label="Copiar link" :icon="copied ? 'i-heroicons-check-circle' : 'i-heroicons-link'" class=" mt-4 bg-red-500 font-bold text-white" color="error" :loading="isLoading" @click="copy(source)" />
+
+            <NuxtLink to="/catalogos/catalogo3.pdf" external target="_blank" label="Veja o catálogo" class="mt-5 flex w-full justify-center rounded-lg bg-red-500 p-2 font-bold text-white">
+              Veja o catálogo competo
+            </NuxtLink>
           </UCard>
         </div>
 
@@ -303,6 +312,12 @@ async function salvarLead(){
         </div>
       </div>
     </div>
+
+    <UButton class="fixed right-5 bottom-5 z-50 size-14 rounded-full bg-[#5BF070] text-white transition-opacity ease-in-out" :ui="{}" @click="navigateTo('https://wa.link/c1di0k', { open: { target: '_blank' } })">
+      <template #leading>
+        <UIcon name="ic-baseline-whatsapp" class="size-96" />
+      </template>
+    </UButton>
 
     <UModal v-model:open="naoLogado" :dismissible="false" title="Email" description="Por favor, insira seu email para continuar." :ui="{ footer: 'justify-end' }" :close="false">
       <template #body>
