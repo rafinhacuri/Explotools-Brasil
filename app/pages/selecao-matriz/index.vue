@@ -285,11 +285,10 @@ async function salvarLead(){
             </div>
 
             <UButton label="Copiar link" :icon="copied ? 'i-heroicons-check-circle' : 'i-heroicons-link'" class=" mt-4 bg-red-500 font-bold text-white" color="error" :loading="isLoading" @click="copy(source)" />
-
-            <NuxtLink to="/catalogos/catalogo2025.pdf" external target="_blank" label="Veja o catálogo" class="mt-5 flex w-full justify-center rounded-lg bg-red-500 p-2 font-bold text-white">
-              Veja o catálogo competo!
-            </NuxtLink>
           </UCard>
+          <NuxtLink to="/catalogos/catalogo2025.pdf" external target="_blank" label="Veja o catálogo" class="mt-5 flex w-full justify-center rounded-lg bg-red-500 p-2 font-bold text-white">
+            Veja o catálogo competo!
+          </NuxtLink>
         </div>
 
         <div class="mx col-span-2 rounded-xl bg-slate-900 p-6 shadow-lg">
@@ -312,12 +311,6 @@ async function salvarLead(){
         </div>
       </div>
     </div>
-
-    <UButton class="fixed right-5 bottom-5 z-50 size-14 rounded-full bg-[#5BF070] text-white transition-opacity ease-in-out" :ui="{}" @click="navigateTo('https://wa.link/c1di0k', { open: { target: '_blank' } })">
-      <template #leading>
-        <UIcon name="ic-baseline-whatsapp" class="size-96" />
-      </template>
-    </UButton>
 
     <UModal v-model:open="naoLogado" :dismissible="false" title="Email" description="Por favor, insira seu email para continuar." :ui="{ footer: 'justify-end' }" :close="false">
       <template #body>
@@ -360,5 +353,9 @@ async function salvarLead(){
         <UButton label="Confirmar" color="error" :loading="isLoading" @click="login" />
       </template>
     </UModal>
+
+    <UButton class="fixed right-5 bottom-5 z-50 flex size-14 items-center justify-center overflow-hidden rounded-full bg-[#5BF070] p-0 text-white transition-opacity ease-in-out" @click="navigateTo('https://wa.link/c1di0k', { open: { target: '_blank' } })">
+      <UIcon name="ic-baseline-whatsapp" class="pointer-events-none size-10" />
+    </UButton>
   </section>
 </template>
