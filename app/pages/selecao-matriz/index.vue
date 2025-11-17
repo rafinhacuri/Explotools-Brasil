@@ -116,10 +116,13 @@ async function sair(){
 }
 
 const modalCadastro = ref(false)
+const wireline = ref('')
 const newLead = ref<Lead>({ nome: '', email: '', telefone: '', empresa: '', cargo: '', wireline: false })
 
 async function salvarLead(){
   start()
+
+  if(wireline.value === 'Sim') newLead.value.wireline = true
 
   const body = LeadSchema.safeParse(newLead.value)
 
@@ -207,9 +210,6 @@ async function salvarLead(){
         </div>
 
         <div class="col-span-2 mx-auto w-full rounded-xl bg-slate-900 p-6 shadow-lg md:col-span-1">
-          <NuxtLink to="/catalogos/catalogo2025.pdf" external target="_blank" label="Veja o catálogo" class="mt-5 flex w-full justify-center rounded-lg bg-red-500 p-2 font-bold text-white">
-            Veja o catálogo competo!
-          </NuxtLink>
           <UCard v-if="gerarRecomendacao" class="mt-5">
             <template #header>
               <div class="flex items-center space-x-2">
@@ -284,6 +284,10 @@ async function salvarLead(){
 
             <UButton label="Copiar link" :icon="copied ? 'i-heroicons-check-circle' : 'i-heroicons-link'" class=" mt-4 bg-red-500 font-bold text-white" color="error" :loading="isLoading" @click="copy(source)" />
           </UCard>
+
+          <NuxtLink to="/catalogos/catalogo2025.pdf" external target="_blank" label="Veja o catálogo" class="mt-5 flex w-full justify-center rounded-lg bg-red-500 p-2 font-bold text-white">
+            Veja o catálogo competo!
+          </NuxtLink>
         </div>
 
         <div class="mx col-span-2 rounded-xl bg-slate-900 p-6 shadow-lg">
@@ -334,8 +338,8 @@ async function salvarLead(){
               <UFormField label="Cargo" name="cargo">
                 <UInput v-model="newLead.cargo" color="error" @keydown.enter="salvarLead" />
               </UFormField>
-              <UFormField label="Wireline" name="wireline">
-                <UCheckbox v-model="newLead.wireline" color="error" label="Trabalha com método Wireline?" />
+              <UFormField label="Trabalha com método Wireline?" name="wireline">
+                <URadioGroup id="wireline" v-model="wireline" orientation="horizontal" color="error" :variant="isMobile ? 'list' : 'card'" :items="['Sim', 'Não']" />
               </UFormField>
             </UForm>
           </template>
