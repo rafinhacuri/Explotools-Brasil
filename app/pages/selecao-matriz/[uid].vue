@@ -10,7 +10,7 @@ const { data } = await useFetch('/api/fetch/recomendacao', { method: 'POST', bod
 
 <template>
   <UContainer class="my-6">
-    <UCard v-if="data">
+    <UCard v-if="data" class="mt-5">
       <template #header>
         <div class="flex items-center space-x-2">
           <UBadge label="Recomendação" class="bg-red-500 font-bold text-white" />
@@ -29,43 +29,34 @@ const { data } = await useFetch('/api/fetch/recomendacao', { method: 'POST', bod
         Quadro de séries por fabricante
       </p>
       <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <div class="rounded-2xl border border-slate-800 bg-slate-950 p-3">
-          <p class="font-bold">
-            Explotools
+        <div class=" col-span-2 rounded-2xl border border-slate-800 bg-slate-950 p-3 md:col-span-1">
+          <p class="font-bold break-words">
+            Explotools Série: <span class="font-bold">{{ data.serie || '---' }}</span>
           </p>
-          <p>
-            Série: <span class="font-bold">{{ data.serie || '---' }}</span>
+          <p class="font-bold">
+            Di-Corp Série: <span class="font-bold">{{ data.diCorpo || '---' }}</span>
+          </p>
+          <p class="font-bold">
+            Fordia/Epiroc Série: <span class="font-bold">{{ data.fordiaEpiroc || '---' }}</span>
+          </p>
+          <p class="font-bold">
+            Boart Longyear Série: <span class="font-bold">{{ data.boartLongyear || '---' }}</span>
           </p>
         </div>
-        <div class="rounded-2xl border border-slate-800 bg-slate-950 p-3">
+
+        <div class="col-span-2 rounded-2xl border border-slate-800 bg-slate-950 p-3 md:col-span-1">
+          <p class="text-slate-400">
+            Canais de água
+          </p>
           <p class="font-bold">
-            Di-Corp
-          </p>
-          <p>
-            Série: <span class="font-bold">{{ data.diCorpo || '---' }}</span>
-          </p>
-        </div>
-        <div class="rounded-2xl border border-slate-800 bg-slate-950 p-3">
-          <p class="font-bold">
-            Fordia/Epiroc
-          </p>
-          <p>
-            Série: <span class="font-bold">{{ data.fordiaEpiroc || '---' }}</span>
-          </p>
-        </div>
-        <div class="rounded-2xl border border-slate-800 bg-slate-950 p-3">
-          <p class="font-bold">
-            Boart Longyear
-          </p>
-          <p>
-            Série: <span class="font-bold">{{ data.boartLongyear || '---' }}</span>
+            {{ data.canal || '---' }}
           </p>
         </div>
 
         <p class="col-span-2 mt-3 text-xl font-bold">
           Especificações padrão de operação
         </p>
-        <div class="rounded-2xl border border-slate-800 bg-slate-950 p-3">
+        <div class="col-span-2 rounded-2xl border border-slate-800 bg-slate-950 p-3 md:col-span-1">
           <p class="text-slate-400">
             RPM sugerido
           </p>
@@ -73,7 +64,7 @@ const { data } = await useFetch('/api/fetch/recomendacao', { method: 'POST', bod
             {{ data.rpm || '---' }}
           </p>
         </div>
-        <div class="rounded-2xl border border-slate-800 bg-slate-950 p-3">
+        <div class="col-span-2 rounded-2xl border border-slate-800 bg-slate-950 p-3 md:col-span-1">
           <p class="text-slate-400">
             WOB típico (kN)
           </p>
@@ -81,20 +72,12 @@ const { data } = await useFetch('/api/fetch/recomendacao', { method: 'POST', bod
             {{ data.wob || '---' }}
           </p>
         </div>
-        <div class="rounded-2xl border border-slate-800 bg-slate-950 p-3">
+        <div class="col-span-2 rounded-2xl border border-slate-800 bg-slate-950 p-3 md:col-span-1">
           <p class="text-slate-400">
             Fluxo água (L/min)
           </p>
           <p class="font-bold">
             {{ data.fluxoAgua || '---' }}
-          </p>
-        </div>
-        <div class="rounded-2xl border border-slate-800 bg-slate-950 p-3">
-          <p class="text-slate-400">
-            Canais de água
-          </p>
-          <p class="font-bold">
-            {{ data.canal || '---' }}
           </p>
         </div>
       </div>
