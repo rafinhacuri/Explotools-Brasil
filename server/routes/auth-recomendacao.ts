@@ -10,6 +10,8 @@ export default defineEventHandler(async event => {
 
   if(!usuario) throw createError({ status: 401, message: 'Este email não está cadastrado' })
 
+  await Leads.updateOne({ email }, { lastAccess: new Date().toISOString() })
+
   await setUserSession(event, { user: { email, level: 'user' } })
 
   return 'Autenticado com sucesso!'

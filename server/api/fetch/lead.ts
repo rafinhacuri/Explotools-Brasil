@@ -17,7 +17,7 @@ export default defineEventHandler(async event => {
       link: `/selecao-matriz/${r.uid}`,
     }))
 
-    return { ...l, recomendacoes: recReturn }
+    return { ...l, recomendacoes: recReturn, dataCriacao: l.createdAt || '', wireline: l.wireline || false, lastAccess: l.lastAccess || '' }
   })
 
   return leadsMap.toSorted((a, b) => a.nome.localeCompare(b.nome))

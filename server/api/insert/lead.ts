@@ -15,7 +15,7 @@ export default defineEventHandler(async event => {
 
   if(existe2) throw createError({ status: 400, message: 'Telefone já cadastrado' })
 
-  await new Leads({ nome, cargo, email, empresa, telefone, wireline }).save()
+  await new Leads({ nome, cargo, email, empresa, telefone, wireline, createdAt: new Date().toISOString() }).save()
     .catch(() => { throw createError({ status: 500, message: 'Não foi possivel inserir o cadastro do banco de dados' }) })
 
   return 'Cadastro criado com Sucesso!'

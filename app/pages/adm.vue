@@ -21,6 +21,9 @@ interface LeadId{
   telefone: string,
   empresa: string,
   cargo: string,
+  dataCriacao: string,
+  lastAccess: string,
+  wireline: boolean,
   recomendacoes: { date: string, link: string }[],
 }
 
@@ -39,6 +42,7 @@ watch(globalFilter, () => {
 const UButton = resolveComponent('UButton')
 const UTooltip = resolveComponent('UTooltip')
 const UBadge = resolveComponent('UBadge')
+const NuxtTime = resolveComponent('NuxtTime')
 
 const columns: TableColumn<LeadId>[] = [
   {
@@ -77,8 +81,33 @@ const columns: TableColumn<LeadId>[] = [
     accessorKey: 'cargo',
     header: ({ column }) => {
       const isSorted = column.getIsSorted()
-      return h(UButton, { color: 'neutral', variant: 'ghost', label: 'Telefone', icon: isSorted ? isSorted === 'asc' ? 'i-heroicons-bars-arrow-up' : 'i-heroicons-bars-arrow-down' : 'i-heroicons-arrows-up-down', class: '-mx-2.5', onClick: () => column.toggleSorting(column.getIsSorted() === 'asc') })
+      return h(UButton, { color: 'neutral', variant: 'ghost', label: 'Cargo', icon: isSorted ? isSorted === 'asc' ? 'i-heroicons-bars-arrow-up' : 'i-heroicons-bars-arrow-down' : 'i-heroicons-arrows-up-down', class: '-mx-2.5', onClick: () => column.toggleSorting(column.getIsSorted() === 'asc') })
     },
+  },
+  {
+    accessorKey: 'dataCriacao',
+    header: ({ column }) => {
+      const isSorted = column.getIsSorted()
+      return h(UButton, { color: 'neutral', variant: 'ghost', label: 'Data de criação', icon: isSorted ? isSorted === 'asc' ? 'i-heroicons-bars-arrow-up' : 'i-heroicons-bars-arrow-down' : 'i-heroicons-arrows-up-down', class: '-mx-2.5', onClick: () => column.toggleSorting(column.getIsSorted() === 'asc') })
+    },
+    cell: ({ row }) => row.original.dataCriacao ? h(NuxtTime, { datetime: row.original.dataCriacao, locale: 'pt-BR', month: '2-digit', year: '2-digit', day: '2-digit', minute: '2-digit', hour: '2-digit' }) : null,
+  },
+  {
+    accessorKey: 'lastAccess',
+    header: ({ column }) => {
+      const isSorted = column.getIsSorted()
+      return h(UButton, { color: 'neutral', variant: 'ghost', label: 'Último Acesso', icon: isSorted ? isSorted === 'asc' ? 'i-heroicons-bars-arrow-up' : 'i-heroicons-bars-arrow-down' : 'i-heroicons-arrows-up-down', class: '-mx-2.5', onClick: () => column.toggleSorting(column.getIsSorted() === 'asc') })
+    },
+    cell: ({ row }) => row.original.lastAccess ? h(NuxtTime, { datetime: row.original.lastAccess, locale: 'pt-BR', month: '2-digit', year: '2-digit', day: '2-digit', minute: '2-digit', hour: '2-digit' }) : null,
+  },
+  {
+    id: 'wireline',
+    accessorFn: (row: LeadId) => row.wireline,
+    header: ({ column }) => {
+      const isSorted = column.getIsSorted()
+      return h(UButton, { color: 'neutral', variant: 'ghost', label: 'Trabalha Com Wireline', icon: isSorted ? isSorted === 'asc' ? 'i-heroicons-bars-arrow-up' : 'i-heroicons-bars-arrow-down' : 'i-heroicons-arrows-up-down', class: '-mx-2.5', onClick: () => column.toggleSorting(column.getIsSorted() === 'asc') })
+    },
+    cell: ({ row }) => row.original.wireline ? h(UBadge, { color: 'success', variant: 'soft', class: 'rounded-full px-3 py-1 text-sm font-medium' }, { default: () => 'Sim' }) : h(UBadge, { color: 'danger', variant: 'soft', class: 'rounded-full px-3 py-1 text-sm font-medium' }, { default: () => 'Não' }),
   },
   {
     id: 'numeroRecomendacoes',

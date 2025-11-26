@@ -7,6 +7,8 @@ export const LeadSchema = z.object({
   empresa: z.string().trim().min(1, { message: 'Selecione a empresa' }),
   cargo: z.string().trim().min(1, { message: 'Selecione a cargo' }),
   wireline: z.boolean().optional(),
+  createdAt: z.string().optional(),
+  lastAccess: z.string().optional(),
 })
 
 export type Lead = z.infer<typeof LeadSchema>

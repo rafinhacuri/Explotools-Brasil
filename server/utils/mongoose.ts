@@ -15,6 +15,8 @@ export const Leads = mongoose.model('lead', new Schema<Lead>({
   empresa: { type: String, required: true },
   cargo: { type: String, required: true },
   wireline: { type: Boolean, required: false },
+  createdAt: { type: String, required: true },
+  lastAccess: { type: String, required: false },
 }))
 
 export const Adm = mongoose.model('adm', new Schema<User>({
