@@ -23,7 +23,7 @@ interface LeadId{
   cargo: string,
   dataCriacao: string,
   lastAccess: string,
-  wireline: boolean,
+  wireline: boolean | undefined,
   recomendacoes: { date: string, link: string }[],
 }
 
@@ -107,7 +107,7 @@ const columns: TableColumn<LeadId>[] = [
       const isSorted = column.getIsSorted()
       return h(UButton, { color: 'neutral', variant: 'ghost', label: 'Trabalha Com Wireline', icon: isSorted ? isSorted === 'asc' ? 'i-heroicons-bars-arrow-up' : 'i-heroicons-bars-arrow-down' : 'i-heroicons-arrows-up-down', class: '-mx-2.5', onClick: () => column.toggleSorting(column.getIsSorted() === 'asc') })
     },
-    cell: ({ row }) => row.original.wireline ? h(UBadge, { color: 'success', variant: 'soft', class: 'rounded-full px-3 py-1 text-sm font-medium' }, { default: () => 'Sim' }) : h(UBadge, { color: 'danger', variant: 'soft', class: 'rounded-full px-3 py-1 text-sm font-medium' }, { default: () => 'Não' }),
+    cell: ({ row }) => row.original.wireline === false ? h(UBadge, { color: 'success', variant: 'soft', class: 'rounded-full px-3 py-1 text-sm font-medium', label: 'Não' }) : row.original.wireline === true ? h(UBadge, { color: 'info', variant: 'soft', class: 'rounded-full px-3 py-1 text-sm font-medium', label: 'Sim' }) : h(UBadge, { color: 'neutral', variant: 'soft', class: 'rounded-full px-3 py-1 text-sm font-medium', label: '---' }),
   },
   {
     id: 'numeroRecomendacoes',
