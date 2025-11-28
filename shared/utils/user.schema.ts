@@ -8,7 +8,7 @@ export const UserSchema = z.object({
 export type User = z.infer<typeof UserSchema>
 
 export const UserRecSchema = z.object({
-  email: z.string().trim().min(1, { message: 'Selecione a email' }),
+  email: z.string().trim().min(1, { message: 'Selecione a email' }).toLowerCase(),
 })
 
 export type UserRec = z.infer<typeof UserRecSchema>

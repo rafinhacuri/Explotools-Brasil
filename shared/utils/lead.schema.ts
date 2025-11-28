@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 export const LeadSchema = z.object({
   nome: z.string().trim().min(1, { message: 'Selecione a nome' }),
-  email: z.email({ message: 'Email invalido' }),
+  email: z.email({ message: 'Email invalido' }).trim().toLowerCase(),
   telefone: z.string().trim().min(1, { message: 'Selecione a telefone' }),
   empresa: z.string().trim().min(1, { message: 'Selecione a empresa' }),
   cargo: z.string().trim().min(1, { message: 'Selecione a cargo' }),

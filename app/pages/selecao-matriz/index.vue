@@ -230,9 +230,6 @@ async function salvarLead(){
             </p>
             <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div class=" col-span-2 rounded-2xl border border-slate-800 bg-slate-950 p-3 md:col-span-1">
-                <p class="font-bold break-words">
-                  Explotools Série: <span class="font-bold">{{ recomendacao.serie || '---' }}</span>
-                </p>
                 <p class="font-bold">
                   Di-Corp Série: <span class="font-bold">{{ recomendacao.diCorpo || '---' }}</span>
                 </p>
