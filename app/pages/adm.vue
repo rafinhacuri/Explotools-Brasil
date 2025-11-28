@@ -163,7 +163,9 @@ async function confirmDeleteLead(){
 
   if(!res) return finish({ error: true })
 
-  await refreshLead()
+  refreshLead()
+  pagination.value.pageIndex = 0
+  globalFilter.value = ''
   modalDeletLead.value = false
   finish()
   return toast.add({ title: res, icon: 'i-heroicons-check-badge', color: 'success' })

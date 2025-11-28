@@ -17,5 +17,13 @@ export default defineEventHandler(async event => {
   await Leads.findByIdAndDelete(_id)
     .catch(() => { throw createError({ status: 500, message: 'Não foi possivel deletar a pagina do banco de dados' }) })
 
+  const leadRecomendacoes = await Recomenacoes.find({ email: lead.email })
+    .catch(() => { throw createError({ status: 500, message: 'Não foi possivel ler as recomendações do banco de dados' }) })
+
+  await Promise.all(leadRecomendacoes.map(async recomendacao => {
+    await Recomenacoes.findByIdAndDelete(recomendacao._id)
+      .catch(() => { throw createError({ status: 500, message: 'Não foi possivel deletar a recomendação do banco de dados' }) })
+  }))
+
   return 'lead excluido com susseso!'
 })
