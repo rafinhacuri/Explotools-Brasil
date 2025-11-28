@@ -79,10 +79,10 @@ async function getRecomendacao(){
 
   if(!res) return finish({ error: true })
 
-  await refresh()
   recomendacao.value = res
   if(body.data.email) emailPreenchido.value = true
   gerarRecomendacao.value = true
+  await refresh()
   finish()
 }
 
@@ -109,6 +109,7 @@ async function login(){
   if(!res) return finish({ error: true })
 
   await fetch()
+  await refresh()
   finish()
 }
 
