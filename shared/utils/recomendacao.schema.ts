@@ -30,6 +30,7 @@ export const RecomendacaoMongoSchema = z.object({
   wob: z.string(),
   fluxoAgua: z.string(),
   canal: z.string(),
+  createdAt: z.string().optional(),
 })
 
 export type RecomendacaoMongo = z.infer<typeof RecomendacaoMongoSchema>

@@ -42,4 +42,5 @@ export const Recomenacoes = mongoose.model('recomendacao', new Schema<Recomendac
   wob: { type: String, required: true },
   fluxoAgua: { type: String, required: true },
   canal: { type: String, required: true },
+  createdAt: { type: String, required: false },
 }))

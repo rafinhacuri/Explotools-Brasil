@@ -15,6 +15,8 @@ const naoLogado = computed(() => !loggedIn.value)
 
 const isMobile = useMediaQuery('(max-width: 768px)')
 
+const { data, refresh } = await useFetch('/api/fetch/user-recomendacao', { method: 'POST', body: { _id: user.value?.email } })
+
 const abrasividadeOptions = ['Baixa', 'Média', 'Alta']
 const granulometriaOptions = ['Fino', 'Médio', 'Grosso']
 const diametroOptions = ['BQ', 'NQ', 'NQ2', 'HQ', 'PQ']
@@ -77,6 +79,7 @@ async function getRecomendacao(){
 
   if(!res) return finish({ error: true })
 
+  await refresh()
   recomendacao.value = res
   if(body.data.email) emailPreenchido.value = true
   gerarRecomendacao.value = true
@@ -153,6 +156,26 @@ async function salvarLead(){
         </NuxtLink>
       </template>
       <template #right>
+        <UPopover>
+          <UButton icon="i-heroicons-clipboard-document-list" variant="ghost" class="p-1 text-white" size="xl" />
+
+          <template #content>
+            <div class="p-4">
+              <p class="mb-2 font-bold">
+                Recomendações recentes
+              </p>
+              <div class="flex flex-col space-y-2">
+                <NuxtLink v-for="({link, label}, index) in data" :key="link" :to="link" target="_blank" class="rounded-lg bg-slate-800 p-2 hover:bg-slate-700">
+                  <NuxtTime v-if="label" :datetime="label" locale="pt-BR" day="2-digit" month="2-digit" year="numeric" hour="2-digit" minute="2-digit" />
+                  <span v-else>Recomendação {{ index + 1 }}</span>
+                </NuxtLink>
+                <p v-if="!data || data.length === 0" class="text-slate-400">
+                  Nenhuma recomendação encontrada.
+                </p>
+              </div>
+            </div>
+          </template>
+        </UPopover>
         <UButton icon="i-heroicons-arrow-left-on-rectangle" variant="ghost" class="p-1 text-white" size="xl" @click="sair" />
       </template>
     </UHeader>

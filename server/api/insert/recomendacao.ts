@@ -130,6 +130,7 @@ export default defineEventHandler(async event => {
     formacao,
     mohs,
     email: email || '',
+    createdAt: new Date().toISOString(),
   }
 
   await new Recomenacoes(recomendacao).save()
