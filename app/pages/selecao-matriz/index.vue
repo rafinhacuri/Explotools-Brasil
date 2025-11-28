@@ -176,7 +176,7 @@ async function salvarLead(){
             </div>
           </template>
         </UPopover>
-        <UButton icon="i-heroicons-arrow-left-on-rectangle" variant="ghost" class="p-1 text-white" size="xl" @click="sair" />
+        <UButton icon="i-heroicons-arrow-left-on-rectangle" variant="ghost" class="ml-3 p-1 text-white" size="xl" @click="sair" />
       </template>
     </UHeader>
     <div class="min-h-screen  bg-slate-950 p-4 text-white">
