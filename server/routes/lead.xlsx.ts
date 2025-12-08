@@ -19,6 +19,9 @@ export default defineEventHandler(async event => {
     { header: 'Telefone', key: 'telefone', width: 20 },
     { header: 'Empresa', key: 'empresa', width: 20 },
     { header: 'Cargo', key: 'cargo', width: 20 },
+    { header: 'Criação', key: 'createdAt', width: 20 },
+    { header: 'Acesso', key: 'lastAccess', width: 20 },
+    { header: 'Wireline', key: 'wireline', width: 10 },
   ]
 
   worksheet.getRow(1).eachCell(cell => {
@@ -30,9 +33,9 @@ export default defineEventHandler(async event => {
   })
 
   for(const pessoa of lead){
-    const { nome, cargo, email, empresa, telefone } = pessoa
+    const { nome, cargo, email, empresa, telefone, createdAt, lastAccess, wireline } = pessoa
 
-    worksheet.addRow({ nome, cargo, email, empresa, telefone })
+    worksheet.addRow({ nome, cargo, email, empresa, telefone, createdAt, lastAccess, wireline })
   }
 
   const buffer = await workbook.xlsx.writeBuffer()
