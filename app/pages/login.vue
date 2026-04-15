@@ -5,8 +5,6 @@ definePageMeta({
   layout: false,
 })
 
-defineOgImageComponent('NuxtSeo', { theme: '#3FA1B0', colorMode: 'dark' })
-
 const toast = useToast()
 
 const { start, finish, isLoading } = useLoadingIndicator()

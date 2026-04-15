@@ -10,7 +10,7 @@ const progress = ref(90)
   <section class="min-h-screen bg-[url('/fundo.jpeg')] bg-cover bg-center bg-no-repeat">
     <div class="relative z-10">
       <div class="flex items-center justify-center">
-        <NuxtImg src="/explotools.png" alt="logo Explotools brasil" class="mt-7 h-[140px] w-[300px] md:h-[200px] md:w-[700px]" />
+        <NuxtImg src="/explotools.png" alt="logo Explotools brasil" class="mt-7 h-35 w-75 md:h-50 md:w-175" />
       </div>
       <div class="flex justify-center pt-10 text-5xl font-black tracking-wide text-red-600">
         <h1>
@@ -19,10 +19,10 @@ const progress = ref(90)
       </div>
       <div class="px-4 py-6 md:px-32">
         <div class="flex items-center justify-center">
-          <UProgress v-model="progress" class="h-[40px] w-[300px] pb-4" />
+          <UProgress v-model="progress" class="h-10 w-75 pb-4" />
         </div>
         <span class="flex justify-center">
-          <p class="max-w-[800px] pt-10 text-center text-lg font-bold text-white">
+          <p class="max-w-200 pt-10 text-center text-lg font-bold text-white">
             Agora, falta apenas um passo para você concluir sua inscrição e ter acesso a todas as novidades, ofertas e informações que vamos compartilhar!
           </p>
         </span>
@@ -30,7 +30,7 @@ const progress = ref(90)
           Siga Nossas Redes Sociais
         </h2>
         <span class="flex justify-center">
-          <p class="max-w-[800px] pt-7 text-center text-lg font-bold text-white">
+          <p class="max-w-200 pt-7 text-center text-lg font-bold text-white">
             Toque agora nos ícones abaixo, siga nossas redes sociais e fique por dentro de todos os materiais, avisos e conteúdos exclusivos que iremos compartilhar:
           </p>
         </span>
@@ -72,7 +72,7 @@ const progress = ref(90)
           </UTooltip>
         </div>
         <span class="flex justify-center">
-          <p class="max-w-[800px] pt-7 pb-40 text-center text-lg font-bold text-white md:pb-3">
+          <p class="max-w-200 pt-7 pb-40 text-center text-lg font-bold text-white md:pb-3">
             Agradecemos por se cadastrar! Estamos ansiosos para compartilhar com você as melhores dicas e novidades do setor de sondagem.
           </p>
         </span>

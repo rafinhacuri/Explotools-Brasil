@@ -257,15 +257,15 @@ async function salvarLead(){
       <UTable ref="table" v-model:expanded="expanded" v-model:global-filter="globalFilter" v-model:pagination="pagination" empty="Lead não encontrado" :pagination-options="{ getPaginationRowModel: getPaginationRowModel()}" :data="response" :columns="columns">
         <template #expanded="{ row }">
           <div class="relative my-4 pl-7">
-            <div class="absolute top-0 bottom-0 left-3 w-px bg-gradient-to-b from-sky-400/60 via-purple-400/60 to-pink-400/60" />
+            <div class="absolute top-0 bottom-0 left-3 w-px bg-linear-to-b from-sky-400/60 via-purple-400/60 to-pink-400/60" />
 
             <div v-if="!row.original.recomendacoes?.length" class="rounded-xl border border-white/10 bg-slate-800/60 p-4 text-sm text-slate-300 backdrop-blur">
               <span class="i-heroicons-information-circle-20-solid mr-2" />
               Sem recomendações para este lead.
             </div>
 
-            <div v-for="(rec, index) in row.original.recomendacoes" :key="index" class="group relative mb-4 rounded-xl border border-white/10 bg-gradient-to-br from-slate-800/70 to-slate-900/70 p-4 shadow-lg ring-1 ring-white/5 backdrop-blur transition hover:shadow-xl">
-              <span aria-hidden="true" class="absolute top-5 -left-[22px] inline-block h-3 w-3 rounded-full bg-gradient-to-r from-sky-400 to-fuchsia-500 ring-4 ring-slate-900" />
+            <div v-for="(rec, index) in row.original.recomendacoes" :key="index" class="group relative mb-4 rounded-xl border border-white/10 bg-linear-to-br from-slate-800/70 to-slate-900/70 p-4 shadow-lg ring-1 ring-white/5 backdrop-blur transition hover:shadow-xl">
+              <span aria-hidden="true" class="absolute top-5 -left-5.5 inline-block h-3 w-3 rounded-full bg-linear-to-r from-sky-400 to-fuchsia-500 ring-4 ring-slate-900" />
               <div class="flex flex-wrap items-center justify-between gap-3">
                 <div class="flex items-center gap-2 text-white">
                   <span class="i-heroicons-calendar-days-20-solid opacity-70" />

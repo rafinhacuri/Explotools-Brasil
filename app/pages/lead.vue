@@ -8,8 +8,6 @@ definePageMeta({
 
 useHead({ title: 'Cadastre-se' })
 
-defineOgImageComponent('NuxtSeo', { theme: '#3FA1B0', colorMode: 'dark' })
-
 const toast = useToast()
 
 const { start, finish } = useLoadingIndicator()
@@ -55,26 +53,26 @@ function scrollToDestiny(){
     <div class="relative z-10">
       <div class="flex flex-col items-center justify-center">
         <div class="flex items-center justify-center">
-          <NuxtImg src="/explotools.png" alt="logo Explotools brasil" class="mt-7 h-[140px] w-[300px] md:h-[200px] md:w-[700px]" />
+          <NuxtImg src="/explotools.png" alt="logo Explotools brasil" class="mt-7 h-35 w-75 md:h-50 md:w-175" />
         </div>
         <p class=" text-center text-base font-black tracking-wide text-white italic md:text-3xl">
           Qualidade Internacional, Preços Nacionais:<br>
           Revolucione Sua Sondagem
         </p>
         <div class="flex flex-col items-center justify-center p-4">
-          <p class="mt-10 max-w-[1000px] text-center text-sm font-semibold text-white md:text-lg">
+          <p class="mt-10 max-w-250 text-center text-sm font-semibold text-white md:text-lg">
             Um dos maiores desafios enfrentados pelas <span class="text-[#FD0116]">empresas de sondagem rotativa diamantada</span> no Brasil é o difícil acesso a <span class="text-[#FD0116]">materiais de qualidade com preços justos</span>. Muitas vezes, encontram-se produtos importados de alta qualidade, porém com valores elevados, ou materiais nacionais mais acessíveis, porém de qualidade inferior.
           </p>
-          <p class="mt-10 max-w-[1000px] text-center text-sm font-semibold text-white md:text-lg">
+          <p class="mt-10 max-w-250 text-center text-sm font-semibold text-white md:text-lg">
             <span class="text-[#FD0116]">Nossa proposta é oferecer produtos de qualidade importada para sondagem a preços acessíveis</span>, permitindo uma redução de custos significativa sem comprometer a qualidade e a produtividade.
           </p>
-          <p class="mt-10 max-w-[1000px] text-center text-sm font-semibold text-white md:text-lg">
+          <p class="mt-10 max-w-250 text-center text-sm font-semibold text-white md:text-lg">
             Como <span class="text-[#FD0116]">fabricantes</span>, temos controle total sobre o processo, <span class="text-[#FD0116]">garantindo eficiência e competitividade</span>. Proporcionamos a solução ideal para empresas que buscam aumentar a produtividade e economizar em suas operações de sondagem, com resultados visíveis em apenas 30 dias de uso.
           </p>
         </div>
 
         <div class="grid gap-5 p-12 md:grid-cols-2">
-          <div ref="destiny" class="order-2 flex max-w-[500px] flex-col items-center justify-center space-y-6 rounded-xl bg-zinc-950 p-4 transition-all duration-1000 ease-in-out md:order-1 md:space-y-14">
+          <div ref="destiny" class="order-2 flex max-w-125 flex-col items-center justify-center space-y-6 rounded-xl bg-zinc-950 p-4 transition-all duration-1000 ease-in-out md:order-1 md:space-y-14">
             <p class="p-3 text-lg font-semibold text-white">
               Inscreva-se aqui para mais informações:
             </p>
@@ -95,11 +93,11 @@ function scrollToDestiny(){
                 <UInput v-model="newLead.cargo" color="error" @keydown.enter="salvarLead" />
               </UFormField>
             </UForm>
-            <button class=" mb-5 w-[290px] rounded-xl border-2 border-black bg-red-600 px-6 py-2 text-base font-bold tracking-wide text-white transition-all duration-200 ease-in-out hover:bg-red-500" @click="salvarLead()">
+            <button class=" mb-5 w-72.5 rounded-xl border-2 border-black bg-red-600 px-6 py-2 text-base font-bold tracking-wide text-white transition-all duration-200 ease-in-out hover:bg-red-500" @click="salvarLead()">
               Quero ter acesso a esses produtos em primeira mão!
             </button>
           </div>
-          <div data-aos="zoom-in" class="order-1 max-w-[500px] pb-3 transition-all duration-200 ease-in-out md:order-2">
+          <div data-aos="zoom-in" class="order-1 max-w-125 pb-3 transition-all duration-200 ease-in-out md:order-2">
             <UCarousel v-slot="{ item }" :items="images" loop auto-scroll :ui="{ item: 'basis-2/3' } ">
               <NuxtImg :src="item" width="320" height="320" class="m-auto rounded-lg" alt="Imagem do Produto" />
             </UCarousel>
@@ -107,7 +105,7 @@ function scrollToDestiny(){
         </div>
       </div>
       <div class="flex flex-col items-center justify-center">
-        <div class="max-w-[1000px] rounded-lg pb-10">
+        <div class="max-w-250 rounded-lg pb-10">
           <h2 data-aos="zoom-in" class="pb-5 text-center text-3xl font-bold tracking-wide text-white transition-all duration-1000 ease-in-out">
             Por que se cadastrar?
           </h2>
@@ -128,7 +126,7 @@ function scrollToDestiny(){
           </ul>
         </div>
 
-        <div class="max-w-[1000px] rounded-lg pb-10">
+        <div class="max-w-250 rounded-lg pb-10">
           <div>
             <p data-aos="zoom-in" class="py-5 text-center text-base font-semibold text-white transition-all duration-1000 ease-in-out md:text-xl">
               🌟 Vantagens únicas:
@@ -147,14 +145,14 @@ function scrollToDestiny(){
             </li>
           </ul>
           <div class="flex items-center justify-center text-white">
-            <button class="my-10 w-[380px] rounded-full border-2 border-black bg-[#FD0116] px-6 py-2 text-lg font-bold tracking-wide md:transition-all md:duration-200 md:ease-in-out md:hover:w-[470px] md:hover:text-xl" @click="scrollToDestiny">
+            <button class="my-10 w-95 rounded-full border-2 border-black bg-[#FD0116] px-6 py-2 text-lg font-bold tracking-wide md:transition-all md:duration-200 md:ease-in-out md:hover:w-117.5 md:hover:text-xl" @click="scrollToDestiny">
               Não perca essa chance! <br>
               Cadastre-se agora e saia na frente
             </button>
           </div>
         </div>
 
-        <div class="max-w-[1000px] rounded-lg pb-10">
+        <div class="max-w-250 rounded-lg pb-10">
           <h2 data-aos="zoom-in" class="pb-5 text-center text-2xl font-bold tracking-wide text-white transition-all duration-1000 ease-in-out">
             🔧 Explotools: A escolha certa para empresas que valorizam qualidade, inovação e resultados excepcionais em suas operações de sondagem.
           </h2>
@@ -177,7 +175,7 @@ function scrollToDestiny(){
             </li>
           </ul>
           <div class="flex items-center justify-center text-white">
-            <button class="m-10 mb-32 w-[300px] rounded-full border-2 border-black bg-[#FD0116] px-6 py-2 text-lg font-bold tracking-wide transition-all duration-200 ease-in-out hover:w-[340px] hover:text-xl md:my-10" @click="scrollToDestiny">
+            <button class="m-10 mb-32 w-75 rounded-full border-2 border-black bg-[#FD0116] px-6 py-2 text-lg font-bold tracking-wide transition-all duration-200 ease-in-out hover:w-85 hover:text-xl md:my-10" @click="scrollToDestiny">
               Quero aumentar minha produtividade!
             </button>
           </div>
@@ -186,7 +184,7 @@ function scrollToDestiny(){
     </div>
     <div>
       <div class="flex items-center justify-center">
-        <button id="scrollTopButton" class=" fixed bottom-0 z-50 block w-[380px] rounded-lg border-2 border-black bg-[#FD0116] py-6 text-lg font-bold tracking-wide text-white opacity-0 transition-opacity ease-in-out md:hidden" @click="scrollToDestiny">
+        <button id="scrollTopButton" class=" fixed bottom-0 z-50 block w-95 rounded-lg border-2 border-black bg-[#FD0116] py-6 text-lg font-bold tracking-wide text-white opacity-0 transition-opacity ease-in-out md:hidden" @click="scrollToDestiny">
           Quero aumentar minha produtividade!
         </button>
       </div>

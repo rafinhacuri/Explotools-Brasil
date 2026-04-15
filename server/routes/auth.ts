@@ -11,7 +11,7 @@ export default defineEventHandler(async event => {
 
   if(!(/^\S[^\s@]*@\S[^\s.]*\.\S+$/.test(user))) throw createError({ status: 401, message: 'escreva um email valido' })
 
-  const userRes = await Adm.findOne({ user })
+  const userRes = await Adm.findOne({ user }).lean()
     .catch(() => { throw createError({ status: 500, message: 'Não foi possivel ler os usuarios do banco de dados' }) })
 
   if(!userRes) throw createError({ status: 401, message: 'Usuário e/ou senha inválidos' })
@@ -21,6 +21,13 @@ export default defineEventHandler(async event => {
   if(!senhas) throw createError({ status: 401, message: 'Usuário e/ou senha inválidos' })
 
   if(!verifySha512Crypt(senha, senhas)) throw createError({ status: 401, message: 'Usuário e/ou senha inválidos' })
+
+ await setStudioUserSession(event, {
+    providerId: userRes.user,
+    name: userRes.user,
+    email: userRes.user,
+  })
+
 
   await setUserSession(event, { user: { email: usuario.user, level: 'admin' } })
 
