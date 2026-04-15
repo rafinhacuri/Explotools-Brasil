@@ -57,30 +57,30 @@ export default defineNuxtConfig({
   nitro: { experimental: { asyncContext: true } },
   linkChecker: { enabled: false },
   robots: { disallow: ['/lead', '/obrigado', '/login'] },
-  security: NUXT_PUBLIC_PRODUCTION === 'true'
-    ? {
-        headers: {
-          crossOriginEmbedderPolicy: 'require-corp',
-          contentSecurityPolicy: {
-            'img-src': ['\'self\'', 'data:', 'https://www.facebook.com', 'https://www.facebook.net'],
-            'script-src': ['\'self\'', '\'unsafe-inline\'', 'https://connect.facebook.net', 'https://va.vercel-scripts.com'],
-            'connect-src': ['\'self\'', 'https://www.facebook.com', 'https://www.facebook.net', 'https://capig.madgicx.ai'],
-          },
-        },
-      }
-    : {
-        headers: {
-          crossOriginEmbedderPolicy: 'unsafe-none',
-          contentSecurityPolicy: {
-            'img-src': ['\'self\'', 'data:', 'blob:', 'https:'],
-            'script-src': ['\'self\'', '\'unsafe-inline\'', '\'unsafe-eval\'', '\'wasm-unsafe-eval\'', 'https:'],
-            'style-src': ['\'self\'', '\'unsafe-inline\'', 'https:'],
-            'font-src': ['\'self\'', 'data:', 'https:'],
-            'connect-src': ['\'self\'', 'ws:', 'wss:', 'https:'],
-            'worker-src': ['\'self\'', 'blob:'],
-          },
-        },
+  security: {
+    headers: {
+      crossOriginEmbedderPolicy: 'unsafe-none',
+      contentSecurityPolicy: {
+        'img-src': ['\'self\'', 'data:', 'blob:', 'https://www.facebook.com', 'https://www.facebook.net', 'https:'],
+        'script-src': ['\'self\'', '\'unsafe-inline\'', '\'unsafe-eval\'', '\'wasm-unsafe-eval\'', 'https://connect.facebook.net', 'https://va.vercel-scripts.com', 'https:'],
+        'style-src': ['\'self\'', '\'unsafe-inline\'', 'https:'],
+        'font-src': ['\'self\'', 'data:', 'https:'],
+        'connect-src': [
+          '\'self\'',
+          'ws:',
+          'wss:',
+          'https://www.facebook.com',
+          'https://www.facebook.net',
+          'https://capig.madgicx.ai',
+          'https://api.iconify.design',
+          'https://api.simplesvg.com',
+          'https://api.unisvg.com',
+          'https:',
+        ],
+        'worker-src': ['\'self\'', 'blob:'],
       },
+    },
+  },
   studio: {
     route: '/admin',
     i18n: {
