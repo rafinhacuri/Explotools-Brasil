@@ -1,6 +1,6 @@
 import process from 'node:process'
 
-const { NUXT_PUBLIC_PRODUCTION, NUXT_PUBLIC_SITE_URL, NUXT_MONGO_URL, NUXT_MONGO_USERNAME, NUXT_MONGO_PASSWORD, NUXT_MONGO_DB_NAME, DEV_URL, DEV_KEY, DEV_CERT } = process.env
+const { NUXT_PUBLIC_PRODUCTION, NUXT_PUBLIC_SITE_URL, MONGO_URL, MONGO_USERNAME, MONGO_PASSWORD, MONGO_DB_NAME, DEV_URL, DEV_KEY, DEV_CERT } = process.env
 
 export default defineNuxtConfig({
   modules: ['nuxt-auth-utils', '@nuxtjs/seo', 'nuxt-security', '@nuxt/ui', '@vueuse/nuxt', 'nuxt-aos', '@nuxt/image', '@nuxt/content', 'nuxt-studio'],
@@ -38,11 +38,16 @@ export default defineNuxtConfig({
     identity: { type: 'Organization' },
   },
   runtimeConfig: {
-    MONGO_URL: NUXT_MONGO_URL,
-    MONGO_USERNAME: NUXT_MONGO_USERNAME,
-    MONGO_PASSWORD: NUXT_MONGO_PASSWORD,
-    MONGO_DB_NAME: NUXT_MONGO_DB_NAME,
+    MONGO_URL,
+    MONGO_USERNAME,
+    MONGO_PASSWORD,
+    MONGO_DB_NAME,
     public: { PRODUCTION: NUXT_PUBLIC_PRODUCTION, SITE_URL: NUXT_PUBLIC_SITE_URL },
+  },
+  hooks: {
+    close: (nuxt) => {
+      if (!nuxt.options._prepare) process.exit(0);
+    },
   },
   devServer: {
     host: DEV_URL,
