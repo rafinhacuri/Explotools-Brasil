@@ -1,8 +1,6 @@
 <script setup lang="ts">
 useHead({ title: `Contatos` })
 
-defineOgImageComponent('NuxtSeo', { theme: '#3FA1B0', colorMode: 'dark' })
-
 const midias = ref([
   { href: 'https://wa.link/c1di0k', icon: 'ic-baseline-whatsapp', text: 'WhatsApp' },
   { href: 'mailto:ramoncuri@explotools.com.br', icon: 'line-md-email', text: 'Email' },
