@@ -29,6 +29,6 @@ useSeoMeta({
     </div>
 
     
-    <ContentRenderer v-if="home" :value="home" />
+    <ContentRenderer class="mx-3" v-if="home" :value="home" />
   </section>
 </template>
