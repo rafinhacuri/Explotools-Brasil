@@ -82,7 +82,11 @@ export default defineNuxtConfig({
     },
   },
   studio: {
-    route: '/admin',
+    git: {
+      commit: {
+        messagePrefix: 'content:'
+      }
+    },
     i18n: {
       defaultLocale: 'pt-br',
     },

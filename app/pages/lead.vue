@@ -12,7 +12,9 @@ const toast = useToast()
 
 const { start, finish } = useLoadingIndicator()
 
-const images = ref(['/foto1.jpeg', '/foto2.jpeg', '/foto3.jpeg', '/foto4.jpeg', '/foto5.jpeg', '/foto6.jpeg', '/foto7.jpeg', '/foto8.jpeg'])
+const { data: images } = await useFetch<string[]>('/lead-carrosel/produtos.json', {
+  default: () => [],
+})
 
 const newLead = ref<Lead>({ nome: '', email: '', telefone: '', empresa: '', cargo: '' })
 
