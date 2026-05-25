@@ -3,7 +3,7 @@ import process from 'node:process'
 const { NUXT_PUBLIC_PRODUCTION, NUXT_PUBLIC_SITE_URL, MONGO_URL, MONGO_USERNAME, MONGO_PASSWORD, MONGO_DB_NAME, DEV_URL, DEV_KEY, DEV_CERT } = process.env
 
 export default defineNuxtConfig({
-  modules: ['nuxt-auth-utils', '@nuxtjs/seo', 'nuxt-security', '@nuxt/ui', '@vueuse/nuxt', 'nuxt-aos', '@nuxt/image', '@nuxt/content', 'nuxt-studio'],
+  modules: ['nuxt-auth-utils', '@nuxtjs/seo', 'nuxt-security', '@nuxt/ui', '@vueuse/nuxt', 'nuxt-aos', '@nuxt/image'],
   devtools: { enabled: true },
   app: {
     head: {
@@ -81,20 +81,4 @@ export default defineNuxtConfig({
       },
     },
   },
-  studio: {
-    git: {
-      commit: {
-        messagePrefix: 'content:'
-      }
-    },
-    i18n: {
-      defaultLocale: 'pt-br',
-    },
-    repository: {
-      provider: 'github',
-      owner: 'rafinhacuri',
-      repo: 'Explotools-Brasil',
-      branch: 'main',
-    },
-},
 })

@@ -22,13 +22,6 @@ export default defineEventHandler(async event => {
 
   if(!verifySha512Crypt(senha, senhas)) throw createError({ status: 401, message: 'Usuário e/ou senha inválidos' })
 
- await setStudioUserSession(event, {
-    providerId: userRes.user,
-    name: userRes.user,
-    email: userRes.user,
-  })
-
-
   await setUserSession(event, { user: { email: usuario.user, level: 'admin' } })
 
   return 'Autenticado com sucesso!'

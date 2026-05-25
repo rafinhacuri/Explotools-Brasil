@@ -7,13 +7,9 @@ useHead({ title: 'Empresa' })
 
 const mutado = ref(true)
 
-const { data: home } = await useAsyncData(() =>
-  queryCollection('content').path('/').first()
-)
-
 useSeoMeta({
-  title: home.value?.title,
-  description: home.value?.description
+  title: 'Explotools',
+  description: 'Ferramentas de sondagem wireline de alta qualidade'
 })
 
 const principios = [
@@ -53,6 +49,44 @@ const qualidadeItens = [
   { icon: 'i-lucide-package-check', title: 'Embalagem e expedição', desc: 'Padrão que protege o produto até o campo.' }
 ]
 
+const produtos = [
+  {
+    icon: 'i-lucide-target',
+    title: 'Overshots',
+    desc: 'Para recuperação de testemunho com precisão e confiabilidade.'
+  },
+  {
+    icon: 'i-lucide-gauge',
+    title: 'Cabeçotes',
+    desc: 'Projetados para alta durabilidade e vedação em operação contínua.'
+  },
+  {
+    icon: 'i-lucide-rotate-3d',
+    title: 'Molas e Caixas de Mola',
+    desc: 'Componentes críticos para captura de testemunho, fabricados com controle rigoroso de tolerância.'
+  },
+  {
+    icon: 'i-lucide-droplets',
+    title: "Cabeças d'Água",
+    desc: 'Vedação e desempenho para operação contínua em alta pressão.'
+  },
+  {
+    icon: 'i-lucide-scissors',
+    title: 'Cortadores de Hastes e Revestimentos',
+    desc: 'Corte limpo, resistência ao desgaste e vida útil prolongada.'
+  },
+  {
+    icon: 'i-lucide-wrench',
+    title: "Peças para bombas d'água",
+    desc: 'Kits e componentes para manutenção rápida em campo.'
+  },
+  {
+    icon: 'i-lucide-settings',
+    title: 'Acessórios de sondagem',
+    desc: 'Manga trava, barriletes e demais itens consumíveis de operação.'
+  }
+]
+
 // Países
 const paises = ['México', 'Argentina', 'Peru', 'Bolívia', 'Chile', 'Colômbia', '+6 outros']
 </script>
@@ -83,6 +117,14 @@ const paises = ['México', 'Argentina', 'Peru', 'Bolívia', 'Chile', 'Colômbia'
 
           <p class="mb-9 max-w-145 text-[clamp(15px,1.2vw,17px)] leading-[1.65] text-white/70">
             A Explotools é <strong class="font-semibold text-white">fabricante de consumíveis e ferramentas para sondagem wireline</strong>, com <strong class="font-semibold text-white">qualidade de padrão internacional</strong> e <strong class="font-semibold text-white">atendimento ágil e diferenciado</strong>.
+          </p>
+
+          <p class="mb-4 max-w-145 text-[15px] leading-[1.65] text-white/60">
+            Nascemos para entregar ao mercado de mineração e geotecnia produtos de <strong class="font-semibold text-white">alta performance que reduzem horas paradas por quebra de ferramental</strong>, a <strong class="font-semibold text-white">preço competitivo</strong>.
+          </p>
+
+          <p class="mb-9 max-w-145 text-[15px] leading-[1.65] text-white/60">
+            Fornecemos para empresas de sondagem em <strong class="font-semibold text-white">todo o Brasil</strong> e exportamos para <strong class="font-semibold text-white">mais de 12 países</strong>.
           </p>
 
           <div class="flex flex-wrap gap-3">
@@ -155,19 +197,68 @@ const paises = ['México', 'Argentina', 'Peru', 'Bolívia', 'Chile', 'Colômbia'
       </UContainer>
     </section>
 
-    <!-- ═══════════════ CONTEÚDO DO STUDIO ═══════════════ -->
-    <!-- Mantém o ContentRenderer original para textos editáveis no Nuxt Content -->
-    <section
-      v-if="home"
-      class="relative z-10 prose prose-invert max-w-none px-6 py-20
-        prose-headings:text-white
-        prose-p:text-white/70
-        prose-strong:text-red-400
-        prose-a:text-red-500
-        prose-a:no-underline hover:prose-a:underline"
-    >
-      <UContainer>
-        <ContentRenderer :value="home" />
+    <!-- ═══════════════ O QUE FABRICAMOS ═══════════════ -->
+    <section class="relative py-30">
+      <UContainer class="relative z-10">
+        <div class="mb-14">
+          <div class="mb-5 inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-red-500 before:block before:h-px before:w-7 before:bg-red-500">
+            O que fabricamos
+          </div>
+          <h2 class="mb-6 max-w-[20ch] font-[Barlow_Condensed] text-[clamp(36px,4.5vw,56px)] font-extrabold leading-[0.95] tracking-tight">
+            Ferramentas e consumíveis para wireline.
+          </h2>
+          <p class="max-w-165 text-[17px] leading-[1.65] text-white/70">
+            Nosso portfólio cobre as principais categorias de ferramentas e consumíveis para sondagem wireline nos diâmetros <strong class="font-semibold text-white">BQ, NQ, NQ2, HQ e PQ</strong>.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div
+            v-for="produto in produtos"
+            :key="produto.title"
+            class="group relative overflow-hidden rounded-2xl border border-white/8 bg-white/2 p-7 transition-all duration-400 hover:-translate-y-1 hover:border-red-500/30 hover:bg-white/4"
+          >
+            <div class="mb-6 flex size-12 items-center justify-center rounded-[10px] border border-red-500/25 bg-red-500/10 text-red-500 transition-all duration-300 group-hover:scale-105 group-hover:bg-red-500/20">
+              <UIcon :name="produto.icon" class="size-5" />
+            </div>
+            <h3 class="mb-3 text-[20px] font-bold leading-tight text-white">{{ produto.title }}</h3>
+            <p class="text-sm leading-relaxed text-white/65">{{ produto.desc }}</p>
+          </div>
+        </div>
+
+        <div class="mt-10 rounded-2xl border border-red-500/20 bg-red-500/8 p-8">
+          <p class="max-w-190 text-[17px] leading-[1.65] text-white/75">
+            Cada peça é <strong class="font-semibold text-white">projetada internamente</strong>, fabricada com <strong class="font-semibold text-white">matéria-prima selecionada</strong> e <strong class="font-semibold text-white">testada antes de sair da fábrica</strong>. Não revendemos — <strong class="font-semibold text-white">nós fabricamos</strong>.
+          </p>
+        </div>
+      </UContainer>
+    </section>
+
+    <!-- ═══════════════ QUEM ESTÁ POR TRÁS ═══════════════ -->
+    <section class="relative py-30">
+      <UContainer class="relative z-10">
+        <div class="grid grid-cols-1 items-start gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-18">
+          <div>
+            <div class="mb-5 inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-red-500 before:block before:h-px before:w-7 before:bg-red-500">
+              Quem está por trás
+            </div>
+            <h2 class="mb-6 font-[Barlow_Condensed] text-[clamp(36px,4.5vw,56px)] font-extrabold leading-[0.95] tracking-tight">
+              Experiência de campo,<br>gestão e operação.
+            </h2>
+          </div>
+
+          <div class="space-y-5 text-[17px] leading-[1.65] text-white/70">
+            <p>
+              A Explotools nasceu no Chile <strong class="font-semibold text-white">há 7 anos</strong>, fundada por um especialista com <strong class="font-semibold text-white">mais de 20 anos de vivência direta no setor de sondagem e mineração</strong> — no campo, no comercial e na gestão de operações.
+            </p>
+            <p>
+              O que começou como uma operação focada no mercado chileno se expandiu rapidamente pela América Latina, e <strong class="font-semibold text-white">há 2 anos chegou ao Brasil</strong> com uma missão clara: entregar ao mercado brasileiro a mesma qualidade de ferramental que já abastecia grandes operações internacionais, com <strong class="font-semibold text-white">atendimento próximo, ágil e a preço competitivo</strong>.
+            </p>
+            <p>
+              Hoje exportamos para <strong class="font-semibold text-white">mais de 12 países</strong> e fornecemos para as <strong class="font-semibold text-white">maiores operadoras de sondagem do Brasil</strong>. Nosso crescimento acelerado é resultado direto da <strong class="font-semibold text-white">confiança que nossos clientes depositam na qualidade do que entregamos</strong>.
+            </p>
+          </div>
+        </div>
       </UContainer>
     </section>
 
@@ -289,6 +380,45 @@ const paises = ['México', 'Argentina', 'Peru', 'Bolívia', 'Chile', 'Colômbia'
             </div>
           </div>
 
+        </div>
+      </UContainer>
+    </section>
+
+    <!-- ═══════════════ CTA FINAL ═══════════════ -->
+    <section class="relative px-6 py-30">
+      <UContainer class="relative z-10">
+        <div class="relative overflow-hidden rounded-2xl border border-red-500/25 bg-linear-to-br from-red-500/18 via-white/4 to-black p-8 md:p-12">
+          <div class="pointer-events-none absolute right-[-15%] top-[-70%] size-95 rounded-full bg-red-500/18 blur-3xl" />
+          <div class="relative max-w-205">
+            <div class="mb-5 inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-red-400 before:block before:h-px before:w-7 before:bg-red-500">
+              Vamos conversar?
+            </div>
+            <h2 class="mb-6 font-[Barlow_Condensed] text-[clamp(36px,4.5vw,58px)] font-extrabold leading-[0.95] tracking-tight">
+              Teste um fabricante que entrega qualidade real.
+            </h2>
+            <p class="mb-5 max-w-170 text-[17px] leading-[1.65] text-white/75">
+              Se você opera sondas wireline e quer testar um fabricante que entrega <strong class="font-semibold text-white">qualidade real</strong>, com <strong class="font-semibold text-white">atendimento rápido</strong> e <strong class="font-semibold text-white">preço justo</strong> — fala com a gente.
+            </p>
+            <p class="mb-8 max-w-170 text-[17px] leading-[1.65] text-white/75">
+              Mande sua lista de necessidades pelo WhatsApp e <strong class="font-semibold text-white">te respondemos hoje mesmo</strong>, com todas as informações que precisa.
+            </p>
+            <div class="flex flex-wrap items-center gap-4">
+              <UButton
+                to="https://wa.link/c1di0k"
+                external
+                target="_blank"
+                size="lg"
+                color="error"
+                class="font-semibold tracking-wide shadow-[0_6px_24px_rgba(253,1,22,0.35)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(253,1,22,0.55)]"
+                trailing-icon="i-lucide-arrow-right"
+              >
+                Chamar no WhatsApp
+              </UButton>
+              <p class="font-[Barlow_Condensed] text-[22px] font-bold tracking-tight text-white">
+                Junte-se a nós nessa jornada de desenvolvimento e inovação.
+              </p>
+            </div>
+          </div>
         </div>
       </UContainer>
     </section>
