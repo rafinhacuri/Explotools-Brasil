@@ -106,6 +106,17 @@ function cardStyle(brand: string) {
               EXPLOTOOLS BRASIL
             </div>
 
+            <div class="mb-8 grid grid-cols-4 gap-2.5 lg:hidden">
+              <NuxtLink v-for="c in canais" :key="`top-${c.name}`" :to="c.href" :external="c.external" :target="c.external ? '_blank' : undefined" :rel="c.external ? 'noopener noreferrer' : undefined" :aria-label="c.name" class="group relative flex aspect-square items-center justify-center overflow-hidden rounded-2xl border border-white/8 bg-black/30 transition-all duration-300 active:scale-95" :style="cardStyle(c.brand)">
+                <span class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,var(--brand-bg),transparent_70%)]" />
+                <span class="relative flex size-11 items-center justify-center rounded-xl bg-(--brand-bg) text-(--brand)">
+                  <UIcon :name="c.icon" class="size-5" />
+                </span>
+              </NuxtLink>
+            </div>
+
+          
+
             <h1 class="mx-auto mb-7 max-w-[14ch] font-[Barlow_Condensed] text-[clamp(48px,6vw,84px)] font-black leading-none tracking-tight lg:mx-0">
               <span class="bg-linear-to-br from-white via-red-100 to-red-500 bg-clip-text text-transparent">Entre em</span>
               Contato.
@@ -125,7 +136,7 @@ function cardStyle(brand: string) {
             </div>
           </div>
 
-          <div class="relative">
+          <div class="relative hidden lg:block">
             <div class="absolute -inset-4 rounded-4xl bg-red-500/10 blur-2xl" />
             <div class="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.035] p-4 shadow-2xl shadow-black/40 backdrop-blur-xl sm:p-5">
               <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(253,1,22,0.16),transparent_55%)]" />
@@ -140,37 +151,39 @@ function cardStyle(brand: string) {
                 </div>
               </div>
 
-              <div class="relative grid grid-cols-2 gap-3">
-                <NuxtLink v-for="c in canaisPrincipais" :key="c.name" :to="c.href" :external="c.external" :target="c.external ? '_blank' : undefined" :rel="c.external ? 'noopener noreferrer' : undefined" class="group relative min-h-35 overflow-hidden rounded-2xl border border-white/8 bg-black/30 p-4 transition-all duration-300 hover:-translate-y-1" :style="cardStyle(c.brand)">
-                  <span class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,var(--brand-bg),transparent_70%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                  <span class="relative mb-4 flex size-11 items-center justify-center rounded-xl bg-(--brand-bg) text-(--brand) transition-all duration-300 group-hover:scale-105 group-hover:bg-(--brand) group-hover:text-white group-hover:shadow-[0_8px_24px_var(--brand-glow)]">
-                    <UIcon :name="c.icon" class="size-5" />
-                  </span>
-                  <span class="relative block font-[Barlow_Condensed] text-xl font-bold uppercase tracking-[0.04em] text-white">{{ c.name }}</span>
-                  <span class="relative mt-1 line-clamp-2 block break-all text-xs font-medium leading-snug text-white/45">{{ c.handle }}</span>
-                </NuxtLink>
+              <div>
+                <div class="relative grid grid-cols-2 gap-3">
+                  <NuxtLink v-for="c in canaisPrincipais" :key="c.name" :to="c.href" :external="c.external" :target="c.external ? '_blank' : undefined" :rel="c.external ? 'noopener noreferrer' : undefined" class="group relative min-h-35 overflow-hidden rounded-2xl border border-white/8 bg-black/30 p-4 transition-all duration-300 hover:-translate-y-1" :style="cardStyle(c.brand)">
+                    <span class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,var(--brand-bg),transparent_70%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                    <span class="relative mb-4 flex size-11 items-center justify-center rounded-xl bg-(--brand-bg) text-(--brand) transition-all duration-300 group-hover:scale-105 group-hover:bg-(--brand) group-hover:text-white group-hover:shadow-[0_8px_24px_var(--brand-glow)]">
+                      <UIcon :name="c.icon" class="size-5" />
+                    </span>
+                    <span class="relative block font-[Barlow_Condensed] text-xl font-bold uppercase tracking-[0.04em] text-white">{{ c.name }}</span>
+                    <span class="relative mt-1 line-clamp-2 block break-all text-xs font-medium leading-snug text-white/45">{{ c.handle }}</span>
+                  </NuxtLink>
+                </div>
+
+                <UPopover>
+                  <UButton block variant="soft" color="neutral" trailing-icon="i-lucide-chevron-down" class="relative mt-4 justify-center border border-white/8 bg-white/5 font-semibold text-white hover:bg-white/10">
+                    Ver todos os canais
+                  </UButton>
+
+                  <template #content>
+                    <div class="w-80 space-y-2 rounded-2xl border border-white/10 bg-[#0b0b0b] p-3 shadow-2xl shadow-black/50">
+                      <NuxtLink v-for="c in canais" :key="`popover-${c.name}`" :to="c.href" :external="c.external" :target="c.external ? '_blank' : undefined" :rel="c.external ? 'noopener noreferrer' : undefined" class="flex items-center gap-3 rounded-xl px-3 py-2.5 transition hover:bg-white/8" :style="cardStyle(c.brand)">
+                        <span class="flex size-9 shrink-0 items-center justify-center rounded-lg bg-(--brand-bg) text-(--brand)">
+                          <UIcon :name="c.icon" class="size-4" />
+                        </span>
+                        <span class="min-w-0 flex-1">
+                          <span class="block text-sm font-semibold text-white">{{ c.name }}</span>
+                          <span class="block truncate text-xs text-white/45">{{ c.handle }}</span>
+                        </span>
+                        <UIcon name="i-lucide-external-link" class="size-4 text-white/30" />
+                      </NuxtLink>
+                    </div>
+                  </template>
+                </UPopover>
               </div>
-
-              <UPopover>
-                <UButton block variant="soft" color="neutral" trailing-icon="i-lucide-chevron-down" class="relative mt-4 justify-center border border-white/8 bg-white/5 font-semibold text-white hover:bg-white/10">
-                  Ver todos os canais
-                </UButton>
-
-                <template #content>
-                  <div class="w-80 space-y-2 rounded-2xl border border-white/10 bg-[#0b0b0b] p-3 shadow-2xl shadow-black/50">
-                    <NuxtLink v-for="c in canais" :key="`popover-${c.name}`" :to="c.href" :external="c.external" :target="c.external ? '_blank' : undefined" :rel="c.external ? 'noopener noreferrer' : undefined" class="flex items-center gap-3 rounded-xl px-3 py-2.5 transition hover:bg-white/8" :style="cardStyle(c.brand)">
-                      <span class="flex size-9 shrink-0 items-center justify-center rounded-lg bg-(--brand-bg) text-(--brand)">
-                        <UIcon :name="c.icon" class="size-4" />
-                      </span>
-                      <span class="min-w-0 flex-1">
-                        <span class="block text-sm font-semibold text-white">{{ c.name }}</span>
-                        <span class="block truncate text-xs text-white/45">{{ c.handle }}</span>
-                      </span>
-                      <UIcon name="i-lucide-external-link" class="size-4 text-white/30" />
-                    </NuxtLink>
-                  </div>
-                </template>
-              </UPopover>
             </div>
           </div>
         </div>
