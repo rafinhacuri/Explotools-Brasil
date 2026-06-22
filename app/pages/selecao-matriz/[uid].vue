@@ -1,6 +1,13 @@
 <script setup lang="ts">
-useHead({ title: 'Recomendação' })
-definePageMeta({ layout: false, colorMode: 'dark' })
+useHead({
+  title: 'Recomendação',
+  link: [
+    { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+    { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
+    { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Saira:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap' },
+  ],
+})
+definePageMeta({ layout: false, colorMode: 'light' })
 const { uid } = useRoute().params
 
 const id = Array.isArray(uid) ? uid[0] : uid
@@ -9,79 +16,13 @@ const { data } = await useFetch('/api/fetch/recomendacao', { method: 'POST', bod
 </script>
 
 <template>
-  <UContainer class="my-6">
-    <UCard v-if="data" class="mt-5">
-      <template #header>
-        <div class="flex items-center space-x-2">
-          <UBadge label="Recomendação" class="bg-red-500 font-bold text-white" />
-          <p class="rounded-full border border-red-500 bg-[rgba(227,24,55,0.15)] px-2 font-bold">
-            Rocha: {{ data.rocha || '---' }}
-          </p>
-        </div>
-        <div class="mt-2 text-slate-400">
-          <p class="word-break">
-            Mohs <span class="font-bold">{{ data.mohs }}</span> · Abrasividade <span class="font-bold">{{ data.abrasividade }}</span> · Formação <span class="font-bold">{{ data.formacao }}</span> · Granulometria <span class="font-bold">{{ data.granulometria }}</span> · Diâmetro <span class="font-bold">{{ data.diametro }}</span>
-          </p>
-        </div>
-      </template>
+  <div class="matriz min-h-screen p-4">
+    <UContainer class="py-6">
+      <MatrizRecomendacao v-if="data" :data="data" />
 
-      <p class="mb-3 text-xl font-bold">
-        Quadro de séries por fabricante
-      </p>
-      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <div class=" col-span-2 rounded-2xl border border-slate-800 bg-slate-950 p-3 md:col-span-1">
-          <p class="font-bold">
-            Di-Corp Série: <span class="font-bold">{{ data.diCorpo || '---' }}</span>
-          </p>
-          <p class="font-bold">
-            Fordia/Epiroc Série: <span class="font-bold">{{ data.fordiaEpiroc || '---' }}</span>
-          </p>
-          <p class="font-bold">
-            Boart Longyear Série: <span class="font-bold">{{ data.boartLongyear || '---' }}</span>
-          </p>
-        </div>
-
-        <div class="col-span-2 rounded-2xl border border-slate-800 bg-slate-950 p-3 md:col-span-1">
-          <p class="text-slate-400">
-            Canais de água
-          </p>
-          <p class="font-bold">
-            {{ data.canal || '---' }}
-          </p>
-        </div>
-
-        <p class="col-span-2 mt-3 text-xl font-bold">
-          Especificações padrão de operação
-        </p>
-        <div class="col-span-2 rounded-2xl border border-slate-800 bg-slate-950 p-3 md:col-span-1">
-          <p class="text-slate-400">
-            RPM sugerido
-          </p>
-          <p class="font-bold">
-            {{ data.rpm || '---' }}
-          </p>
-        </div>
-        <div class="col-span-2 rounded-2xl border border-slate-800 bg-slate-950 p-3 md:col-span-1">
-          <p class="text-slate-400">
-            WOB típico (kN)
-          </p>
-          <p class="font-bold">
-            {{ data.wob || '---' }}
-          </p>
-        </div>
-        <div class="col-span-2 rounded-2xl border border-slate-800 bg-slate-950 p-3 md:col-span-1">
-          <p class="text-slate-400">
-            Fluxo água (L/min)
-          </p>
-          <p class="font-bold">
-            {{ data.fluxoAgua || '---' }}
-          </p>
-        </div>
+      <div v-else class="et-sub flex h-96 items-center justify-center">
+        Nenhum dado encontrado.
       </div>
-    </UCard>
-
-    <div v-else class="flex h-96 items-center justify-center">
-      Nenhum dado encontrado.
-    </div>
-  </UContainer>
+    </UContainer>
+  </div>
 </template>
