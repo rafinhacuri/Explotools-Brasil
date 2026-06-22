@@ -94,7 +94,7 @@ function cardStyle(brand: string) {
   <div class="relative min-h-screen overflow-hidden bg-[#050505] font-[Inter] text-white">
     <div class="pointer-events-none fixed inset-0 z-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_0%,rgba(253,1,22,0.12),transparent_60%)]" />
 
-    <section class="relative overflow-hidden px-6 pb-20 pt-35 lg:pb-25 lg:pt-42">
+    <section class="relative overflow-hidden px-6 pb-20 pt-10 lg:pb-25 lg:pt-42">
       <div class="pointer-events-none absolute left-1/2 top-0 z-0 h-150 w-200 -translate-x-1/2 bg-[radial-gradient(ellipse_50%_50%,rgba(253,1,22,0.18),transparent_60%)]" />
       <div class="pointer-events-none absolute right-0 top-28 z-0 h-90 w-90 rounded-full bg-red-500/10 blur-3xl" />
 
