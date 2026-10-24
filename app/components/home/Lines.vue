@@ -100,14 +100,15 @@
                 </div>
               </div>
 
-              <div class="absolute inset-0 overflow-hidden lg:relative">
+              <div
+                class="absolute inset-0 overflow-hidden lg:left-[42%] lg:mask-[linear-gradient(90deg,transparent_0%,#000_45%)]">
                 <img
                   :src="line.cover.src"
                   :alt="line.cover.title"
                   loading="lazy"
-                  class="size-full object-cover opacity-35 transition-transform duration-[1.4s] ease-out-quint group-hover:scale-105 lg:opacity-100" />
+                  class="size-full origin-right object-cover opacity-35 transition-transform duration-[1.4s] ease-out-quint group-hover:scale-105 lg:opacity-100" />
                 <div
-                  class="absolute inset-0 bg-linear-to-r from-rocha via-rocha/40 to-transparent lg:via-transparent" />
+                  class="absolute inset-0 bg-linear-to-r from-rocha via-rocha/40 to-transparent lg:hidden" />
                 <div class="absolute right-5 bottom-5 hidden gap-2 lg:flex">
                   <NuxtImg
                     v-for="(photo, p) in line.rest"
