@@ -1,28 +1,57 @@
 <script setup lang="ts">
-useHead({
-  title: 'Recomendação',
-  link: [
-    { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-    { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
-    { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Saira:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap' },
-  ],
-})
-definePageMeta({ layout: false, colorMode: 'light' })
-const { uid } = useRoute().params
+  const text = {
+    title: 'Recomendação de matriz',
+    back: 'Fazer nova seleção',
+    missing: 'Recomendação não encontrada.',
+    missingLede: 'O link pode estar incompleto ou a recomendação foi removida.',
+    catalog: 'Ver o catálogo completo',
+    talk: 'Falar com um especialista',
+  }
 
-const id = Array.isArray(uid) ? uid[0] : uid
+  const route = useRoute()
+  const uid = computed(() => String(route.params.uid ?? ''))
+  const { data } = await useFetch<RecomendacaoMongo>(() => `/api/recomendacoes/${uid.value}`)
 
-const { data } = await useFetch('/api/fetch/recomendacao', { method: 'POST', body: { _id: id } })
+  useHead({ title: () => (data.value?.rocha ? `${text.title} · ${data.value.rocha}` : text.title) })
+  useSeoMeta({ robots: 'noindex' })
 </script>
 
 <template>
-  <div class="matriz min-h-screen p-4">
-    <UContainer class="py-6">
-      <MatrizRecomendacao v-if="data" :data="data" />
+  <section class="relative min-h-dvh bg-furo pt-28 pb-20 sm:pt-32">
+    <div
+      aria-hidden="true"
+      class="absolute inset-x-0 top-0 h-80 bg-[radial-gradient(ellipse_60%_80%_at_50%_0%,rgb(254_0_24/0.16)_0%,transparent_70%)]" />
+    <div class="relative mx-auto max-w-5xl px-5 sm:px-8">
+      <NuxtLink
+        to="/selecao-matriz"
+        class="inline-flex items-center gap-2 text-[0.875rem] font-semibold text-muted hover:text-fg">
+        <Icon name="ph:arrow-left" class="size-4" />
+        {{ text.back }}
+      </NuxtLink>
 
-      <div v-else class="et-sub flex h-96 items-center justify-center">
-        Nenhum dado encontrado.
+      <Reveal v-if="data" class="mt-6">
+        <MatrizResult :data="data">
+          <template #actions>
+            <Btn to="https://wa.link/c1di0k" icon="simple-icons:whatsapp">{{ text.talk }}</Btn>
+            <Btn
+              to="/catalogos/catalogo2025.pdf"
+              external
+              variant="ghost"
+              icon="ph:download-simple"
+              >{{ text.catalog }}</Btn
+            >
+          </template>
+        </MatrizResult>
+      </Reveal>
+
+      <div
+        v-else
+        class="mt-10 flex min-h-[50vh] flex-col items-center justify-center rounded-[2rem] border border-dashed border-line-strong p-10 text-center">
+        <Icon name="ph:magnifying-glass-minus" class="size-10 text-red" />
+        <p class="mt-5 display text-[2.5rem] leading-none">{{ text.missing }}</p>
+        <p class="mt-3 text-muted">{{ text.missingLede }}</p>
+        <Btn to="/selecao-matriz" class="mt-8" trailing="ph:arrow-right">{{ text.back }}</Btn>
       </div>
-    </UContainer>
-  </div>
+    </div>
+  </section>
 </template>
