@@ -1,7 +1,5 @@
 import { randomUUID } from 'node:crypto'
 
-import { useRecomendacaoSchema } from '~~/app/composables/useRecomendacaoSchema'
-
 const { recomendacaoSchema } = useRecomendacaoSchema()
 
 export default defineEventHandler(async (event): Promise<RecomendacaoMongo> => {

@@ -1,5 +1,4 @@
 import { sha512Crypt } from 'ldap-passwords'
-import { useAdminSchema } from '~~/app/composables/useAdminSchema'
 
 const { adminSchema } = useAdminSchema()
 

@@ -1,5 +1,4 @@
 import { verifySha512Crypt } from 'ldap-passwords'
-import { useAdminSchema } from '~~/app/composables/useAdminSchema'
 
 const INVALID = 'E-mail e/ou senha inválidos'
 

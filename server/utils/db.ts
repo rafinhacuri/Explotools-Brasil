@@ -1,5 +1,4 @@
 import mongoose, { Schema } from 'mongoose'
-import type { LeadOutput } from '~~/app/composables/useLeadSchema'
 
 interface LeadDoc extends LeadOutput {
   createdAt?: string

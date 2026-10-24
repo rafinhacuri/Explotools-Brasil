@@ -1,5 +1,3 @@
-import { useLeadSchema } from '~~/app/composables/useLeadSchema'
-
 const { leadSchema } = useLeadSchema()
 
 export default defineEventHandler(async (event) => {
