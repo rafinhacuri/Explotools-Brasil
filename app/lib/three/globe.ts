@@ -23,6 +23,7 @@ import {
 import type { Country } from '~/data/content'
 
 import { createRenderer, disposeObject, pixelRatioFor } from './common'
+import { isLand } from './land'
 import { Spring } from './spring'
 
 interface GlobeFrame {
@@ -44,7 +45,7 @@ interface Arc {
 }
 
 const RADIUS = 2
-const DOTS = 14_000
+const DOTS = 13_000
 const CAMERA_Z = 9.6
 const HOME_LON = -62
 const HOME_LAT = -14
@@ -147,8 +148,9 @@ function yawFor(lon: number): number {
 function createDots(): Points<BufferGeometry, PointsMaterial> {
   const positions = new Float32Array(DOTS * 3)
   const colors = new Float32Array(DOTS * 3)
-  const land = new Color('#ff1f33')
-  const sea = new Color('#4d4d55')
+  const latam = new Color('#ff1f33')
+  const land = new Color('#b4b4bc')
+  const sea = new Color('#18181b')
   const golden = Math.PI * (3 - Math.sqrt(5))
   for (let index = 0; index < DOTS; index += 1) {
     const y = 1 - (index / (DOTS - 1)) * 2
@@ -161,7 +163,8 @@ function createDots(): Points<BufferGeometry, PointsMaterial> {
     const lat = MathUtils.radToDeg(Math.asin(y))
     const lon = MathUtils.radToDeg(Math.atan2(point.z, -point.x)) - 180
     const normalized = lon < -180 ? lon + 360 : lon
-    const color = inside(normalized, lat) ? land : sea
+    let color = sea
+    if (isLand(lat, normalized)) color = inside(normalized, lat) ? latam : land
     colors.set([color.r, color.g, color.b], index * 3)
   }
   const geometry = new BufferGeometry()
@@ -170,7 +173,7 @@ function createDots(): Points<BufferGeometry, PointsMaterial> {
   return new Points(
     geometry,
     new PointsMaterial({
-      size: 0.05,
+      size: 0.075,
       vertexColors: true,
       map: dotTexture(),
       transparent: true,
