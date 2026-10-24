@@ -16,12 +16,12 @@
   const visible = useElementVisibility(section)
 
   const { scrollYProgress } = useScroll({ target: section, offset: ['start start', 'end end'] })
-  const inset = useTransform(scrollYProgress, [0, 0.45], [22, 0])
-  const radius = useTransform(scrollYProgress, [0, 0.45], [40, 0])
+  const inset = useTransform(scrollYProgress, (value) => 22 * (1 - band(value, 0, 0.45)))
+  const radius = useTransform(scrollYProgress, (value) => 40 * (1 - band(value, 0, 0.45)))
   const clip = useMotionTemplate`inset(${inset}% ${inset}% ${inset}% ${inset}% round ${radius}px)`
-  const scale = useTransform(scrollYProgress, [0, 0.45], [1.25, 1])
-  const titleY = useTransform(scrollYProgress, [0.2, 0.6], ['40%', '0%'])
-  const titleOpacity = useTransform(scrollYProgress, [0.25, 0.5], [0, 1])
+  const scale = useTransform(scrollYProgress, (value) => 1.25 - 0.25 * band(value, 0, 0.45))
+  const titleY = useTransform(scrollYProgress, (value) => `${40 * (1 - band(value, 0.2, 0.6))}%`)
+  const titleOpacity = useTransform(scrollYProgress, (value) => band(value, 0.25, 0.5))
 
   watch(visible, async (on) => {
     if (!video.value) return

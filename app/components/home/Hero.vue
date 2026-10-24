@@ -31,8 +31,8 @@
   })
 
   const lift = useTransform(scrollYProgress, [0, 1], [0, -180])
-  const fade = useTransform(scrollYProgress, [0, 0.55], [1, 0])
-  const sink = useTransform(scrollYProgress, [0.45, 0.85], [1, 0])
+  const fade = useTransform(scrollYProgress, (value) => 1 - band(value, 0, 0.55))
+  const sink = useTransform(scrollYProgress, (value) => 1 - band(value, 0.45, 0.85))
   const rpmLabel = computed(() => String(Math.round(rpm.value)).padStart(4, '0'))
 </script>
 

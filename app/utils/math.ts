@@ -11,4 +11,9 @@ function smoothstep(edge0: number, edge1: number, value: number): number {
   return t * t * (3 - 2 * t)
 }
 
-export { clamp, mix, smoothstep }
+// Progresso de 0 a 1 dentro de um trecho [start, end], travado nas pontas.
+function band(value: number, start: number, end: number): number {
+  return clamp((value - start) / (end - start))
+}
+
+export { band, clamp, mix, smoothstep }

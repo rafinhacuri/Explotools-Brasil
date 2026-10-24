@@ -23,8 +23,8 @@
   const scales = principles.map((_, index) =>
     useTransform(
       scrollYProgress,
-      [index / principles.length, 1],
-      [1, 1 - (principles.length - index) * 0.035],
+      (value) =>
+        1 - band(value, index / principles.length, 1) * (principles.length - index) * 0.035,
     ),
   )
 </script>

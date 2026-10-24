@@ -58,8 +58,8 @@
   useMotionValueEvent(scrollYProgress, 'change', (value) => {
     progress.value = value
   })
-  const textY = useTransform(scrollYProgress, [0, 0.6], [0, -120])
-  const textOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
+  const textY = useTransform(scrollYProgress, (value) => -120 * band(value, 0, 0.6))
+  const textOpacity = useTransform(scrollYProgress, (value) => 1 - band(value, 0, 0.5))
 
   const filter = ref('todos')
   const lightbox = ref<number | null>(null)
