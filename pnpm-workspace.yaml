@@ -1,9 +1,0 @@
-packages:
-  - .
-onlyBuiltDependencies:
-  - '@parcel/watcher'
-  - '@tailwindcss/oxide'
-  - esbuild
-  - unrs-resolver
-  - vue-demi
-  - better-sqlite3

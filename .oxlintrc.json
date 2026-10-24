@@ -1,0 +1,6 @@
+{
+  "extends": ["./node_modules/@dethdkn/ox-config/.oxlintrc.json"],
+  "rules": {
+    "eslint/no-underscore-dangle": ["error", { "allow": ["_id"] }]
+  }
+}

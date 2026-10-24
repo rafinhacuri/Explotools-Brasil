@@ -1,242 +1,205 @@
 <script setup lang="ts">
-definePageMeta({
-  colorMode: 'dark',
-})
+  import { brand, channels } from '~/data/content'
 
-useHead({ title: 'Contatos' })
-
-useSeoMeta({
-  title: 'Contatos • Explotools Brasil',
-  description: 'Fale conosco pelos nossos canais oficiais e conheça soluções de alta qualidade para mineração, sondagem e perfuração.'
-})
-
-const canais = [
-  {
-    href: 'https://wa.link/c1di0k',
-    external: true,
-    icon: 'i-simple-icons-whatsapp',
-    name: 'WhatsApp',
-    handle: 'Atendimento direto',
-    brand: '#25D366'
-  },
-  {
-    href: 'mailto:ramoncuri@explotools.com.br',
-    external: false,
-    icon: 'i-lucide-mail',
-    name: 'E-mail',
-    handle: 'ramoncuri@explotools.com.br',
-    brand: '#FD0116'
-  },
-  {
-    href: 'https://www.instagram.com/explotools.brasil?igsh=MWc2OHBxc3ozejhsdA==',
-    external: true,
-    icon: 'i-simple-icons-instagram',
-    name: 'Instagram',
-    handle: '@explotools.brasil',
-    brand: '#E4405F'
-  },
-  {
-    href: 'https://www.facebook.com/share/p1veqrfSK8BVwVUU/?mibextid=qi2Omg',
-    external: true,
-    icon: 'i-simple-icons-facebook',
-    name: 'Facebook',
-    handle: 'Página oficial',
-    brand: '#1877F2'
-  },
-  {
-    href: 'https://www.linkedin.com/in/explotools-brasil-b6ba58273',
-    external: true,
-    icon: 'i-simple-icons-linkedin',
-    name: 'LinkedIn',
-    handle: 'Perfil corporativo',
-    brand: '#0A66C2'
-  },
-  {
-    href: 'https://maps.app.goo.gl/FGUcQ1ZqUXyxKMsT8',
-    external: true,
-    icon: 'i-simple-icons-googlemaps',
-    name: 'Google Maps',
-    handle: 'Localização',
-    brand: '#EA4335'
-  },
-  {
-    href: 'https://www.tiktok.com/@explotools.brasil?_t=8pFnT9iDWli&_r=1',
-    external: true,
-    icon: 'i-simple-icons-tiktok',
-    name: 'TikTok',
-    handle: '@explotools.brasil',
-    brand: '#FE2C55'
+  const text = {
+    title: 'Contatos',
+    description:
+      'Fale com a Explotools pelos canais oficiais: WhatsApp, e-mail, Instagram, TikTok, LinkedIn e Facebook. Atendimento técnico para mineração, sondagem e perfuração.',
+    eyebrow: 'Explotools Brasil',
+    heading: ['Entre em', 'contato.'],
+    lede: 'Fale com a gente pelos canais oficiais. Mande sua lista de necessidades pelo WhatsApp e respondemos hoje mesmo, com atendimento técnico para quem opera no campo.',
+    whatsapp: 'Falar no WhatsApp',
+    whatsappHint: 'Resposta no mesmo dia',
+    email: 'E-mail',
+    copy: 'Copiar e-mail',
+    copied: 'E-mail copiado',
+    where: 'Onde estamos',
+    country: 'Brasil · Chile',
+    open: 'Abrir no mapa',
   }
-]
 
-const canaisPrincipais = canais.slice(0, 4)
+  useHead({ title: text.title })
+  useSeoMeta({ description: text.description })
+  defineOgImage('Explotools.takumi', { title: 'Entre em contato.', description: text.lede })
 
-// Helper para converter hex em RGB e gerar a string rgba
-function hexToRgb(hex: string) {
-  const v = hex.replace('#', '')
-  const r = parseInt(v.substring(0, 2), 16)
-  const g = parseInt(v.substring(2, 4), 16)
-  const b = parseInt(v.substring(4, 6), 16)
-  return `${r},${g},${b}`
-}
+  const toast = useToast()
+  const { copy, copied } = useClipboard({ source: brand.email })
+  const socials = new Set(['instagram', 'tiktok', 'linkedin', 'facebook'])
+  const grid = channels.filter((channel) => socials.has(channel.id))
 
-function cardStyle(brand: string) {
-  const rgb = hexToRgb(brand)
-  return {
-    '--brand': brand,
-    '--brand-bg': `rgba(${rgb},0.12)`,
-    '--brand-glow': `rgba(${rgb},0.3)`
+  async function copyEmail(): Promise<void> {
+    await copy(brand.email)
+    toast.success(text.copied)
   }
-}
 </script>
 
 <template>
-  <div class="relative min-h-screen overflow-hidden bg-[#050505] font-[Inter] text-white">
-    <div class="pointer-events-none fixed inset-0 z-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_0%,rgba(253,1,22,0.12),transparent_60%)]" />
+  <section class="relative flex min-h-dvh flex-col overflow-hidden pt-24 pb-10 lg:pt-28">
+    <div aria-hidden="true" class="absolute inset-x-0 bottom-0 h-[45%] opacity-80">
+      <Strata :layers="6" :seed="21" :depth="140" :vein="-1" />
+    </div>
+    <div
+      aria-hidden="true"
+      class="absolute inset-0 bg-[radial-gradient(ellipse_50%_50%_at_15%_20%,rgb(254_0_24/0.16)_0%,transparent_70%)]" />
 
-    <section class="relative overflow-hidden px-6 pb-20 pt-10 lg:pb-25 lg:pt-42">
-      <div class="pointer-events-none absolute left-1/2 top-0 z-0 h-150 w-200 -translate-x-1/2 bg-[radial-gradient(ellipse_50%_50%,rgba(253,1,22,0.18),transparent_60%)]" />
-      <div class="pointer-events-none absolute right-0 top-28 z-0 h-90 w-90 rounded-full bg-red-500/10 blur-3xl" />
+    <div
+      class="relative mx-auto grid w-full max-w-[90rem] flex-1 gap-8 px-5 sm:px-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-14">
+      <div class="flex flex-col">
+        <Motion
+          as="p"
+          class="label text-red"
+          :initial="{ opacity: 0 }"
+          :animate="{ opacity: 1 }"
+          :transition="{ delay: 0.15 }">
+          {{ text.eyebrow }}
+        </Motion>
+        <h1 class="mt-4 display text-[clamp(3.25rem,min(8vw,13dvh),7.5rem)] leading-[0.84]">
+          <span v-for="(line, index) in text.heading" :key="line" class="block overflow-hidden">
+            <Motion
+              as="span"
+              class="block"
+              :class="index === 1 ? 'text-red' : ''"
+              :initial="{ y: '105%' }"
+              :animate="{ y: '0%' }"
+              :transition="{
+                type: 'spring',
+                bounce: 0.1,
+                duration: 1.1,
+                delay: 0.2 + index * 0.1,
+              }">
+              {{ line }}
+            </Motion>
+          </span>
+        </h1>
+        <Reveal :delay="0.35">
+          <p class="mt-5 max-w-lg text-[0.9375rem] text-muted sm:text-base">{{ text.lede }}</p>
+        </Reveal>
 
-      <UContainer class="relative z-10">
-        <div class="grid items-center gap-12 lg:grid-cols-[1fr_460px] xl:grid-cols-[1fr_520px]">
-          <div class="text-center lg:text-left">
-            <div class="mb-8 inline-flex items-center gap-3 rounded-full border border-red-500/40 bg-red-500/10 px-3.5 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/85">
-              <span class="size-1.5 animate-pulse rounded-full bg-red-500 ring-4 ring-red-500/25" />
-              EXPLOTOOLS BRASIL
-            </div>
+        <Reveal :delay="0.45" class="mt-7 hidden lg:block">
+          <Magnet :strength="0.15">
+            <a
+              :href="brand.whatsapp"
+              target="_blank"
+              rel="noopener"
+              class="group flex items-center gap-4 rounded-3xl bg-red p-5 pr-7 text-osso shadow-red transition-transform duration-200 active:scale-[0.98]">
+              <span class="flex size-14 items-center justify-center rounded-2xl bg-furo/20">
+                <Icon name="simple-icons:whatsapp" class="size-7" />
+              </span>
+              <span class="flex-1">
+                <span class="block display text-[2rem] leading-none">{{ text.whatsapp }}</span>
+                <span class="mt-1 block label text-osso/80">{{ text.whatsappHint }}</span>
+              </span>
+              <Icon
+                name="ph:arrow-up-right"
+                class="size-7 transition-transform duration-300 group-hover:rotate-45" />
+            </a>
+          </Magnet>
+        </Reveal>
+      </div>
 
-            <div class="mb-8 grid grid-cols-4 gap-2.5 lg:hidden">
-              <NuxtLink v-for="c in canais" :key="`top-${c.name}`" :to="c.href" :external="c.external" :target="c.external ? '_blank' : undefined" :rel="c.external ? 'noopener noreferrer' : undefined" :aria-label="c.name" class="group relative flex aspect-square items-center justify-center overflow-hidden rounded-2xl border border-white/8 bg-black/30 transition-all duration-300 active:scale-95" :style="cardStyle(c.brand)">
-                <span class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,var(--brand-bg),transparent_70%)]" />
-                <span class="relative flex size-11 items-center justify-center rounded-xl bg-(--brand-bg) text-(--brand)">
-                  <UIcon :name="c.icon" class="size-5" />
+      <div class="flex flex-col gap-3">
+        <Motion
+          as="a"
+          :href="brand.whatsapp"
+          target="_blank"
+          rel="noopener"
+          class="group flex items-center gap-4 rounded-3xl bg-red p-4 text-osso shadow-red lg:hidden"
+          :initial="{ opacity: 0, y: 16 }"
+          :animate="{ opacity: 1, y: 0 }"
+          :transition="{ type: 'spring', bounce: 0, duration: 0.7, delay: 0.3 }">
+          <span class="flex size-12 items-center justify-center rounded-2xl bg-furo/20">
+            <Icon name="simple-icons:whatsapp" class="size-6" />
+          </span>
+          <span class="flex-1">
+            <span class="block display text-[1.75rem] leading-none">{{ text.whatsapp }}</span>
+            <span class="mt-1 block label text-osso/80">{{ text.whatsappHint }}</span>
+          </span>
+          <Icon name="ph:arrow-up-right" class="size-6" />
+        </Motion>
+
+        <ul class="grid grid-cols-2 gap-3">
+          <Motion
+            v-for="(channel, index) in grid"
+            :key="channel.id"
+            as="li"
+            :initial="{ opacity: 0, y: 20, scale: 0.97 }"
+            :animate="{ opacity: 1, y: 0, scale: 1 }"
+            :transition="{
+              type: 'spring',
+              bounce: 0.15,
+              duration: 0.7,
+              delay: 0.3 + index * 0.05,
+            }">
+            <a
+              :href="channel.href"
+              :target="channel.href.startsWith('http') ? '_blank' : undefined"
+              rel="noopener"
+              class="group relative flex h-full flex-col justify-between gap-6 overflow-hidden rounded-3xl border border-line bg-rocha/90 p-4 backdrop-blur transition-[border-color,transform] duration-300 hover:-translate-y-0.5 hover:border-red sm:p-5">
+              <span
+                aria-hidden="true"
+                class="absolute inset-0 origin-bottom scale-y-0 bg-red transition-transform duration-500 ease-out-quint group-hover:scale-y-100 group-focus-visible:scale-y-100" />
+              <span class="relative flex items-center justify-between">
+                <span
+                  class="flex size-11 items-center justify-center rounded-2xl border border-line-strong transition-colors duration-300 group-hover:border-osso/40">
+                  <Icon :name="channel.icon" class="size-5" />
                 </span>
-              </NuxtLink>
+                <Icon
+                  name="ph:arrow-up-right"
+                  class="size-5 text-faint transition-[color,transform] duration-500 ease-out-quint group-hover:rotate-45 group-hover:text-osso" />
+              </span>
+              <span class="relative min-w-0">
+                <span class="block display text-[clamp(1.5rem,2.4vw,2.125rem)] leading-none">
+                  {{ channel.name }}
+                </span>
+                <span
+                  class="mt-1.5 block truncate font-mono text-[0.75rem] text-muted transition-colors group-hover:text-osso/85">
+                  {{ channel.handle }}
+                </span>
+              </span>
+            </a>
+          </Motion>
+        </ul>
+
+        <Motion
+          class="grid gap-3 sm:grid-cols-2"
+          :initial="{ opacity: 0, y: 16 }"
+          :animate="{ opacity: 1, y: 0 }"
+          :transition="{ type: 'spring', bounce: 0, duration: 0.7, delay: 0.65 }">
+          <div
+            class="flex items-center justify-between gap-3 rounded-3xl border border-line bg-rocha/90 p-4 backdrop-blur sm:p-5">
+            <div class="min-w-0">
+              <p class="label text-faint">{{ text.email }}</p>
+              <a
+                :href="`mailto:${brand.email}`"
+                class="mt-1 block truncate text-[0.9375rem] font-semibold transition-colors hover:text-red">
+                {{ brand.email }}
+              </a>
             </div>
-
-          
-
-            <h1 class="mx-auto mb-7 max-w-[14ch] font-[Barlow_Condensed] text-[clamp(48px,6vw,84px)] font-black leading-none tracking-tight lg:mx-0">
-              <span class="bg-linear-to-br from-white via-red-100 to-red-500 bg-clip-text text-transparent">Entre em</span>
-              Contato.
-            </h1>
-
-            <p class="mx-auto mb-9 max-w-150 text-[clamp(15px,1.3vw,18px)] leading-[1.65] text-white/70 lg:mx-0">
-              Fale conosco pelos nossos canais oficiais e conheça <strong class="font-semibold text-white">soluções de alta qualidade</strong> para mineração, sondagem e perfuração.
-            </p>
-
-            <div class="flex flex-wrap justify-center gap-3 lg:justify-start">
-              <UButton to="https://wa.link/c1di0k" external target="_blank" size="lg" color="error" icon="i-simple-icons-whatsapp" class="font-semibold tracking-wide shadow-[0_6px_24px_rgba(253,1,22,0.35)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(253,1,22,0.55)]">
-                Falar no WhatsApp
-              </UButton>
-              <UButton to="mailto:ramoncuri@explotools.com.br" size="lg" variant="soft" color="neutral" icon="i-lucide-mail" class="font-semibold tracking-wide backdrop-blur-sm hover:bg-white/15">
-                Enviar e-mail
-              </UButton>
-            </div>
+            <button
+              type="button"
+              class="flex size-10 shrink-0 items-center justify-center rounded-full border border-line-strong transition-colors hover:border-red hover:text-red"
+              :aria-label="text.copy"
+              @click="copyEmail">
+              <Icon :name="copied ? 'ph:check' : 'ph:copy'" class="size-4" />
+            </button>
           </div>
-
-          <div class="relative hidden lg:block">
-            <div class="absolute -inset-4 rounded-4xl bg-red-500/10 blur-2xl" />
-            <div class="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.035] p-4 shadow-2xl shadow-black/40 backdrop-blur-xl sm:p-5">
-              <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(253,1,22,0.16),transparent_55%)]" />
-
-              <div class="relative mb-5 flex items-center justify-between gap-4 px-1">
-                <div>
-                  <div class="mb-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-red-500">Canais oficiais</div>
-                  <h2 class="font-[Barlow_Condensed] text-3xl font-extrabold uppercase tracking-tight text-white">Fale agora</h2>
-                </div>
-                <div class="flex size-11 items-center justify-center rounded-2xl bg-red-500/10 text-red-500 ring-1 ring-red-500/20">
-                  <UIcon name="i-lucide-message-circle" class="size-5" />
-                </div>
-              </div>
-
-              <div>
-                <div class="relative grid grid-cols-2 gap-3">
-                  <NuxtLink v-for="c in canaisPrincipais" :key="c.name" :to="c.href" :external="c.external" :target="c.external ? '_blank' : undefined" :rel="c.external ? 'noopener noreferrer' : undefined" class="group relative min-h-35 overflow-hidden rounded-2xl border border-white/8 bg-black/30 p-4 transition-all duration-300 hover:-translate-y-1" :style="cardStyle(c.brand)">
-                    <span class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,var(--brand-bg),transparent_70%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                    <span class="relative mb-4 flex size-11 items-center justify-center rounded-xl bg-(--brand-bg) text-(--brand) transition-all duration-300 group-hover:scale-105 group-hover:bg-(--brand) group-hover:text-white group-hover:shadow-[0_8px_24px_var(--brand-glow)]">
-                      <UIcon :name="c.icon" class="size-5" />
-                    </span>
-                    <span class="relative block font-[Barlow_Condensed] text-xl font-bold uppercase tracking-[0.04em] text-white">{{ c.name }}</span>
-                    <span class="relative mt-1 line-clamp-2 block break-all text-xs font-medium leading-snug text-white/45">{{ c.handle }}</span>
-                  </NuxtLink>
-                </div>
-
-                <UPopover>
-                  <UButton block variant="soft" color="neutral" trailing-icon="i-lucide-chevron-down" class="relative mt-4 justify-center border border-white/8 bg-white/5 font-semibold text-white hover:bg-white/10">
-                    Ver todos os canais
-                  </UButton>
-
-                  <template #content>
-                    <div class="w-80 space-y-2 rounded-2xl border border-white/10 bg-[#0b0b0b] p-3 shadow-2xl shadow-black/50">
-                      <NuxtLink v-for="c in canais" :key="`popover-${c.name}`" :to="c.href" :external="c.external" :target="c.external ? '_blank' : undefined" :rel="c.external ? 'noopener noreferrer' : undefined" class="flex items-center gap-3 rounded-xl px-3 py-2.5 transition hover:bg-white/8" :style="cardStyle(c.brand)">
-                        <span class="flex size-9 shrink-0 items-center justify-center rounded-lg bg-(--brand-bg) text-(--brand)">
-                          <UIcon :name="c.icon" class="size-4" />
-                        </span>
-                        <span class="min-w-0 flex-1">
-                          <span class="block text-sm font-semibold text-white">{{ c.name }}</span>
-                          <span class="block truncate text-xs text-white/45">{{ c.handle }}</span>
-                        </span>
-                        <UIcon name="i-lucide-external-link" class="size-4 text-white/30" />
-                      </NuxtLink>
-                    </div>
-                  </template>
-                </UPopover>
-              </div>
+          <div
+            class="flex items-center justify-between gap-3 rounded-3xl border border-line bg-rocha/90 p-4 backdrop-blur sm:p-5">
+            <div>
+              <p class="label text-faint">{{ text.where }}</p>
+              <p class="mt-1 text-[0.9375rem] font-semibold">{{ text.country }}</p>
             </div>
+            <a
+              href="https://maps.app.goo.gl/FGUcQ1ZqUXyxKMsT8"
+              target="_blank"
+              rel="noopener"
+              :aria-label="text.open"
+              class="flex size-10 shrink-0 items-center justify-center rounded-full border border-line-strong transition-colors hover:border-red hover:text-red">
+              <Icon name="ph:map-pin" class="size-4" />
+            </a>
           </div>
-        </div>
-      </UContainer>
-    </section>
-
-    <section class="relative pb-25 pt-4">
-      <UContainer class="relative z-10">
-        <div class="relative mx-auto max-w-230 overflow-hidden rounded-3xl border border-red-500/25 bg-linear-to-br from-[#0a0a0a] to-[#1a0606] p-8 text-center md:p-14">
-          <div class="pointer-events-none absolute -top-1/2 left-1/2 h-125 w-150 -translate-x-1/2 bg-[radial-gradient(ellipse_50%_50%,rgba(253,1,22,0.18),transparent_60%)]" />
-
-          <div class="relative">
-            <div class="mb-5 inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-red-500 before:block before:h-px before:w-6 before:bg-red-500 after:block after:h-px after:w-6 after:bg-red-500">
-              Atendimento especializado
-            </div>
-            <h2 class="mb-5 font-[Barlow_Condensed] text-[clamp(32px,4vw,46px)] font-extrabold leading-tight tracking-tight">
-              Suporte para quem opera no campo.
-            </h2>
-            <p class="mx-auto mb-9 max-w-130 text-base leading-[1.65] text-white/75">
-              Suporte para ferramentas de sondagem, produtos técnicos e soluções para operações de campo.
-            </p>
-
-            <div class="mx-auto mb-8 grid max-w-130 grid-cols-1 gap-3 text-left sm:grid-cols-2">
-              <div class="flex items-center gap-3.5 rounded-[10px] border border-white/8 bg-white/4 px-5 py-4 transition-all duration-300 hover:border-red-500/30 hover:bg-white/6">
-                <div class="flex size-9 shrink-0 items-center justify-center rounded-lg bg-red-500/10 text-red-500">
-                  <UIcon name="i-lucide-mail" class="size-4" />
-                </div>
-                <div class="min-w-0 flex-1">
-                  <div class="mb-0.5 text-[10px] uppercase tracking-[0.18em] text-white/45">E-mail</div>
-                  <NuxtLink to="mailto:ramoncuri@explotools.com.br" class="wrap-break-word text-sm font-medium text-white transition-colors hover:text-red-500">
-                    ramoncuri@explotools.com.br
-                  </NuxtLink>
-                </div>
-              </div>
-
-              <div class="flex items-center gap-3.5 rounded-[10px] border border-white/8 bg-white/4 px-5 py-4 transition-all duration-300 hover:border-red-500/30 hover:bg-white/6">
-                <div class="flex size-9 shrink-0 items-center justify-center rounded-lg bg-red-500/10 text-red-500">
-                  <UIcon name="i-lucide-map-pin" class="size-4" />
-                </div>
-                <div>
-                  <div class="mb-0.5 text-[10px] uppercase tracking-[0.18em] text-white/45">Localização</div>
-                  <div class="text-sm font-medium text-white">Brasil</div>
-                </div>
-              </div>
-            </div>
-
-            <UButton to="https://wa.link/c1di0k" external target="_blank" color="error" size="lg" icon="i-simple-icons-whatsapp" class="px-9 py-4.5 font-semibold uppercase tracking-[0.06em] shadow-[0_6px_24px_rgba(253,1,22,0.35)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(253,1,22,0.55)]">
-              Falar no WhatsApp
-            </UButton>
-          </div>
-        </div>
-      </UContainer>
-    </section>
-  </div>
+        </Motion>
+      </div>
+    </div>
+  </section>
 </template>
-
