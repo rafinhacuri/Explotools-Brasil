@@ -1,16 +1,20 @@
 <script setup lang="ts">
+  const text = { skip: 'Pular para o conteúdo' }
 </script>
 
 <template>
-  <Header />
-   <UMain>
-    <slot />
-    <UButton class="fixed right-5 bottom-5 z-50 size-14 animate-bounce rounded-full bg-[#5BF070] text-white transition-opacity ease-in-out" :ui="{}" @click="navigateTo('https://wa.link/c1di0k', { open: { target: '_blank' } })">
-      <template #leading>
-        <UIcon name="ic-baseline-whatsapp" class="size-96" />
-      </template>
-    </UButton>
-
-  </UMain>
-  <Footer />
+  <div>
+    <a
+      href="#main"
+      class="sr-only z-70 rounded-full bg-red px-4 py-2 text-sm text-osso focus:not-sr-only focus:fixed focus:top-3 focus:left-3">
+      {{ text.skip }}
+    </a>
+    <Header />
+    <DepthGauge />
+    <main id="main" class="relative">
+      <slot />
+    </main>
+    <Footer />
+    <WhatsAppFab />
+  </div>
 </template>
