@@ -1,84 +1,122 @@
 import process from 'node:process'
 
-const { NUXT_PUBLIC_PRODUCTION, NUXT_PUBLIC_SITE_URL, MONGO_URL, MONGO_USERNAME, MONGO_PASSWORD, MONGO_DB_NAME, DEV_URL, DEV_KEY, DEV_CERT } = process.env
+import tailwindcss from '@tailwindcss/vite'
+
+const { DEV_URL, DEV_KEY, DEV_CERT } = process.env
 
 export default defineNuxtConfig({
-  modules: ['nuxt-auth-utils', '@nuxtjs/seo', 'nuxt-security', '@nuxt/ui', '@vueuse/nuxt', 'nuxt-aos', '@nuxt/image'],
+  modules: [
+    '@nuxt/image',
+    '@nuxtjs/seo',
+    '@vueuse/nuxt',
+    'nuxt-security',
+    'nuxt-auth-utils',
+    '@vercel/analytics',
+    '@vercel/speed-insights',
+    '@nuxt/a11y',
+    '@nuxt/hints',
+    '@nuxt/fonts',
+    '@nuxt/icon',
+    '@nuxt/scripts',
+    'reka-ui/nuxt',
+    'motion-v/nuxt',
+  ],
   devtools: { enabled: true },
   app: {
     head: {
+      htmlAttrs: { lang: 'pt-BR' },
       templateParams: { separator: '•' },
-      meta: [{ name: 'facebook-domain-verification', content: '2aur1h4ul3t9qi39592a7ogeuekoig' }],
-      script: [
-        {
-          id: 'meta-pixel',
-          type: 'text/javascript',
-          innerHTML: `!function(f,b,e,v,n,t,s)
-            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-            n.queue=[];t=b.createElement(e);t.async=!0;
-            t.src=v;s=b.getElementsByTagName(e)[0];
-            s.parentNode.insertBefore(t,s)}(window, document,'script',
-            'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', '1809820002998809')`,
-        },
-      ],
-      noscript: [
-        {
-          innerHTML: `<img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1809820002998809&ev=PageView&noscript=1" />`,
-        },
+      meta: [
+        { name: 'theme-color', content: '#0a0a0b' },
+        { name: 'facebook-domain-verification', content: '2aur1h4ul3t9qi39592a7ogeuekoig' },
       ],
     },
   },
-  css: ['~/assets/global.css'],
+  css: ['~/assets/main.css'],
   site: {
-    name: 'Explotools Brasil | Ferramentas para Sondagem',
-    description: 'Líder na América Latina em materiais de sondagem. Com 20 anos de experiência, alta tecnologia e presença em mais de 13 países, oferecemos produtos de qualidade importada a preços competitivos. Aumente sua produtividade e eficiência com nossa inovação',
+    url: 'https://explotools.com.br/',
+    name: 'Explotools Brasil',
+    description:
+      'Fabricante de ferramentas e consumíveis para sondagem diamantada wireline. Overshots, cabeçotes, molas, cabeças d’água e acessórios nos diâmetros BQ, NQ, HQ e PQ, com qualidade de importado a preço nacional.',
     identity: { type: 'Organization' },
+    defaultLocale: 'pt-BR',
   },
   runtimeConfig: {
-    MONGO_URL,
-    MONGO_USERNAME,
-    MONGO_PASSWORD,
-    MONGO_DB_NAME,
-    public: { PRODUCTION: NUXT_PUBLIC_PRODUCTION, SITE_URL: NUXT_PUBLIC_SITE_URL },
-  },
-  hooks: {
-    close: (nuxt) => {
-      if (!nuxt.options._prepare) process.exit(0);
-    },
+    mongoUrl: '',
+    mongoDbName: 'explotools',
+    public: { siteUrl: 'https://explotools.com.br' },
   },
   devServer: {
     host: DEV_URL,
-    https: DEV_KEY && DEV_CERT ? { key: DEV_KEY, cert: DEV_CERT } : false,
+    https: DEV_KEY && DEV_CERT ? { key: DEV_KEY, cert: DEV_CERT } : undefined,
   },
-  compatibilityDate: '2025-08-06',
-  nitro: { experimental: { asyncContext: true } },
-  linkChecker: { enabled: false },
-  robots: { disallow: ['/lead', '/obrigado', '/login'] },
-  security: {
-    headers: {
-      crossOriginEmbedderPolicy: 'unsafe-none',
-      contentSecurityPolicy: {
-        'img-src': ['\'self\'', 'data:', 'blob:', 'https://www.facebook.com', 'https://www.facebook.net', 'https:'],
-        'script-src': ['\'self\'', '\'unsafe-inline\'', '\'unsafe-eval\'', '\'wasm-unsafe-eval\'', 'https://connect.facebook.net', 'https://va.vercel-scripts.com', 'https:'],
-        'style-src': ['\'self\'', '\'unsafe-inline\'', 'https:'],
-        'font-src': ['\'self\'', 'data:', 'https:'],
-        'connect-src': [
-          '\'self\'',
-          'ws:',
-          'wss:',
-          'https://www.facebook.com',
-          'https://www.facebook.net',
-          'https://capig.madgicx.ai',
-          'https://api.iconify.design',
-          'https://api.simplesvg.com',
-          'https://api.unisvg.com',
-          'https:',
-        ],
-        'worker-src': ['\'self\'', 'blob:'],
-      },
+  compatibilityDate: '2026-10-24',
+  vite: {
+    plugins: [tailwindcss()],
+    optimizeDeps: {
+      include: ['three', 'three/addons/environments/RoomEnvironment.js', 'lenis'],
     },
   },
+  fonts: {
+    families: [
+      {
+        name: 'Saira',
+        provider: 'google',
+        global: true,
+        weights: ['400 900'],
+        styles: ['normal', 'italic'],
+        subsets: ['latin', 'latin-ext'],
+        providerOptions: { google: { experimental: { variableAxis: { wdth: [['50', '125']] } } } },
+      },
+      {
+        name: 'Archivo',
+        provider: 'google',
+        global: true,
+        weights: ['300 700'],
+        styles: ['normal'],
+        subsets: ['latin', 'latin-ext'],
+      },
+      {
+        name: 'JetBrains Mono',
+        provider: 'google',
+        global: true,
+        weights: ['400 600'],
+        styles: ['normal'],
+        subsets: ['latin'],
+      },
+    ],
+  },
+  icon: {
+    cssLayer: 'base',
+    serverBundle: { collections: ['ph', 'simple-icons'] },
+  },
+  linkChecker: { enabled: false },
+  robots: { disallow: ['/lead', '/obrigado', '/login', '/adm'] },
+  scripts: {
+    registry: {
+      metaPixel: { id: '1809820002998809', bundle: false, proxy: false, trigger: 'onNuxtReady' },
+    },
+  },
+  security: {
+    headers: {
+      contentSecurityPolicy: {
+        'img-src': ["'self'", 'data:', 'blob:', 'https:'],
+        'script-src': [
+          "'self'",
+          'https:',
+          "'unsafe-inline'",
+          "'strict-dynamic'",
+          "'nonce-{{nonce}}'",
+          "'wasm-unsafe-eval'",
+        ],
+        'connect-src': ["'self'", 'https:', 'wss:'],
+        'media-src': ["'self'", 'blob:'],
+        'worker-src': ["'self'", 'blob:'],
+        'frame-src': ["'self'"],
+        'object-src': ["'self'"],
+      },
+      crossOriginEmbedderPolicy: false,
+    },
+  },
+  sitemap: { exclude: ['/lead', '/obrigado', '/login', '/adm', '/selecao-matriz/**'] },
 })
