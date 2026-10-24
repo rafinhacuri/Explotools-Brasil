@@ -1,64 +1,165 @@
 <script setup lang="ts">
-useHead({ title: `Login` })
+  import { safeParse } from 'valibot'
 
-definePageMeta({
-  layout: false,
-})
+  definePageMeta({ layout: 'bare' })
 
-const toast = useToast()
-
-const { start, finish, isLoading } = useLoadingIndicator()
-
-const state = ref<User>({ user: '', senha: '' })
-const show = ref(false)
-
-async function login(){
-  start()
-
-  const body = UserSchema.safeParse(state.value)
-  if(!body.success){
-    toast.add({ title: body.error.issues[0]?.message || '', icon: 'i-heroicons-exclamation-triangle', color: 'error' })
-    return finish({ error: true })
+  const text = {
+    title: 'Entrar',
+    panel: 'Painel administrativo',
+    loginTitle: 'Entrar no painel',
+    loginLede: 'Acesse com o e-mail e a senha de administrador.',
+    setupBadge: 'Primeiro acesso',
+    setupTitle: 'Crie a conta de administrador',
+    setupLede:
+      'Ainda não existe nenhum usuário. Esta conta será a primeira do painel — depois, só ela poderá criar novos acessos.',
+    email: 'E-mail',
+    password: 'Senha',
+    confirm: 'Confirme a senha',
+    show: 'Mostrar senha',
+    hide: 'Esconder senha',
+    enter: 'Entrar',
+    create: 'Criar conta e entrar',
+    back: 'Voltar ao site',
+    quote: 'Contra a hora parada.',
   }
 
-  const res = await $fetch('/auth', { method: 'post', body: body.data })
-    .catch(error => { toast.add({ title: error.data.message, icon: 'i-heroicons-exclamation-triangle', color: 'error' }) })
+  useHead({ title: text.title })
+  useSeoMeta({ robots: 'noindex' })
 
-  finish({ error: true })
+  const { loginSchema, adminSchema } = useAdminSchema()
+  const { errors, collect, clear } = useFormErrors()
+  const { fetch: refreshSession } = useUserSession()
+  const toast = useToast()
 
-  if(!res) return finish({ error: true })
+  const { data: setup } = await useFetch('/api/setup', { default: () => ({ open: false }) })
+  const firstAccess = computed(() => setup.value.open)
 
-  toast.add({ title: res, icon: 'i-heroicons-check-circle', color: 'success' })
-  finish()
-  await navigateTo('/adm')
-}
+  const state = ref<AdminSchema>({ email: '', senha: '', confirmacao: '' })
+  const show = ref(false)
+  const loading = ref(false)
+
+  async function submit(): Promise<void> {
+    const schema = firstAccess.value ? adminSchema : loginSchema
+    const body = safeParse(schema, state.value)
+    if (!body.success) {
+      collect(body.issues)
+      return
+    }
+    clear()
+    loading.value = true
+    try {
+      const message = await $fetch(firstAccess.value ? '/api/setup' : '/api/auth/login', {
+        method: 'POST',
+        body: body.output,
+      })
+      await refreshSession()
+      toast.success(message)
+      await navigateTo('/adm')
+    } catch (error) {
+      toast.fail(error)
+    } finally {
+      loading.value = false
+    }
+  }
 </script>
 
 <template>
-  <section class="min-h-screen bg-[url('/fundo.jpeg')] bg-cover bg-center bg-no-repeat">
-    <div class="mx-auto flex min-h-screen flex-col items-center justify-center px-6">
-      <div class="w-full rounded-lg bg-white shadow sm:max-w-md md:mt-0 xl:p-0 ">
-        <div class="space-y-4 p-6 sm:p-8 md:space-y-6">
-          <h1 class="ms-2 text-xl leading-tight font-bold tracking-tight text-gray-900 md:text-2xl ">
-            Explotools - Login
-          </h1>
-          <UForm :schema="UserSchema" :state="state" class="space-y-4" @submit="login">
-            <UFormField label="Email" name="user">
-              <UInput v-model="state.user" icon="i-heroicons-user" class="w-full" @keydown.enter="login" />
-            </UFormField>
-
-            <UFormField label="Senha" name="senha">
-              <UInput v-model="state.senha" icon="i-heroicons-key" class="w-full" :type="show ? 'text' : 'password'" @keydown.enter="login">
-                <template #trailing>
-                  <UButton color="neutral" variant="link" size="sm" :icon="show ? 'i-lucide-eye-off' : 'i-lucide-eye'" :aria-label="show ? 'Esconder senha' : 'Ver senha'" :aria-pressed="show" aria-controls="password" @click="show = !show" />
-                </template>
-              </UInput>
-            </UFormField>
-
-            <UButton label="Entrar" :loading="isLoading" variant="solid" size="xl" class="w-full justify-center rounded-full text-center transition duration-200 hover:bg-blue-600 " trailing-icon="i-heroicons-arrow-right-end-on-rectangle" @click="login" />
-          </UForm>
+  <div class="grid min-h-dvh lg:grid-cols-[1.1fr_1fr]">
+    <aside class="relative hidden overflow-hidden border-r border-line lg:block">
+      <Strata :layers="7" :seed="17" :depth="200" :vein="4" />
+      <div
+        aria-hidden="true"
+        class="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_30%_30%,rgb(254_0_24/0.22)_0%,transparent_70%)]" />
+      <div class="relative flex h-full flex-col justify-between p-12">
+        <NuxtLink to="/" class="text-[1.5rem]" :aria-label="text.back">
+          <Logo tagline />
+        </NuxtLink>
+        <div>
+          <p class="label text-red">{{ text.panel }}</p>
+          <p class="mt-4 display text-[clamp(4rem,7vw,7rem)] leading-[0.84]">{{ text.quote }}</p>
         </div>
       </div>
+    </aside>
+
+    <div class="relative flex items-center justify-center px-5 py-12 sm:px-8">
+      <div class="w-full max-w-md">
+        <NuxtLink
+          to="/"
+          class="mb-12 inline-block text-[1.375rem] lg:hidden"
+          :aria-label="text.back">
+          <Logo tagline />
+        </NuxtLink>
+
+        <Motion
+          :initial="{ opacity: 0, y: 20 }"
+          :animate="{ opacity: 1, y: 0 }"
+          :transition="{ type: 'spring', bounce: 0, duration: 0.8 }">
+          <span
+            v-if="firstAccess"
+            class="inline-flex items-center gap-2 rounded-full border border-red/40 bg-red/10 px-3 py-1.5 label text-red">
+            <Icon name="ph:sparkle-fill" class="size-3.5" />
+            {{ text.setupBadge }}
+          </span>
+          <h1 class="mt-4 display text-[clamp(2.75rem,6vw,4rem)] leading-[0.9]">
+            {{ firstAccess ? text.setupTitle : text.loginTitle }}
+          </h1>
+          <p class="mt-4 text-[0.9375rem] text-muted">
+            {{ firstAccess ? text.setupLede : text.loginLede }}
+          </p>
+
+          <form class="mt-10 flex flex-col gap-5" novalidate @submit.prevent="submit">
+            <Field
+              v-model="state.email"
+              :label="text.email"
+              name="email"
+              type="email"
+              inputmode="email"
+              autocomplete="username"
+              :error="errors.email" />
+            <Field
+              v-model="state.senha"
+              :label="text.password"
+              name="senha"
+              :type="show ? 'text' : 'password'"
+              :autocomplete="firstAccess ? 'new-password' : 'current-password'"
+              :error="errors.senha">
+              <template #trailing>
+                <button
+                  type="button"
+                  class="absolute top-1/2 right-2 flex size-9 -translate-y-1/2 items-center justify-center rounded-lg text-fg/60 hover:text-fg"
+                  :aria-label="show ? text.hide : text.show"
+                  :aria-pressed="show"
+                  @click="show = !show">
+                  <Icon :name="show ? 'ph:eye-slash' : 'ph:eye'" class="size-5" />
+                </button>
+              </template>
+            </Field>
+            <Field
+              v-if="firstAccess"
+              v-model="state.confirmacao"
+              :label="text.confirm"
+              name="confirmacao"
+              :type="show ? 'text' : 'password'"
+              autocomplete="new-password"
+              :error="errors.confirmacao" />
+            <Btn
+              type="submit"
+              size="lg"
+              :loading="loading"
+              trailing="ph:arrow-right"
+              class="mt-2 w-full">
+              {{ firstAccess ? text.create : text.enter }}
+            </Btn>
+          </form>
+
+          <NuxtLink
+            to="/"
+            class="mt-10 inline-flex items-center gap-2 text-[0.875rem] text-muted hover:text-fg">
+            <Icon name="ph:arrow-left" class="size-4" />
+            {{ text.back }}
+          </NuxtLink>
+        </Motion>
+      </div>
     </div>
-  </section>
+  </div>
 </template>
