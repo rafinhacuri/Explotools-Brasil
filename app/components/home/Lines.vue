@@ -100,7 +100,7 @@
                 </div>
               </div>
 
-              <div class="absolute inset-0 lg:relative">
+              <div class="absolute inset-0 overflow-hidden lg:relative">
                 <img
                   :src="line.cover.src"
                   :alt="line.cover.title"
