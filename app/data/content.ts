@@ -18,7 +18,6 @@ interface Category {
 interface Photo {
   id: number
   src: string
-  thumb: string
   title: string
   category: string
 }
@@ -198,7 +197,6 @@ const photos: Photo[] = Array.from({ length: 30 }, (_, index) => {
   return {
     id,
     src: `/produtos/${id}.webp`,
-    thumb: `/produtos/thumb/${id}.webp`,
     title: titles[id] ?? category.name,
     category: category.id,
   }

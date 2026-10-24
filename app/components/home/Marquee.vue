@@ -26,10 +26,11 @@
     class="relative z-10 -mt-[10vh] overflow-hidden py-24 select-none">
     <Motion class="-mx-[5%] rotate-[2.5deg]" :style="{ x: shiftA }">
       <div class="flex w-max animate-marquee gap-3 [--marquee-duration:70s]">
-        <img
+        <NuxtImg
           v-for="(photo, index) in [...strip, ...strip]"
           :key="index"
-          :src="photo.thumb"
+          :src="photo.src"
+          width="320"
           alt=""
           loading="lazy"
           class="size-44 shrink-0 rounded-xl object-cover sm:size-56" />

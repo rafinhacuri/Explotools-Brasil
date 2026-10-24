@@ -68,7 +68,8 @@
   const visible = computed(() =>
     filter.value === 'todos' ? photos : photos.filter((photo) => photo.category === filter.value),
   )
-  const sources = photos.map((photo) => photo.thumb)
+  const img = useImage()
+  const sources = photos.map((photo) => img(photo.src, { width: 640 }))
 
   function openPhoto(id: number): void {
     filter.value = 'todos'
@@ -216,8 +217,9 @@
                   type="button"
                   class="group relative block size-full overflow-hidden rounded-2xl border border-line bg-rocha text-left"
                   @click="openVisible(index)">
-                  <img
-                    :src="photo.thumb"
+                  <NuxtImg
+                    :src="photo.src"
+                    width="320"
                     :alt="photo.title"
                     loading="lazy"
                     class="size-full object-cover transition-transform duration-700 ease-out-quint group-hover:scale-110" />

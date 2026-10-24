@@ -171,17 +171,18 @@
                     ? 'animate-[rise_30s_linear_infinite]'
                     : 'animate-[fall_30s_linear_infinite]'
                 ">
-                <img
+                <NuxtImg
                   v-for="(src, i) in [...column, ...column]"
                   :key="i"
-                  :src="`/lead/thumb/${src.split('/').pop()}`"
+                  :src="src"
+                  width="320"
                   alt=""
                   class="aspect-square w-full rounded-xl object-cover" />
               </div>
             </div>
             <div class="flex-1 overflow-hidden">
               <div class="flex animate-[rise_38s_linear_infinite] flex-col gap-3">
-                <img
+                <NuxtImg
                   v-for="(src, i) in [
                     ...leadPhotos.slice(3),
                     ...leadPhotos.slice(0, 3),
@@ -189,7 +190,8 @@
                     ...leadPhotos.slice(0, 3),
                   ]"
                   :key="i"
-                  :src="`/lead/thumb/${src.split('/').pop()}`"
+                  :src="src"
+                  width="320"
                   alt=""
                   class="aspect-square w-full rounded-xl object-cover" />
               </div>

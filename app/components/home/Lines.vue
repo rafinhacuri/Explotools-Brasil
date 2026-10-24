@@ -109,10 +109,12 @@
                 <div
                   class="absolute inset-0 bg-linear-to-r from-rocha via-rocha/40 to-transparent lg:via-transparent" />
                 <div class="absolute right-5 bottom-5 hidden gap-2 lg:flex">
-                  <img
+                  <NuxtImg
                     v-for="(photo, p) in line.rest"
                     :key="photo.id"
-                    :src="photo.thumb"
+                    :src="photo.src"
+                    width="320"
+                    densities="x1"
                     :alt="photo.title"
                     loading="lazy"
                     class="size-20 rounded-xl object-cover ring-1 ring-fg/15 transition-transform duration-500 ease-spring group-hover:-translate-y-2"
