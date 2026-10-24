@@ -59,9 +59,9 @@
     progress.value = value
   })
   const textY = useTransform(scrollYProgress, (value) => -120 * band(value, 0, 0.6))
-  const textOpacity = useTransform(scrollYProgress, (value) => 1 - band(value, 0.05, 0.4))
-  const helixOpacity = useTransform(scrollYProgress, (value) => 1 - band(value, 0.25, 0.5))
-  const helixScale = useTransform(scrollYProgress, (value) => 1 - band(value, 0.25, 0.5) * 0.12)
+  const textOpacity = useTransform(scrollYProgress, (value) => 1 - band(value, 0.1, 0.45))
+  const helixOpacity = useTransform(scrollYProgress, (value) => 1 - band(value, 0.4, 0.78))
+  const helixScale = useTransform(scrollYProgress, (value) => 1 - band(value, 0.4, 0.78) * 0.12)
 
   const filter = ref('todos')
   const lightbox = ref<number | null>(null)
@@ -93,12 +93,14 @@
 
 <template>
   <div>
-    <section ref="hero" class="relative h-[200vh]">
+    <section ref="hero" class="relative h-[160vh]">
       <div class="sticky top-0 h-dvh overflow-hidden">
         <div
           aria-hidden="true"
           class="absolute inset-0 bg-[radial-gradient(ellipse_50%_60%_at_70%_50%,rgb(254_0_24/0.16)_0%,transparent_70%)]" />
-        <Motion class="absolute inset-0" :style="{ opacity: helixOpacity, scale: helixScale }">
+        <Motion
+          class="absolute inset-0 mask-[linear-gradient(to_bottom,#000_72%,transparent)]"
+          :style="{ opacity: helixOpacity, scale: helixScale }">
           <ProdutosHelixStage
             :progress="progress"
             :sources="sources"
