@@ -46,6 +46,12 @@ export default defineNuxtConfig({
     mongoDbName: 'explotools',
     public: { siteUrl: 'https://explotools.com.br' },
   },
+  routeRules: {
+    '/api/**': { security: { rateLimiter: { tokensPerInterval: 120, interval: 60_000 } } },
+    '/api/_nuxt_icon/**': { security: { rateLimiter: false } },
+    '/api/auth/**': { security: { rateLimiter: { tokensPerInterval: 10, interval: 300_000 } } },
+    '/api/setup': { security: { rateLimiter: { tokensPerInterval: 10, interval: 300_000 } } },
+  },
   devServer: {
     host: DEV_URL,
     https: DEV_KEY && DEV_CERT ? { key: DEV_KEY, cert: DEV_CERT } : undefined,
@@ -98,6 +104,7 @@ export default defineNuxtConfig({
     },
   },
   security: {
+    rateLimiter: false,
     headers: {
       contentSecurityPolicy: {
         'img-src': ["'self'", 'data:', 'blob:', 'https:'],
