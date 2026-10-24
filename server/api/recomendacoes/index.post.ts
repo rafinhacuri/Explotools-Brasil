@@ -1,12 +1,13 @@
-import { v4 } from 'uuid'
+import { randomUUID } from 'node:crypto'
 
-export default defineEventHandler(async event => {
-  await requireUserSession(event, { statusCode: 401, message: 'Você não tem pemissão para executar essa ação' })
+import { useRecomendacaoSchema } from '~~/app/composables/useRecomendacaoSchema'
 
-  const body = await readValidatedBody(event, RecomendacaoSchema.safeParse)
-  if(!body.success) throw createError({ status: 400, message: body.error.issues[0]?.message || '' })
+const { recomendacaoSchema } = useRecomendacaoSchema()
 
-  const { abrasividade, granulometria, diametro, formacao, objetivo, mohs, rocha, email } = body.data
+export default defineEventHandler(async (event): Promise<RecomendacaoMongo> => {
+  const { email } = await requireLead(event)
+  const input = await validBody(event, recomendacaoSchema)
+  const { abrasividade, granulometria, diametro, formacao, objetivo, mohs, rocha } = input
 
   const abra = mapAbra(abrasividade)
   const form = mapForm(formacao)
@@ -16,20 +17,21 @@ export default defineEventHandler(async event => {
 
   // Propriedades da rocha (eqc/cai/ucs) — da base quando reconhecida, senão estimadas.
   const rock = findRock(rocha)
-  const eqc = rock?.eqc ?? (abra === 'high' ? 60 : abra === 'medium' ? 28 : 5)
-  const cai = rock?.cai ?? (abra === 'high' ? 4.2 : abra === 'medium' ? 2.5 : 1.0)
+  const fallback = ABRA_DEFAULTS[abra]
+  const eqc = rock?.eqc ?? fallback.eqc
+  const cai = rock?.cai ?? fallback.cai
   const ucs = rock ? `${rock.ucs[0]}–${rock.ucs[1]} MPa` : '—'
 
   const matriz = computeMatrix(mohs, abra, form)
-  const ds = decideSeries(mohs, abra, form)
+  const series = decideSeries(mohs, abra, form)
   const eq = equivalents(mohs, abra)
-  const cp = crownProfile(mohs, abra, form, obj)
+  const crown = crownProfile(mohs, abra, form, obj)
   const ops = opNumbers(size, abra, grain, form)
 
   const recomendacao: RecomendacaoMongo = {
-    uid: v4(),
-    email: email || '',
-    rocha: rocha || '',
+    uid: randomUUID(),
+    email,
+    rocha: rock?.n ?? rocha ?? '',
     mohs,
     eqc,
     cai,
@@ -43,11 +45,11 @@ export default defineEventHandler(async event => {
     matriz: String(matriz),
     matrizPalavra: matrixWord(matriz),
     abrVariante: abra === 'high' ? 'Sim' : 'Não',
-    serie: ds.serie,
-    serieAlt: ds.alt,
-    areaAberta: cp.openness,
-    canalCoroa: cp.waterway,
-    alturaCoroa: cp.crown,
+    serie: series.serie,
+    serieAlt: series.alt,
+    areaAberta: crown.openness,
+    canalCoroa: crown.waterway,
+    alturaCoroa: crown.crown,
     diCorpo: eq.dicorp,
     fordiaEpiroc: eq.hero,
     boartLongyear: eq.bl,
@@ -63,7 +65,9 @@ export default defineEventHandler(async event => {
     createdAt: new Date().toISOString(),
   }
 
-  await new Recomenacoes(recomendacao).save()
+  await new Recomendacoes(recomendacao)
+    .save()
+    .catch(() => failed('Não foi possível salvar a recomendação'))
 
   return recomendacao
 })
