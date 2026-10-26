@@ -4,7 +4,7 @@
     description: { type: String, default: 'Qualidade de importado a preço nacional.' },
   })
 
-  const facts = ['Fabricante', 'BQ · NQ · NQ2 · HQ · PQ', '+12 países']
+  const facts = ['Fabricante', 'BO · NO · NO2 · HO · PO', '+12 países']
 
   function svg(viewBox: string, path: string, color: string): string {
     const markup = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}"><path fill="${color}" d="${path}"/></svg>`

@@ -8,7 +8,7 @@
     'Contra a hora parada',
     'Nós fabricamos — não revendemos',
     'Cotação no mesmo dia',
-    'BQ · NQ · NQ2 · HQ · PQ',
+    'BO · NO · NO2 · HO · PO',
   ]
 
   const section = useTemplateRef<HTMLElement>('section')
