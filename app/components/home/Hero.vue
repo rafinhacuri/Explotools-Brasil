@@ -11,8 +11,8 @@
     lede: 'Fabricante de consumíveis e ferramentas para sondagem wireline, com qualidade de padrão internacional e atendimento ágil. Produtos de alta performance que reduzem horas paradas por quebra de ferramental, a preço competitivo.',
     products: 'Ver produtos',
     talk: 'Fale conosco',
-    hintMouse: 'Passe o mouse na coroa',
-    hintTouch: 'Toque na coroa',
+    hintMouse: 'Passe o mouse no cabeçote',
+    hintTouch: 'Toque no cabeçote',
     diameters: 'Diâmetros',
     scroll: 'Role para perfurar',
   }
