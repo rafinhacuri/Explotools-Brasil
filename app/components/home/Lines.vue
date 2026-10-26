@@ -30,16 +30,21 @@
   const x = useTransform(smooth, (value) => -value * distance.value)
   const bar = useTransform(scrollYProgress, [0, 1], ['0%', '100%'])
 
-  const lines = categories.map((category, index) => ({
-    id: category.id,
-    name: category.name,
-    short: category.short,
-    description: category.description,
-    icon: category.icon,
-    index,
-    cover: photoById(category.photos[0] ?? 1),
-    rest: category.photos.slice(1, 4).map((id) => photoById(id)),
-  }))
+  const lines = categories.map((category, index) => {
+    const items = category.photos.map((id) => photoById(id))
+    const shots = items.filter((photo) => !photo.sheet)
+    return {
+      id: category.id,
+      name: category.name,
+      short: category.short,
+      description: category.description,
+      icon: category.icon,
+      index,
+      sheet: items.find((photo) => photo.sheet),
+      cover: pick(shots, 0),
+      rest: shots.slice(0, 3),
+    }
+  })
 </script>
 
 <template>
@@ -101,14 +106,29 @@
               </div>
 
               <div
-                class="absolute inset-0 overflow-hidden lg:left-[42%] lg:mask-[linear-gradient(90deg,transparent_0%,#000_45%)]">
+                class="absolute inset-0 overflow-hidden lg:left-[42%]"
+                :class="
+                  line.sheet ? '' : 'lg:mask-[linear-gradient(90deg,transparent_0%,#000_45%)]'
+                ">
                 <img
                   :src="line.cover.src"
                   :alt="line.cover.title"
                   loading="lazy"
-                  class="size-full origin-right object-cover opacity-35 transition-transform duration-[1.4s] ease-out-quint group-hover:scale-105 lg:opacity-100" />
+                  class="size-full origin-right object-cover opacity-35 transition-transform duration-[1.4s] ease-out-quint group-hover:scale-105"
+                  :class="line.sheet ? 'lg:hidden' : 'lg:opacity-100'" />
                 <div
                   class="absolute inset-0 bg-linear-to-r from-rocha via-rocha/40 to-transparent lg:hidden" />
+                <div
+                  v-if="line.sheet"
+                  class="absolute inset-0 hidden items-center justify-center px-10 pt-10 pb-32 lg:flex">
+                  <NuxtImg
+                    :src="line.sheet.src"
+                    width="900"
+                    densities="x1"
+                    :alt="line.sheet.title"
+                    loading="lazy"
+                    class="max-h-full w-auto rounded-xl bg-osso shadow-float ring-1 ring-fg/10 transition-transform duration-[1.4s] ease-out-quint group-hover:scale-[1.03]" />
+                </div>
                 <div class="absolute right-5 bottom-5 hidden gap-2 lg:flex">
                   <NuxtImg
                     v-for="(photo, p) in line.rest"

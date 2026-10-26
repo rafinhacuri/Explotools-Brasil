@@ -20,6 +20,7 @@ interface Photo {
   src: string
   title: string
   category: string
+  sheet: boolean
 }
 
 interface Principle {
@@ -122,7 +123,7 @@ const categories: Category[] = [
     short: 'Recuperação de testemunho',
     description: 'Para recuperação de testemunho com precisão e confiabilidade.',
     icon: 'ph:anchor-simple',
-    photos: [28, 22, 8, 6],
+    photos: [31, 6, 30, 8, 25],
   },
   {
     id: 'cabecotes',
@@ -130,7 +131,7 @@ const categories: Category[] = [
     short: 'Operação contínua',
     description: 'Projetados para alta durabilidade e vedação em operação contínua.',
     icon: 'ph:gauge',
-    photos: [10, 30, 18, 13],
+    photos: [32, 10, 33, 34, 28, 7, 18, 3, 29, 20, 26],
   },
   {
     id: 'molas',
@@ -139,7 +140,7 @@ const categories: Category[] = [
     description:
       'Componentes críticos para captura de testemunho, fabricados com controle rigoroso de tolerância.',
     icon: 'ph:spiral',
-    photos: [26, 23, 27, 12],
+    photos: [35, 36, 23, 24, 27],
   },
   {
     id: 'cabecas-dagua',
@@ -147,7 +148,7 @@ const categories: Category[] = [
     short: 'Alta pressão',
     description: 'Vedação e desempenho para operação contínua em alta pressão.',
     icon: 'ph:drop',
-    photos: [5, 21, 2, 20],
+    photos: [37, 38, 21, 39, 40, 41],
   },
   {
     id: 'cortadores',
@@ -155,7 +156,7 @@ const categories: Category[] = [
     short: 'Corte limpo',
     description: 'Corte limpo, resistência ao desgaste e vida útil prolongada.',
     icon: 'ph:scissors',
-    photos: [11, 24, 25, 16],
+    photos: [42, 43, 11, 16],
   },
   {
     id: 'bombas',
@@ -163,7 +164,7 @@ const categories: Category[] = [
     short: 'Manutenção em campo',
     description: 'Kits e componentes para manutenção rápida em campo.',
     icon: 'ph:wrench',
-    photos: [14, 15, 9, 17, 29],
+    photos: [44, 2, 45, 46, 47, 5, 4, 48, 17],
   },
   {
     id: 'acessorios',
@@ -171,39 +172,73 @@ const categories: Category[] = [
     short: 'Consumíveis',
     description: 'Manga trava, barriletes e demais itens consumíveis de operação.',
     icon: 'ph:toolbox',
-    photos: [1, 3, 4, 19, 7],
+    photos: [49, 50, 12, 1, 51, 52, 53],
   },
 ]
 
 const titles: Record<number, string> = {
-  9: 'Assento de válvula',
-  14: 'Kit de reparo da bomba d’água 420/435/535',
-  15: 'Kit de reparo da válvula de alívio 435/535',
-  22: 'Pino lança (spearhead point)',
-  26: 'Molas',
-  29: 'Arruelas',
+  1: 'Adaptadores',
+  2: 'Componentes da bomba d’água 435',
+  3: 'Bucha indicadora de chegada',
+  4: 'Cilindro cerâmico',
+  5: 'Cup 435',
+  6: 'Destorcedor',
+  7: 'Caixa do tubo de retração',
+  8: 'Lifting dog',
+  10: 'Cabeçote HO montado',
+  11: 'Navalhas',
+  12: 'Anel estabilizador de bronze',
+  18: 'Corpo inferior',
+  20: 'Arruela Nord-Lock',
+  21: 'Gaxetas',
+  23: 'Caixa de mola',
+  24: 'Mola cesto',
+  25: 'Telegrama',
+  26: 'Molas do kit furo seco',
+  27: 'Molas',
+  28: 'Ponta e base do arpão',
+  29: 'Válvulas interruptoras de fluido',
+  30: 'Luva de segurança',
+  31: 'Catálogo · Overshot HO',
+  32: 'Catálogo · Cabeçote HO',
+  33: 'Ponta do arpão',
+  34: 'Válvulas interruptoras de fluido',
+  35: 'Catálogo · Caixa de mola, mola e anel trava',
+  36: 'Caixa de mola, mola e anel trava',
+  37: 'Catálogo · Cabeça d’água K-25.000',
+  38: 'Cabeça d’água K-25.000',
+  39: 'Porta-gaxeta de bronze',
+  40: 'Eixo',
+  41: 'Rolamento axial',
+  42: 'Catálogo · Cortador HW/HWT',
+  43: 'Cortador de revestimento HW/HWT',
+  44: 'Catálogo · Bomba d’água 435',
+  45: 'Pistão de bronze',
+  46: 'Copos',
+  47: 'Assento de válvula',
+  48: 'Juntas de cobre',
+  49: 'Catálogo · Barrilete HO',
+  50: 'Manga trava',
+  51: 'Chaves',
+  52: 'Armador de tubos partidos',
+  53: 'Stuffing box AW',
 }
 
-function categoryOf(id: number): Category {
-  return (
-    categories.find((category) => category.photos.includes(id)) ??
-    pick(categories, categories.length - 1)
-  )
-}
+// Páginas do catálogo geral: abrem cada conjunto e aparecem inteiras, sem corte.
+const sheets = new Set([31, 32, 35, 37, 42, 44, 49])
 
-const photos: Photo[] = Array.from({ length: 30 }, (_, index) => {
-  const id = index + 1
-  const category = categoryOf(id)
-  return {
+const photos: Photo[] = categories.flatMap((category) =>
+  category.photos.map((id) => ({
     id,
     src: `/produtos/${id}.webp`,
     title: titles[id] ?? category.name,
     category: category.id,
-  }
-})
+    sheet: sheets.has(id),
+  })),
+)
 
 function photoById(id: number): Photo {
-  return pick(photos, id - 1)
+  return photos.find((photo) => photo.id === id) ?? pick(photos, 0)
 }
 
 const principles: Principle[] = [
