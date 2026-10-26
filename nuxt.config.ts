@@ -37,7 +37,7 @@ export default defineNuxtConfig({
     url: 'https://explotools.com.br/',
     name: 'Explotools Brasil',
     description:
-      'Fabricante de ferramentas e consumíveis para sondagem diamantada wireline. Overshots, cabeçotes, molas, cabeças d’água e acessórios nos diâmetros BQ, NQ, HQ e PQ, com qualidade de importado a preço nacional.',
+      'Fabricante de ferramentas e consumíveis para sondagem diamantada wireline. Overshots, cabeçotes, molas, cabeças d’água e acessórios nos diâmetros BO, NO, HO e PO, com qualidade de importado a preço nacional.',
     identity: { type: 'Organization' },
     defaultLocale: 'pt-BR',
   },

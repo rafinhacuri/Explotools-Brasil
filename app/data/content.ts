@@ -60,7 +60,7 @@ const brand = {
   email: 'ramoncuri@explotools.com.br',
   whatsapp: 'https://wa.link/c1di0k',
   instagram: 'https://www.instagram.com/explotools.brasil',
-  diameters: ['BQ', 'NQ', 'NQ2', 'HQ', 'PQ'],
+  diameters: ['BO', 'NO', 'NO2', 'HO', 'PO'],
 }
 
 const channels: Channel[] = [
