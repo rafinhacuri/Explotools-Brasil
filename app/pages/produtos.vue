@@ -71,7 +71,8 @@
     filter.value === 'todos' ? photos : photos.filter((photo) => photo.category === filter.value),
   )
   const img = useImage()
-  const sources = photos.map((photo) => img(photo.src, { width: 640 }))
+  const reel = photos.filter((photo) => !photo.sheet)
+  const sources = reel.map((photo) => img(photo.src, { width: 640 }))
 
   function openPhoto(id: number): void {
     filter.value = 'todos'
@@ -104,7 +105,7 @@
           <ProdutosHelixStage
             :progress="progress"
             :sources="sources"
-            @open="(index: number) => openPhoto(index + 1)" />
+            @open="(index: number) => openPhoto(pick(reel, index).id)" />
         </Motion>
 
         <Motion
@@ -219,14 +220,16 @@
               <Tilt class="aspect-square">
                 <button
                   type="button"
-                  class="group relative block size-full overflow-hidden rounded-2xl border border-line bg-rocha text-left"
+                  class="group relative block size-full overflow-hidden rounded-2xl border border-line text-left"
+                  :class="photo.sheet ? 'bg-osso' : 'bg-rocha'"
                   @click="openVisible(index)">
                   <NuxtImg
                     :src="photo.src"
                     width="320"
                     :alt="photo.title"
                     loading="lazy"
-                    class="size-full object-cover transition-transform duration-700 ease-out-quint group-hover:scale-110" />
+                    class="size-full transition-transform duration-700 ease-out-quint group-hover:scale-110"
+                    :class="photo.sheet ? 'object-contain p-2' : 'object-cover'" />
                   <span
                     class="absolute inset-0 flex flex-col justify-end bg-linear-to-t from-furo/95 via-furo/30 to-transparent p-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100 sm:p-4">
                     <span class="text-[0.875rem] font-semibold">{{ photo.title }}</span>
