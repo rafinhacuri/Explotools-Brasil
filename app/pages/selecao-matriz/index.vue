@@ -2,7 +2,7 @@
   import { safeParse } from 'valibot'
 
   import type { Cond } from '#shared/utils/matriz.engine'
-  import type { Abra, Rock, RockClass } from '#shared/utils/rochas'
+  import type { Abra, Grain, Rock, RockClass } from '#shared/utils/rochas'
 
   const text = {
     title: 'Seleção de coroa',
@@ -12,7 +12,8 @@
     heading: ['Seleção', 'de coroa.'],
     lede: 'Responda 4 perguntas e toque em Obter recomendação. A ferramenta indica a coroa Explotools, a matriz, o canal de água e os parâmetros de operação.',
     step1: 'Qual é a rocha?',
-    step1Lede: 'Digite o nome. A dureza e a abrasividade vêm automaticamente.',
+    step1Lede:
+      'Digite o nome. Dureza, abrasividade e granulometria vêm da rocha, e você pode ajustar.',
     search: 'Buscar rocha',
     searchPlaceholder: 'Ex.: granito, basalto, itabirito…',
     noRock: 'Nenhuma rocha com esse nome. Use “Não achei minha rocha” para definir a dureza.',
@@ -27,7 +28,9 @@
     hardness: 'Dureza de perfuração',
     auto: 'automática pela rocha',
     manual: 'definida manualmente',
-    edit: 'Editar',
+    edit: 'Editar dureza',
+    editHint:
+      'Estes são os valores típicos desta rocha. Seu boletim ou o furo mostram outra coisa? Ajuste aqui: a recomendação usa o que você informar.',
     manualOn: 'Manual',
     unlock: 'Destravar para editar a dureza',
     relock: 'Voltar ao automático',
@@ -42,6 +45,9 @@
     abrasionRock: '(estimada pela rocha)',
     abrasionUser: '(ajustada por você)',
     abrasionDefault: '(padrão: ajuste se souber)',
+    grain: 'Granulometria',
+    grainRock: '(típica da rocha)',
+    grainUser: '(ajustada por você)',
     step2: 'Qual o diâmetro?',
     diameter: 'Diâmetro da coroa',
     step3: 'Como sai o testemunho?',
@@ -80,6 +86,7 @@
   })
 
   const ABRA_LABELS: Record<Abra, string> = { low: 'Baixa', medium: 'Média', high: 'Alta' }
+  const GRAIN_LABELS: Record<Grain, string> = { fino: 'Fina', medio: 'Média', grosso: 'Grossa' }
   const STATUS_LABELS: Record<StatusCoroa, string> = {
     aguardando: 'Aguardando teste',
     atendeu: 'Atendeu',
@@ -123,7 +130,7 @@
     },
     {
       q: 'Qual canal de água usar?',
-      a: 'Standard para rocha compacta e de grão fino: tem mais diamantes na face e dura mais. Wide para rocha de grão grosso, fraturada ou quebrada: dá mais vazão e penetra mais. Lateral/Superflush para formação friável, que lava o testemunho ou perde circulação. Wide e Superflush são indicados a partir do diâmetro N.',
+      a: 'Standard para rocha compacta e de grão fino: tem mais diamantes na face e dura mais. Em rocha dura e compacta, você escolhe entre Standard (mais vida útil) e Turbo (menos área de contato: avança mais, mas gasta mais rápido). Wide para rocha de grão grosso, fraturada ou quebrada: dá mais vazão e penetra mais. Lateral/Superflush para formação friável, que lava o testemunho ou perde circulação. Turbo, Wide e Superflush são indicados a partir do diâmetro N.',
     },
     {
       q: 'Como funciona o histórico e a avaliação?',
@@ -157,6 +164,7 @@
   const manual = ref(false)
   const manualH = ref(5)
   const abra = ref<Abra | null>(null)
+  const grain = ref<Grain | null>(null)
   const matches = computed(() => searchRocks(term.value, 12))
 
   watch(term, (value) => {
@@ -174,6 +182,7 @@
     term.value = found.n
     manual.value = false
     abra.value = found.abra
+    grain.value = found.grain
     searchOpen.value = false
   }
 
@@ -182,7 +191,11 @@
     if (on && !manual.value) manualH.value = startManualH(rock.value)
     manual.value = on
     if (on && !abra.value) abra.value = 'medium'
-    if (!on && !rock.value) abra.value = null
+    if (on && !grain.value) grain.value = 'medio'
+    if (!on && !rock.value) {
+      abra.value = null
+      grain.value = null
+    }
   }
 
   const hardnessValue = computed(() => {
@@ -204,6 +217,19 @@
       const key = (Object.keys(ABRA_LABELS) as Abra[]).find((item) => ABRA_LABELS[item] === label)
       if (key) abra.value = key
     },
+  })
+  const grainLabel = computed({
+    get: () => (grain.value ? GRAIN_LABELS[grain.value] : ''),
+    set: (label: string) => {
+      const key = (Object.keys(GRAIN_LABELS) as Grain[]).find(
+        (item) => GRAIN_LABELS[item] === label,
+      )
+      if (key) grain.value = key
+    },
+  })
+  const grainNote = computed(() => {
+    if (!rock.value) return text.abrasionDefault
+    return grain.value === rock.value.grain ? text.grainRock : text.grainUser
   })
   const abraNote = computed(() => {
     if (!rock.value) return text.abrasionDefault
@@ -275,6 +301,7 @@
           rock.value?.n ?? null,
           manual.value ? manualH.value : null,
           abra.value,
+          grain.value,
           size.value,
           cond.value,
           municipio.value,
@@ -337,6 +364,7 @@
       rocha: rock.value?.n ?? null,
       durezaManual: manual.value ? manualH.value : null,
       abrasividade: abra.value,
+      granulometria: grain.value,
       diametro: size.value,
       testemunho: cond.value,
       uf: uf.value,
@@ -585,6 +613,11 @@
                   </span>
                 </div>
 
+                <p v-if="rock && !manual" class="flex gap-2 text-[0.8125rem] text-fg/85">
+                  <Icon name="ph:pencil-simple-line" class="mt-0.5 size-4 shrink-0 text-red" />
+                  {{ text.editHint }}
+                </p>
+
                 <p v-if="rock?.variable && !manual" class="flex gap-2 text-[0.8125rem] text-fg/85">
                   <Icon name="ph:warning" class="mt-0.5 size-4 shrink-0 text-red" />
                   {{ text.variable }}
@@ -668,6 +701,10 @@
                   v-model="abraLabel"
                   :label="`${text.abrasion} ${abraNote}`"
                   :options="Object.values(ABRA_LABELS)" />
+                <MatrizSegmented
+                  v-model="grainLabel"
+                  :label="`${text.grain} ${grainNote}`"
+                  :options="Object.values(GRAIN_LABELS)" />
               </div>
             </Transition>
           </div>
@@ -849,8 +886,10 @@
               v-if="result"
               :key="result.uid"
               :data="result"
+              editable
               :class="stale ? 'pointer-events-none opacity-40 grayscale' : ''"
-              :aria-hidden="stale">
+              :aria-hidden="stale"
+              @canal="(recomendacao) => (result = recomendacao)">
               <template #actions>
                 <Btn variant="ghost" icon="ph:link" @click="share">{{ text.copy }}</Btn>
               </template>

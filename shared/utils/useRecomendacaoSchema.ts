@@ -18,10 +18,12 @@ import type { InferInput } from 'valibot'
 import { UF_SIGLAS } from './ufs'
 
 export const ABRASIVIDADES = ['low', 'medium', 'high'] as const
-export const DIAMETROS = ['BQ', 'NQ', 'NQ2', 'HQ', 'PQ'] as const
+export const GRANULOMETRIAS = ['fino', 'medio', 'grosso'] as const
+export const DIAMETROS = ['BO', 'NO', 'NO2', 'HO', 'PO'] as const
 export const TESTEMUNHOS = ['compacta', 'fraturada', 'friavel'] as const
 export const AVALIACOES = ['atendeu', 'ajustada'] as const
 export const PROBLEMAS = ['polindo', 'desgaste', 'lavando', 'outro'] as const
+export const PRIORIDADES = ['vida', 'avanco'] as const
 
 export function useRecomendacaoSchema() {
   const recomendacaoSchema = object(
@@ -35,6 +37,7 @@ export function useRecomendacaoSchema() {
         ),
       ),
       abrasividade: nullish(picklist(ABRASIVIDADES, 'Escolha a abrasividade')),
+      granulometria: nullish(picklist(GRANULOMETRIAS, 'Escolha a granulometria')),
       diametro: picklist(DIAMETROS, 'Escolha o diâmetro da coroa'),
       testemunho: picklist(TESTEMUNHOS, 'Diga como sai o testemunho'),
       uf: picklist(UF_SIGLAS, 'Escolha o estado da sondagem'),
@@ -51,7 +54,11 @@ export function useRecomendacaoSchema() {
     problema: optional(picklist(PROBLEMAS, 'Diga o que aconteceu no furo')),
   })
 
-  return { recomendacaoSchema, avaliacaoSchema }
+  const canalSchema = object({
+    prioridade: picklist(PRIORIDADES, 'Escolha entre vida útil e avanço'),
+  })
+
+  return { recomendacaoSchema, avaliacaoSchema, canalSchema }
 }
 
 export type RecomendacaoSchema = InferInput<

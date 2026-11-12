@@ -5,14 +5,16 @@
    15 = liga mais MACIA (rocha dura, de grão fino, competente, pouco abrasiva).
    A dureza de perfuração da rocha escolhe a faixa; abrasividade, condição do
    testemunho e granulometria ajustam dentro dela. Canal de água pelas regras
-   escritas da mesma tabela. Mudanças técnicas: confirmar com o Rafael.
+   escritas da mesma tabela; Turbo como opção de avanço em rocha dura e inteira.
+   Mudanças técnicas: confirmar com o Rafael.
    =========================================================================== */
 import { CLASSES, findRock } from './rochas'
 import type { Abra, Grain, Rock, RockClass } from './rochas'
 
-type Size = 'BQ' | 'NQ' | 'NQ2' | 'HQ' | 'PQ'
+type Size = 'BO' | 'NO' | 'NO2' | 'HO' | 'PO'
 type Cond = 'compacta' | 'fraturada' | 'friavel'
-type Waterway = 'Standard' | 'Wide' | 'Lateral/Superflush'
+type Waterway = 'Standard' | 'Turbo' | 'Wide' | 'Lateral/Superflush'
+type Priority = 'vida' | 'avanco'
 type Problem = 'polindo' | 'desgaste' | 'lavando' | 'outro'
 
 interface Matrix {
@@ -37,6 +39,7 @@ interface MatrixDecision {
 
 interface WaterwayChoice {
   type: Waterway
+  options: Waterway[]
   reason: string
   note: string
   trigger: string
@@ -64,8 +67,10 @@ interface CrownInput {
   cond?: Cond | null
   manualH?: number | null
   abra?: Abra | null
+  grain?: Grain | null
   matrixShift?: number
   forceWaterway?: Waterway | null
+  prefer?: Priority | null
 }
 
 interface CrownRec {
@@ -83,6 +88,7 @@ interface CrownRec {
   fieldShift: number
   atLimit: boolean
   waterway: WaterwayChoice
+  prefer: Priority
   adjust: { up: string | null; down: string | null }
   ops: OpNumbers
   equiv: Equivalents
@@ -97,6 +103,8 @@ interface Entrada {
   testemunho: Cond
   ajusteMatriz: number
   canalForcado: Waterway | null
+  prioridade: Priority | null
+  granulometria: Grain | null
 }
 
 /* Faixa de dureza (Mohs de perfuração) coberta por cada matriz, medida no guia
@@ -115,25 +123,27 @@ const MATRICES: Matrix[] = [
   { id: '14-15', lo: 8.12, hi: 10 },
 ]
 
-const SIZES: readonly Size[] = ['BQ', 'NQ', 'NQ2', 'HQ', 'PQ']
+const SIZES: readonly Size[] = ['BO', 'NO', 'NO2', 'HO', 'PO']
 const CONDITIONS: readonly Cond[] = ['compacta', 'fraturada', 'friavel']
-const N_OR_LARGER: Record<Size, boolean> = { BQ: false, NQ: true, NQ2: true, HQ: true, PQ: true }
+const N_OR_LARGER: Record<Size, boolean> = { BO: false, NO: true, NO2: true, HO: true, PO: true }
 
 // Parâmetros por diâmetro — referências de fabricantes (Boart Longyear, Dimatec).
 const DIAMETERS: Record<
   Size,
   { rpm: [number, number]; wob: [number, number]; flow: [number, number] }
 > = {
-  BQ: { rpm: [800, 1600], wob: [10, 24], flow: [20, 35] },
-  NQ: { rpm: [600, 1250], wob: [13, 37], flow: [35, 50] },
-  NQ2: { rpm: [600, 1250], wob: [13, 37], flow: [35, 50] },
-  HQ: { rpm: [400, 1000], wob: [20, 56], flow: [50, 70] },
-  PQ: { rpm: [300, 800], wob: [31, 84], flow: [80, 100] },
+  BO: { rpm: [800, 1600], wob: [10, 24], flow: [20, 35] },
+  NO: { rpm: [600, 1250], wob: [13, 37], flow: [35, 50] },
+  NO2: { rpm: [600, 1250], wob: [13, 37], flow: [35, 50] },
+  HO: { rpm: [400, 1000], wob: [20, 56], flow: [50, 70] },
+  PO: { rpm: [300, 800], wob: [31, 84], flow: [80, 100] },
 }
 
 const WATERWAYS: Record<Waterway, string> = {
   Standard:
     'Boa vazão para formação competente e de grão fino. Maior área de contato (mais diamantes na face) e maior vida da coroa.',
+  Turbo:
+    'Menos área de contato na face: corta com menos peso e avança mais. Em troca, gasta mais rápido que o Standard. Para rocha dura e inteira (testemunho compacto).',
   Wide: 'Mais vazão para condição difícil: grão grosso, rocha fraturada ou quebrada. A área de contato menor aumenta a penetração.',
   'Lateral/Superflush':
     'Para testemunho que lava e perda de circulação (formação inconsolidada ou quebrada). Reduz a lavagem do testemunho e os entupimentos. Disponível para tubo padrão ou triplo.',
@@ -221,25 +231,42 @@ function fieldAdjust(id: string): { up: string | null; down: string | null } {
   }
 }
 
-function selectWaterway(cond: Cond, grain: Grain, size: Size): WaterwayChoice {
+/* Turbo (Dimatec, Hayden, Diamond Innovations, Epiroc): rocha dura a muito dura e inteira.
+   Não é regra da tabela, é escolha do cliente entre vida útil (Standard) e avanço (Turbo). */
+const TURBO_CLASSES: readonly RockClass[] = ['dura', 'muito_dura', 'extrema']
+
+function selectWaterway(
+  cond: Cond,
+  grain: Grain,
+  size: Size,
+  cls?: RockClass,
+  prefer?: Priority | null,
+): WaterwayChoice {
   const big = N_OR_LARGER[size]
   let type: Waterway = 'Standard'
   let note = ''
   if (big && cond === 'friavel') type = 'Lateral/Superflush'
   else if (big && (cond === 'fraturada' || grain === 'grosso')) type = 'Wide'
+  const turbo = type === 'Standard' && big && cls !== undefined && TURBO_CLASSES.includes(cls)
+  const options: Waterway[] = turbo ? ['Standard', 'Turbo'] : [type]
+  if (turbo && prefer === 'avanco') type = 'Turbo'
   const smallHard = !big && (cond !== 'compacta' || grain === 'grosso')
   if (smallHard) {
-    note = 'Em BQ a indicação é o Standard: os canais Wide e Superflush são para N e maiores.'
+    note = 'Em BO a indicação é o Standard: os canais Wide e Superflush são para N e maiores.'
   }
-  if (type === 'Standard' && (size === 'HQ' || size === 'PQ')) {
+  if (type === 'Standard' && (size === 'HO' || size === 'PO')) {
     note = `O Standard é indicado para N e menores. Em ${size}, se faltar limpeza da face, use o canal Wide.`
   }
   let trigger = 'rocha compacta de grão fino ou médio'
-  if (smallHard) trigger = 'diâmetro BQ'
+  if (smallHard) trigger = 'diâmetro BO'
   else if (cond === 'friavel') trigger = 'formação friável'
   else if (cond === 'fraturada') trigger = 'testemunho fraturado'
   else if (grain === 'grosso') trigger = 'rocha de grão grosso'
-  return { type, reason: WATERWAYS[type], note, trigger }
+  if (type === 'Turbo') {
+    trigger = 'rocha dura e compacta, priorizando o avanço'
+    note = ''
+  }
+  return { type, options, reason: WATERWAYS[type], note, trigger }
 }
 
 // Ao destravar o cadeado, o valor manual começa na dureza atual (não muda a recomendação).
@@ -374,32 +401,34 @@ function recommendCrown(input: CrownInput): CrownRec | null {
   }
 
   const abra = input.abra ?? rock?.abra ?? 'medium'
-  const grain = rock?.grain ?? 'medio'
+  const grain = input.grain ?? rock?.grain ?? 'medio'
+  const cls = manual || !rock ? classOf(H) : rock.cls
   const decision = matrixDecision(H, abra, cond, grain)
   const shift = input.matrixShift ?? 0
   const want = MATRICES.indexOf(decision.matrix) + shift
   const index = Math.min(Math.max(want, 0), MATRICES.length - 1)
   const matrix = matrixAt(index)
 
-  let waterway = selectWaterway(cond, grain, size)
+  let waterway = selectWaterway(cond, grain, size, cls, input.prefer)
   if (input.forceWaterway) {
     waterway = N_OR_LARGER[size]
       ? {
           type: input.forceWaterway,
+          options: [input.forceWaterway],
           reason: WATERWAYS[input.forceWaterway],
           note: '',
           trigger: 'ajuste de campo: testemunho lavando',
         }
       : {
           ...waterway,
-          note: 'Em BQ o canal Lateral/Superflush não está disponível: reduza a vazão e a rotação para proteger o testemunho.',
+          note: 'Em BO o canal Lateral/Superflush não está disponível: reduza a vazão e a rotação para proteger o testemunho.',
         }
   }
 
   return {
     H,
     manual,
-    cls: manual || !rock ? classOf(H) : rock.cls,
+    cls,
     rock,
     abra,
     grain,
@@ -411,6 +440,7 @@ function recommendCrown(input: CrownInput): CrownRec | null {
     fieldShift: shift,
     atLimit: want !== index,
     waterway,
+    prefer: waterway.type === 'Turbo' ? 'avanco' : 'vida',
     adjust: fieldAdjust(matrix.id),
     ops: opNumbers(size, abra, grain, cond),
     equiv: equivalents(H, abra, manual ? null : rock),
@@ -444,25 +474,43 @@ const PROBLEMS: Record<
   },
 }
 
+// O que a avaliação muda no canal: Turbo que gastou volta ao Standard (antes de mexer na
+// matriz); polindo já na liga mais macia, em rocha que aceita Turbo, passa ao Turbo.
+function turboMove(rec: CrownRec | null, problem: Problem): Priority | null {
+  if (!rec) return null
+  if (problem === 'desgaste' && rec.waterway.type === 'Turbo') return 'vida'
+  const turboFree = rec.waterway.options.includes('Turbo') && rec.waterway.type !== 'Turbo'
+  if (problem === 'polindo' && !rec.adjust.up && turboFree) return 'avanco'
+  return null
+}
+
 function applyFeedback(
   input: CrownInput,
   problem: Problem,
 ): { input: CrownInput; contact: boolean } {
+  const move = turboMove(recommendCrown(input), problem)
+  if (move) return { input: { ...input, prefer: move }, contact: false }
   const found = PROBLEMS[problem]
   const next: CrownInput = { ...input, matrixShift: (input.matrixShift ?? 0) + (found.shift ?? 0) }
   if (found.waterway) next.forceWaterway = found.waterway
   return { input: next, contact: Boolean(found.contact) }
 }
 
-// Sem saída na própria coroa (ponta da escala, BQ ou já em Superflush): falar com o técnico.
+// Sem saída na própria coroa (ponta da escala, BO ou já em Superflush): falar com o técnico.
 function feedbackDeadEnd(rec: CrownRec, problem: Problem): boolean {
   if (problem === 'outro') return true
+  if (turboMove(rec, problem)) return false
   if (problem === 'polindo') return !rec.adjust.up
   if (problem === 'desgaste') return !rec.adjust.down
   return !N_OR_LARGER[rec.size] || rec.waterway.type === 'Lateral/Superflush'
 }
 
 function problemAction(problem: Problem, rec: CrownRec): string {
+  const move = turboMove(rec, problem)
+  if (move === 'vida') return 'Vamos voltar para o canal Standard (mais vida útil), na mesma matriz'
+  if (move === 'avanco') {
+    return 'Já é a liga mais macia: vamos trocar para o canal Turbo, que corta com menos peso'
+  }
   if (problem === 'polindo') {
     return rec.adjust.up
       ? `Vamos subir para a Matriz ${rec.adjust.up} (liga mais macia)`
@@ -475,7 +523,7 @@ function problemAction(problem: Problem, rec: CrownRec): string {
   }
   if (problem === 'lavando') {
     if (!N_OR_LARGER[rec.size]) {
-      return 'Em BQ não existe Superflush: vamos orientar a redução de vazão e rotação'
+      return 'Em BO não existe Superflush: vamos orientar a redução de vazão e rotação'
     }
     return rec.waterway.type === 'Lateral/Superflush'
       ? 'Já está com Superflush: vamos te pôr em contato com o técnico'
@@ -485,6 +533,12 @@ function problemAction(problem: Problem, rec: CrownRec): string {
 }
 
 /* ---------- Entrada salva (histórico no banco) ---------- */
+// Recomendações salvas antes da troca para a série O (BQ, NQ, HQ…) continuam abrindo.
+function normSize(value: string): Size {
+  const size = value.replace(/^(?<serie>[BNHP])Q/u, '$<serie>O')
+  return SIZES.find((item) => item === size) ?? 'NO'
+}
+
 function makeEntrada(input: CrownInput, rec: CrownRec): Entrada {
   return {
     rocha: input.rock?.n ?? null,
@@ -494,18 +548,22 @@ function makeEntrada(input: CrownInput, rec: CrownRec): Entrada {
     testemunho: rec.cond,
     ajusteMatriz: input.matrixShift ?? 0,
     canalForcado: input.forceWaterway ?? null,
+    prioridade: input.prefer ?? null,
+    granulometria: input.grain ?? null,
   }
 }
 
 function inputFromEntrada(entrada: Entrada): CrownInput {
   return {
     rock: findRock(entrada.rocha),
-    size: entrada.diametro,
+    size: normSize(entrada.diametro),
     cond: entrada.testemunho,
     manualH: entrada.durezaManual,
     abra: entrada.abrasividade,
     matrixShift: entrada.ajusteMatriz,
     forceWaterway: entrada.canalForcado,
+    prefer: entrada.prioridade ?? null,
+    grain: entrada.granulometria ?? null,
   }
 }
 
@@ -517,6 +575,7 @@ const PT = {
     string
   >,
   grain: { fino: 'fina', medio: 'média', grosso: 'grossa' } as Record<Grain, string>,
+  prefer: { vida: 'vida útil', avanco: 'avanço' } as Record<Priority, string>,
 }
 
 function fmtBR(value: number): string {
@@ -539,9 +598,13 @@ function quoteDocument(
     '• Coroa impregnada Explotools',
     `• Diâmetro: ${rec.size}`,
     `• Matriz: ${rec.matrix.id} (escala 1–15)`,
-    `• Canal de água: ${rec.waterway.type}`,
+    `• Canal de água: ${rec.waterway.type}${rec.waterway.options.length > 1 ? ` (prioridade: ${PT.prefer[rec.prefer]})` : ''}`,
     '• Quantidade: (informar)',
   )
+  let grainNote = ''
+  if (rec.rock) {
+    grainNote = rec.grain === rec.rock.grain ? ' (típica da rocha)' : ' (ajustada pelo usuário)'
+  }
   let abraNote = ''
   if (rec.rock) {
     abraNote =
@@ -555,7 +618,7 @@ function quoteDocument(
     `• Rocha: ${rec.rock ? rec.rock.n : 'não listada'}`,
     `• Dureza de perfuração: ${CLASSES[rec.cls].label} (Mohs ${fmtBR(rec.H)})${rec.manual ? ' — definida manualmente' : ''}`,
     `• Abrasividade: ${PT.abra[rec.abra]}${abraNote}`,
-    `• Granulometria: ${PT.grain[rec.grain]}`,
+    `• Granulometria: ${PT.grain[rec.grain]}${grainNote}`,
     `• Testemunho: ${PT.cond[rec.cond]}`,
   )
   if (meta.local) lines.push(`• Local da sondagem: ${meta.local}`)
@@ -598,6 +661,7 @@ export type {
   Matrix,
   MatrixDecision,
   OpNumbers,
+  Priority,
   Problem,
   Size,
   Waterway,
@@ -611,6 +675,7 @@ export {
   PROBLEMS,
   PT,
   SIZES,
+  TURBO_CLASSES,
   applyFeedback,
   classOf,
   coveringMatrices,
@@ -619,6 +684,7 @@ export {
   fieldAdjust,
   fmtBR,
   inputFromEntrada,
+  normSize,
   makeEntrada,
   matrixDecision,
   opNumbers,
