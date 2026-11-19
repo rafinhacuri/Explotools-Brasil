@@ -9,6 +9,7 @@
     abrasion: 'Abrasividade',
     matrix: 'Matriz sugerida',
     covers: 'Cobre Mohs',
+    abrasive: 'versão abrasiva',
     full: 'Fazer a seleção completa',
     note: 'A ferramenta completa considera a rocha pelo nome, o diâmetro e o testemunho, e entrega a coroa Explotools com canal de água, rotação, peso, vazão e equivalência entre marcas.',
   }
@@ -27,6 +28,8 @@
   const matrix = computed(() =>
     selectMatrix(hardness.value, keys[abrasion.value], 'compacta', 'medio'),
   )
+  // Abrasividade alta não muda o número: pede a versão abrasiva da mesma matriz (9A).
+  const abrasive = computed(() => abrasion.value === 'Alta')
   const word = computed(() => CLASSES[classOf(hardness.value)].label)
   const position = computed(() => MATRICES.indexOf(matrix.value))
 </script>
@@ -108,13 +111,15 @@
                 leave-active-class="transition duration-150"
                 leave-to-class="-translate-y-6 opacity-0">
                 <span
-                  :key="matrix.id"
+                  :key="`${matrix.id}${abrasive}`"
                   class="display text-[clamp(7rem,16vw,12rem)] leading-[0.78] text-red">
-                  {{ matrix.id }}
+                  {{ matrix.id }}<template v-if="abrasive">A</template>
                 </span>
               </Transition>
               <div class="pb-3">
-                <p class="text-title font-semibold">{{ word }}</p>
+                <p class="text-title font-semibold">
+                  {{ word }}<template v-if="abrasive"> · {{ text.abrasive }}</template>
+                </p>
                 <p class="mt-1 font-mono text-[0.8125rem] text-muted">
                   {{ text.covers }}:
                   <span class="text-fg">{{ fmtBR(matrix.lo) }}–{{ fmtBR(matrix.hi) }}</span>

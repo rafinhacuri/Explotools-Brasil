@@ -102,6 +102,7 @@ export interface RecomendacaoCoroa {
     abrasividade: Abra
     granulometria: Grain
     manual: boolean
+    abrasiva?: boolean
   }
   status: StatusCoroa
   problema: string | null
