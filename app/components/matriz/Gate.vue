@@ -23,6 +23,7 @@
   const { errors, collect, clear } = useFormErrors()
   const { fetch: refreshSession } = useUserSession()
   const toast = useToast()
+  const pixel = usePixel()
   const mode = ref<'login' | 'signup'>('login')
   const email = ref('')
   const loading = ref(false)
@@ -46,6 +47,11 @@
     } finally {
       loading.value = false
     }
+  }
+
+  async function signedUp(value: string): Promise<void> {
+    pixel.track('Lead')
+    await enter(value)
   }
 </script>
 
@@ -108,7 +114,7 @@
             </p>
           </form>
           <div v-else key="signup" class="mt-7">
-            <LeadForm :submit="text.signupSubmit" @done="enter" />
+            <LeadForm :submit="text.signupSubmit" @done="signedUp" />
             <p class="mt-5 text-center text-[0.875rem] text-muted">
               {{ text.haveAccount }}
               <button
