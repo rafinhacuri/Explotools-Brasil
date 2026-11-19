@@ -16,7 +16,8 @@
     logout: 'Sair',
     leads: 'Leads',
     users: 'Usuários',
-    map: 'Mapa',
+    map: 'Coroas',
+    newRule: 'hoje seria',
     total: 'Leads cadastrados',
     wireline: 'Trabalham com wireline',
     recs: 'Recomendações geradas',
@@ -458,12 +459,18 @@
                           class="relative flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-line bg-rocha px-4 py-3">
                           <span
                             class="absolute top-1/2 -left-[1.6rem] size-2.5 -translate-y-1/2 rounded-full bg-red ring-4 ring-furo" />
-                          <div>
+                          <div class="min-w-0">
                             <p class="font-semibold">
                               {{ rec.rocha || `Recomendação ${index + 1}` }}
+                              <span v-if="rec.matriz" class="font-normal text-muted">
+                                · {{ rec.diametro }} · Matriz {{ rec.matriz }}
+                              </span>
                             </p>
                             <p class="font-mono text-[0.75rem] text-muted">
                               {{ formatDate(rec.date) }}
+                              <span v-if="rec.novaRegra" class="text-red">
+                                · {{ text.newRule }} {{ rec.novaRegra }}
+                              </span>
                             </p>
                           </div>
                           <div class="flex items-center gap-2">
@@ -571,7 +578,7 @@
         </TabsContent>
 
         <TabsContent value="mapa" class="mt-8 outline-none">
-          <AdmMapa />
+          <AdmPainel />
         </TabsContent>
       </TabsRoot>
     </div>

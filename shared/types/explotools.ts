@@ -11,7 +11,14 @@ export interface LeadRow {
   wireline?: boolean
   createdAt: string
   lastAccess: string
-  recomendacoes: { uid: string; date: string; rocha: string }[]
+  recomendacoes: {
+    uid: string
+    date: string
+    rocha: string
+    matriz: string
+    diametro: string
+    novaRegra: string | null
+  }[]
 }
 
 export interface AdminRow {
@@ -125,12 +132,24 @@ export interface RecomendacaoResumo {
   createdAt: string
 }
 
-export interface MapaResumo {
-  total: number
-  semLocal: number
-  porUf: { uf: string; total: number }[]
-  cidades: { uf: string; cidade: string; total: number }[]
-  rochasPorUf: Record<string, { rocha: string; total: number }[]>
+// Uma coroa recomendada, pronta para o painel agrupar (mapa, abrasividade, série, cliente).
+export interface PainelRow {
+  uid: string
+  email: string
+  cliente: string
+  empresa: string
+  rocha: string
+  diametro: Size
+  matriz: string
+  serie: string
+  abrasiva: boolean
+  abrasividade: Abra
+  canal: Waterway
+  status: StatusCoroa
+  uf: string | null
+  cidade: string | null
+  createdAt: string
+  novaRegra: string | null
 }
 
 export interface AvaliacaoResposta {
