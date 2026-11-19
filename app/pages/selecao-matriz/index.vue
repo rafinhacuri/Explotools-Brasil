@@ -149,6 +149,7 @@
   const { recomendacaoSchema } = useRecomendacaoSchema()
   const { loggedIn, fetch: refreshSession, clear: clearSession } = useUserSession()
   const toast = useToast()
+  const pixel = usePixel()
   const gate = ref(false)
   const loading = ref(false)
   const result = ref<RecomendacaoCoroa | null>(null)
@@ -379,6 +380,7 @@
       const key = formKey.value
       result.value = await $fetch('/api/recomendacoes', { method: 'POST', body: body.output })
       resultKey.value = key
+      pixel.track('ViewContent')
       await refreshRecent()
       if (globalThis.innerWidth < 1024) await scrollToResult()
     } catch (error) {

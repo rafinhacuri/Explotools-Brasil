@@ -85,6 +85,7 @@
   const canChoose = computed(() => props.editable && props.data.status === 'aguardando')
   const saving = ref(false)
   const toast = useToast()
+  const pixel = usePixel()
 
   async function choose(value: unknown): Promise<void> {
     if (value !== 'vida' && value !== 'avanco') return
@@ -259,6 +260,7 @@
       cliente: user.value?.email,
       local: props.data.local ? `${props.data.local.cidade}/${props.data.local.uf}` : undefined,
     })
+    pixel.track('Contact')
     globalThis.open(
       `https://wa.me/${brand.whatsappPhone}?text=${encodeURIComponent(message)}`,
       '_blank',
