@@ -16,7 +16,8 @@
     logout: 'Sair',
     leads: 'Leads',
     users: 'Usuários',
-    map: 'Mapa',
+    map: 'Coroas',
+    newRule: 'hoje seria',
     total: 'Leads cadastrados',
     wireline: 'Trabalham com wireline',
     recs: 'Recomendações geradas',
@@ -257,7 +258,8 @@
 
     <div class="mx-auto max-w-[100rem] px-4 py-8 sm:px-6">
       <TabsRoot v-model="tab">
-        <TabsList class="relative inline-flex gap-1 rounded-full border border-line bg-rocha p-1">
+        <TabsList
+          class="relative inline-flex max-w-full gap-1 overflow-x-auto rounded-full border border-line bg-rocha p-1">
           <TabsTrigger
             v-for="option in [
               { value: 'leads', label: text.leads, icon: 'ph:address-book' },
@@ -266,7 +268,7 @@
             ]"
             :key="option.value"
             :value="option.value"
-            class="relative flex h-10 items-center gap-2 rounded-full px-5 text-[0.875rem] font-semibold transition-colors data-[state=active]:text-osso data-[state=inactive]:text-muted">
+            class="relative flex h-10 shrink-0 items-center gap-2 rounded-full px-4 text-[0.875rem] font-semibold transition-colors data-[state=active]:text-osso data-[state=inactive]:text-muted sm:px-5">
             <Motion
               v-if="tab === option.value"
               layout-id="adm-tab"
@@ -335,15 +337,15 @@
             </div>
           </div>
 
-          <div class="mt-5 overflow-hidden rounded-3xl border border-line bg-rocha">
+          <div class="mt-5 overflow-x-auto rounded-3xl border border-line bg-rocha">
             <table class="w-full text-left text-[0.875rem]">
               <thead class="border-b border-line">
                 <tr>
-                  <th class="w-12" />
+                  <th class="w-10 sm:w-12" />
                   <th
                     v-for="column in columns"
                     :key="column.key"
-                    class="px-3 py-3 font-medium"
+                    class="px-2 py-3 font-medium sm:px-3"
                     :class="column.hide">
                     <button
                       type="button"
@@ -362,8 +364,11 @@
                         :class="sort.key === column.key ? 'text-red' : ''" />
                     </button>
                   </th>
-                  <th class="px-3 py-3 text-right label text-[0.625rem] text-fg/60">Wireline</th>
-                  <th class="w-28" />
+                  <th
+                    class="hidden px-3 py-3 text-right label text-[0.625rem] text-fg/60 sm:table-cell">
+                    Wireline
+                  </th>
+                  <th class="w-20 sm:w-28" />
                 </tr>
               </thead>
               <tbody>
@@ -371,7 +376,7 @@
                   <tr
                     class="border-b border-line transition-colors hover:bg-fg/[0.025]"
                     :class="expanded === lead._id ? 'bg-fg/[0.03]' : ''">
-                    <td class="py-3 pl-3">
+                    <td class="py-3 pl-1.5 sm:pl-3">
                       <button
                         type="button"
                         class="flex size-8 items-center justify-center rounded-full text-fg/60 hover:bg-fg/5 hover:text-fg"
@@ -384,10 +389,13 @@
                           :class="expanded === lead._id ? 'rotate-180' : ''" />
                       </button>
                     </td>
-                    <td class="px-3 py-3">
-                      <p class="font-semibold">{{ lead.nome }}</p>
-                      <p class="text-[0.8125rem] text-muted">{{ lead.email }}</p>
-                      <p class="text-[0.8125rem] text-faint">{{ lead.telefone }}</p>
+                    <td class="max-w-[9.5rem] px-2 py-3 sm:max-w-none sm:px-3">
+                      <p class="truncate font-semibold">{{ lead.nome }}</p>
+                      <p class="truncate text-[0.8125rem] text-muted md:hidden">
+                        {{ lead.empresa }}
+                      </p>
+                      <p class="truncate text-[0.8125rem] text-muted">{{ lead.email }}</p>
+                      <p class="truncate text-[0.8125rem] text-faint">{{ lead.telefone }}</p>
                     </td>
                     <td class="hidden px-3 py-3 md:table-cell">{{ lead.empresa }}</td>
                     <td class="hidden px-3 py-3 text-muted xl:table-cell">{{ lead.cargo }}</td>
@@ -399,13 +407,13 @@
                       class="hidden px-3 py-3 font-mono text-[0.8125rem] text-muted 2xl:table-cell">
                       {{ formatDate(lead.lastAccess) }}
                     </td>
-                    <td class="px-3 py-3">
+                    <td class="px-1 py-3 sm:px-3">
                       <span
                         class="inline-flex min-w-8 justify-center rounded-full bg-fg/8 px-2.5 py-1 font-mono text-[0.75rem]">
                         {{ lead.recomendacoes.length }}
                       </span>
                     </td>
-                    <td class="px-3 py-3 text-right">
+                    <td class="hidden px-3 py-3 text-right sm:table-cell">
                       <span
                         class="rounded-full px-2.5 py-1 text-[0.75rem] font-semibold"
                         :class="
@@ -424,8 +432,8 @@
                         }}
                       </span>
                     </td>
-                    <td class="py-3 pr-3">
-                      <div class="flex justify-end gap-1">
+                    <td class="py-3 pr-1.5 sm:pr-3">
+                      <div class="flex justify-end sm:gap-1">
                         <button
                           type="button"
                           class="flex size-9 items-center justify-center rounded-full text-fg/60 hover:bg-fg/5 hover:text-fg"
@@ -444,7 +452,7 @@
                     </td>
                   </tr>
                   <tr v-if="expanded === lead._id" class="border-b border-line bg-furo/40">
-                    <td :colspan="columns.length + 3" class="px-4 py-5 sm:px-14">
+                    <td :colspan="columns.length + 3" class="px-3 py-5 sm:px-14">
                       <p
                         v-if="!lead.recomendacoes.length"
                         class="flex items-center gap-2 text-[0.875rem] text-muted">
@@ -458,12 +466,18 @@
                           class="relative flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-line bg-rocha px-4 py-3">
                           <span
                             class="absolute top-1/2 -left-[1.6rem] size-2.5 -translate-y-1/2 rounded-full bg-red ring-4 ring-furo" />
-                          <div>
+                          <div class="min-w-0">
                             <p class="font-semibold">
                               {{ rec.rocha || `Recomendação ${index + 1}` }}
+                              <span v-if="rec.matriz" class="font-normal text-muted">
+                                · {{ rec.diametro }} · Matriz {{ rec.matriz }}
+                              </span>
                             </p>
                             <p class="font-mono text-[0.75rem] text-muted">
                               {{ formatDate(rec.date) }}
+                              <span v-if="rec.novaRegra" class="text-red">
+                                · {{ text.newRule }} {{ rec.novaRegra }}
+                              </span>
                             </p>
                           </div>
                           <div class="flex items-center gap-2">
@@ -571,7 +585,7 @@
         </TabsContent>
 
         <TabsContent value="mapa" class="mt-8 outline-none">
-          <AdmMapa />
+          <AdmPainel />
         </TabsContent>
       </TabsRoot>
     </div>

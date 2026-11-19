@@ -3,7 +3,7 @@ export default defineEventHandler(async (event): Promise<LeadRow[]> => {
 
   const [leads, recomendacoes] = await Promise.all([
     Leads.find().lean(),
-    Recomendacoes.find().select('uid email rocha createdAt').lean(),
+    Recomendacoes.find().select('uid email rocha matriz diametro versao entrada createdAt').lean(),
   ]).catch(() => failed('Não foi possível ler os cadastros'))
 
   const byEmail = Map.groupBy(recomendacoes, (rec) => rec.email)
@@ -23,6 +23,12 @@ export default defineEventHandler(async (event): Promise<LeadRow[]> => {
         .map((rec) => ({
           uid: rec.uid,
           rocha: rec.rocha ?? '',
+          matriz: rec.matriz ?? '',
+          diametro:
+            rec.versao === 2 && rec.diametro ? normSize(rec.diametro) : (rec.diametro ?? ''),
+          // Cotação feita na regra antiga: o que ela seria hoje (só informa, não muda a cotação).
+          novaRegra:
+            rec.versao === 2 && rec.entrada ? (ruleChange(rec.entrada)?.para ?? null) : null,
           date: rec.createdAt ?? rec._id.getTimestamp().toISOString(),
         }))
         .toSorted((a, b) => b.date.localeCompare(a.date)),

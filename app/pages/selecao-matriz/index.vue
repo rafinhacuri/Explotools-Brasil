@@ -114,7 +114,7 @@
   const faq = [
     {
       q: 'Como a matriz é escolhida?',
-      a: 'Usamos o guia de seleção de matrizes da tabela técnica das coroas Explotools. Cada matriz cobre uma faixa de dureza da rocha na escala Mohs. Escolhemos a matriz cuja faixa cobre a dureza da sua rocha e cujo centro está mais próximo dela. Depois aplicamos a regra da tabela: rocha fraturada, friável, abrasiva ou de grão grosso pede um número menor; rocha compacta, pouco abrasiva ou de grão fino pede um número maior.',
+      a: 'Usamos o guia de seleção de matrizes da tabela técnica das coroas Explotools. Cada matriz cobre uma faixa de dureza da rocha na escala Mohs. Escolhemos a matriz cuja faixa cobre a dureza da sua rocha e cujo centro está mais próximo dela. Depois aplicamos a regra da tabela: rocha fraturada, friável ou de grão grosso pede um número menor; rocha compacta, pouco abrasiva ou de grão fino pede um número maior. Em rocha de abrasividade alta, a coroa vai na versão abrasiva da mesma matriz (por exemplo, 9A).',
     },
     {
       q: 'O que significa o número da matriz?',

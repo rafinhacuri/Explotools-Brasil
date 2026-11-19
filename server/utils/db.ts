@@ -84,6 +84,8 @@ const EntradaSchema = new Schema(
     canalForcado: { type: String, required: false, default: null },
     prioridade: { type: String, required: false, default: null },
     granulometria: { type: String, required: false, default: null },
+    versaoAbrasiva: { type: Boolean, required: false, default: null },
+    regra: { type: Number, required: false, default: null },
   },
   { _id: false },
 )
@@ -97,6 +99,7 @@ const ResultadoSchema = new Schema(
     abrasividade: { type: String, required: true },
     granulometria: { type: String, required: true },
     manual: { type: Boolean, required: true },
+    abrasiva: { type: Boolean, required: false },
   },
   { _id: false },
 )

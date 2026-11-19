@@ -13,6 +13,11 @@
     badge: 'Coroa Explotools recomendada',
     manual: 'Dureza definida manualmente',
     adjusted: 'Ajustada em campo',
+    abrasive: 'Versão abrasiva',
+    abrasiveRock:
+      'Rocha de abrasividade alta: a coroa vai na versão abrasiva da mesma matriz, com liga mais resistente ao desgaste. No pedido, ela aparece como',
+    abrasiveField:
+      'A coroa anterior gastou rápido no furo: esta vai na versão abrasiva da mesma matriz. No pedido, ela aparece como',
     kind: 'Coroa impregnada Explotools',
     adjustedLede: 'Ajustada pela sua avaliação de campo:',
     atLimit:
@@ -56,11 +61,13 @@
 
   // Coroa gerada pela avaliação de campo só com troca de canal (Turbo ↔ Standard) também é ajuste.
   const preferMoved = computed(() => Boolean(props.data.parentUid && props.data.entrada.prioridade))
+  const abrasiveMoved = computed(() => Boolean(props.data.entrada.versaoAbrasiva))
   const adjusted = computed(
     () =>
       Boolean(rec.value?.fieldShift) ||
       Boolean(props.data.entrada.canalForcado) ||
-      preferMoved.value,
+      preferMoved.value ||
+      abrasiveMoved.value,
   )
 
   const choices: { value: Priority; title: string; lede: string }[] = [
@@ -130,6 +137,7 @@
         `Matriz ${r.baseMatrix.id} → ${r.matrix.id} (${r.fieldShift > 0 ? text.soft : text.hard})`,
       )
     }
+    if (abrasiveMoved.value) parts.push(`versão abrasiva (${r.label})`)
     if (props.data.entrada.canalForcado || preferMoved.value) {
       parts.push(`canal de água ${r.waterway.type}`)
     }
@@ -173,9 +181,14 @@
         `Rocha dura e compacta: os canais Standard (mais vida útil) e Turbo (mais avanço) servem; a escolha é sua. Prioridade: ${PT.prefer[r.prefer]}.`,
       )
     }
+    if (r.abrasive && !abrasiveMoved.value) {
+      list.push(
+        `Abrasividade alta: versão abrasiva da mesma matriz (${r.label}). A abrasividade escolhe a versão; não muda o número.`,
+      )
+    }
     if (adjusted.value) list.push(`Ajuste de campo pela sua avaliação: ${adjustText.value}`)
     list.push(
-      `Resultado: Matriz ${r.matrix.id}. Canal de água ${r.waterway.type} (granulometria ${PT.grain[r.grain]}, testemunho ${PT.cond[r.cond]}, diâmetro ${r.size}).`,
+      `Resultado: Matriz ${r.label}. Canal de água ${r.waterway.type} (granulometria ${PT.grain[r.grain]}, testemunho ${PT.cond[r.cond]}, diâmetro ${r.size}).`,
     )
     return list
   })
@@ -186,6 +199,10 @@
     const down = r?.adjust.down ? `matriz ${r.adjust.down}` : text.hard
     const turbo = r?.waterway.type === 'Turbo'
     const turboFree = Boolean(r?.waterway.options.includes('Turbo')) && !turbo
+    // Gastou rápido: Turbo volta ao Standard; versão normal vai para a abrasiva; abrasiva desce uma matriz.
+    let wear = `Se repetir, desça para ${down}`
+    if (turbo) wear = 'Se repetir, volte para o canal Standard'
+    else if (r && !r.abrasive) wear = `Se repetir, peça a versão abrasiva (${r.matrix.id}A)`
     return [
       {
         sintoma: 'Face polida (lisa), sem avanço',
@@ -200,9 +217,7 @@
         sintoma: 'Desgaste rápido da coroa',
         causa: 'Liga macia demais ou rocha mais abrasiva que o previsto; pouca água',
         acao: 'Evite o topo da faixa de rotação; aumente a vazão',
-        ajuste: turbo
-          ? 'Se repetir, volte para o canal Standard'
-          : `Se repetir, desça para ${down}`,
+        ajuste: wear,
       },
       {
         sintoma: 'Vibração',
@@ -278,6 +293,11 @@
               class="rounded-full border border-line-strong px-3 py-1 label text-fg/80"
               >{{ text.adjusted }}</span
             >
+            <span
+              v-if="rec.abrasive"
+              class="rounded-full border border-red/50 px-3 py-1 label text-red"
+              >{{ text.abrasive }}</span
+            >
             <span class="font-mono text-[0.75rem] text-faint">{{
               formatDate(props.data.createdAt)
             }}</span>
@@ -318,7 +338,7 @@
                 :initial="{ opacity: 0, y: 30, filter: 'blur(10px)' }"
                 :animate="{ opacity: 1, y: 0, filter: 'blur(0px)' }"
                 :transition="{ type: 'spring', bounce: 0.2, duration: 0.9 }">
-                {{ rec.matrix.id }}
+                {{ rec.label }}
               </Motion>
               <span class="pb-2 font-mono text-[0.8125rem] text-muted">
                 {{ text.scale }}<br />{{ text.covers }} {{ range(rec.matrix) }}
@@ -353,6 +373,14 @@
               <span>← {{ text.hard }}</span>
               <span>{{ text.soft }} →</span>
             </div>
+            <p
+              v-if="rec.abrasive"
+              class="mt-5 rounded-2xl border border-red/30 bg-red/8 px-4 py-3 text-[0.8125rem] text-fg/85">
+              <b>{{ text.abrasive }}.</b>
+              {{ abrasiveMoved ? text.abrasiveField : text.abrasiveRock }}
+              <b class="font-mono">{{ rec.label }}</b
+              >.
+            </p>
           </div>
 
           <div class="flex flex-col bg-rocha p-6 sm:p-8">

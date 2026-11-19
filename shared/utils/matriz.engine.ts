@@ -6,6 +6,7 @@
    A dureza de perfuração da rocha escolhe a faixa; abrasividade, condição do
    testemunho e granulometria ajustam dentro dela. Canal de água pelas regras
    escritas da mesma tabela; Turbo como opção de avanço em rocha dura e inteira.
+   Abrasividade alta parte direto para a VERSÃO ABRASIVA da mesma matriz (ex.: 9A).
    Mudanças técnicas: confirmar com o Rafael.
    =========================================================================== */
 import { CLASSES, findRock } from './rochas'
@@ -15,6 +16,10 @@ type Size = 'BO' | 'NO' | 'NO2' | 'HO' | 'PO'
 type Cond = 'compacta' | 'fraturada' | 'friavel'
 type Waterway = 'Standard' | 'Turbo' | 'Wide' | 'Lateral/Superflush'
 type Priority = 'vida' | 'avanco'
+/* Regra do cálculo. 1 = até nov/2026: abrasividade alta descia uma matriz e não havia versão abrasiva.
+   2 = abrasividade alta usa a versão abrasiva na mesma matriz. Cotação salva guarda a regra dela e reabre igual. */
+type Rules = 1 | 2
+const RULES: Rules = 2
 type Problem = 'polindo' | 'desgaste' | 'lavando' | 'outro'
 
 interface Matrix {
@@ -71,6 +76,8 @@ interface CrownInput {
   matrixShift?: number
   forceWaterway?: Waterway | null
   prefer?: Priority | null
+  forceAbrasive?: boolean | null
+  rules?: Rules | null
 }
 
 interface CrownRec {
@@ -83,6 +90,9 @@ interface CrownRec {
   size: Size
   cond: Cond
   matrix: Matrix
+  abrasive: boolean
+  label: string
+  rules: Rules
   baseMatrix: Matrix
   decision: MatrixDecision
   fieldShift: number
@@ -105,6 +115,8 @@ interface Entrada {
   canalForcado: Waterway | null
   prioridade: Priority | null
   granulometria: Grain | null
+  versaoAbrasiva?: boolean | null
+  regra?: Rules | null
 }
 
 /* Faixa de dureza (Mohs de perfuração) coberta por cada matriz, medida no guia
@@ -180,7 +192,13 @@ function coveringMatrices(H: number): Matrix[] {
 /* Regra escrita da tabela: "quanto maior o número, mais dura, de grão mais fino,
    mais competente e menos abrasiva a rocha; quanto menor, mais quebrada,
    fraturada e abrasiva a formação". */
-function matrixDecision(H: number, abra: Abra, cond: Cond, grain?: Grain): MatrixDecision {
+function matrixDecision(
+  H: number,
+  abra: Abra,
+  cond: Cond,
+  grain?: Grain,
+  rules: Rules = RULES,
+): MatrixDecision {
   const covering = coveringMatrices(H)
   const lowest = covering[0] ?? matrixAt(0)
   const highest = covering.at(-1) ?? lowest
@@ -196,7 +214,7 @@ function matrixDecision(H: number, abra: Abra, cond: Cond, grain?: Grain): Matri
   const shifts: Shift[] = []
   if (cond === 'fraturada') shifts.push({ why: 'testemunho fraturado', d: -1 })
   if (cond === 'friavel') shifts.push({ why: 'formação friável', d: -1 })
-  if (abra === 'high') shifts.push({ why: 'abrasividade alta', d: -1 })
+  if (abra === 'high' && rules === 1) shifts.push({ why: 'abrasividade alta', d: -1 })
   if (cond === 'compacta' && abra === 'low') {
     shifts.push({ why: 'rocha compacta e pouco abrasiva', d: 1 })
   }
@@ -204,7 +222,8 @@ function matrixDecision(H: number, abra: Abra, cond: Cond, grain?: Grain): Matri
   if (grain === 'grosso') shifts.push({ why: 'grão grosso', d: -1 })
 
   const target = MATRICES.indexOf(nominal) + shifts.reduce((sum, shift) => sum + shift.d, 0)
-  const brokenAbr = cond !== 'compacta' && abra === 'high'
+  // Regra 1: quebrada e abrasiva podia descer uma além da faixa. Regra 2: quem cuida disso é a versão abrasiva.
+  const brokenAbr = rules === 1 && cond !== 'compacta' && abra === 'high'
   const minIdx = Math.max(0, MATRICES.indexOf(lowest) - (brokenAbr ? 1 : 0))
   const maxIdx = MATRICES.indexOf(highest)
   const fin = Math.min(Math.max(target, minIdx), maxIdx)
@@ -218,8 +237,14 @@ function matrixDecision(H: number, abra: Abra, cond: Cond, grain?: Grain): Matri
   }
 }
 
-function selectMatrix(H: number, abra: Abra, cond: Cond, grain?: Grain): Matrix {
-  return matrixDecision(H, abra, cond, grain).matrix
+function selectMatrix(
+  H: number,
+  abra: Abra,
+  cond: Cond,
+  grain?: Grain,
+  rules: Rules = RULES,
+): Matrix {
+  return matrixDecision(H, abra, cond, grain, rules).matrix
 }
 
 // Ajuste em campo: subir = liga mais macia (polindo); descer = liga mais dura (desgaste rápido).
@@ -403,7 +428,10 @@ function recommendCrown(input: CrownInput): CrownRec | null {
   const abra = input.abra ?? rock?.abra ?? 'medium'
   const grain = input.grain ?? rock?.grain ?? 'medio'
   const cls = manual || !rock ? classOf(H) : rock.cls
-  const decision = matrixDecision(H, abra, cond, grain)
+  const rules = input.rules ?? RULES
+  const decision = matrixDecision(H, abra, cond, grain, rules)
+  // Versão abrasiva: rocha de abrasividade alta (regra 2) ou coroa que gastou rápido no furo.
+  const abrasive = Boolean(input.forceAbrasive) || (rules === 2 && abra === 'high')
   const shift = input.matrixShift ?? 0
   const want = MATRICES.indexOf(decision.matrix) + shift
   const index = Math.min(Math.max(want, 0), MATRICES.length - 1)
@@ -435,6 +463,9 @@ function recommendCrown(input: CrownInput): CrownRec | null {
     size,
     cond,
     matrix,
+    abrasive,
+    label: `${matrix.id}${abrasive ? 'A' : ''}`,
+    rules,
     baseMatrix: decision.matrix,
     decision,
     fieldShift: shift,
@@ -458,8 +489,8 @@ const PROBLEMS: Record<
     shift: 1,
   },
   desgaste: {
-    label: 'A coroa gastou rápido',
-    action: 'Descer uma matriz: liga mais dura, que dura mais',
+    label: 'A coroa gastou rápido (bordas arredondadas ou calibre gasto), mesmo avançando bem',
+    action: 'Versão abrasiva da mesma matriz; se já for abrasiva, descer uma matriz',
     shift: -1,
   },
   lavando: {
@@ -474,13 +505,21 @@ const PROBLEMS: Record<
   },
 }
 
-// O que a avaliação muda no canal: Turbo que gastou volta ao Standard (antes de mexer na
-// matriz); polindo já na liga mais macia, em rocha que aceita Turbo, passa ao Turbo.
-function turboMove(rec: CrownRec | null, problem: Problem): Priority | null {
+/* O que a avaliação muda antes de mexer no número da matriz:
+   - Turbo que gastou volta ao Standard;
+   - versão normal que gastou passa para a versão abrasiva da mesma matriz (orientação do fornecedor:
+     desgaste rápido, bordas arredondadas ou calibre gasto, mesmo avançando bem);
+   - polindo já na liga mais macia, em rocha que aceita Turbo, passa ao Turbo. */
+type FieldMove = 'standard' | 'turbo' | 'abrasiva'
+
+function fieldMove(rec: CrownRec | null, problem: Problem): FieldMove | null {
   if (!rec) return null
-  if (problem === 'desgaste' && rec.waterway.type === 'Turbo') return 'vida'
+  if (problem === 'desgaste') {
+    if (rec.waterway.type === 'Turbo') return 'standard'
+    return rec.abrasive ? null : 'abrasiva'
+  }
   const turboFree = rec.waterway.options.includes('Turbo') && rec.waterway.type !== 'Turbo'
-  if (problem === 'polindo' && !rec.adjust.up && turboFree) return 'avanco'
+  if (problem === 'polindo' && !rec.adjust.up && turboFree) return 'turbo'
   return null
 }
 
@@ -488,8 +527,11 @@ function applyFeedback(
   input: CrownInput,
   problem: Problem,
 ): { input: CrownInput; contact: boolean } {
-  const move = turboMove(recommendCrown(input), problem)
-  if (move) return { input: { ...input, prefer: move }, contact: false }
+  const move = fieldMove(recommendCrown(input), problem)
+  if (move === 'abrasiva') return { input: { ...input, forceAbrasive: true }, contact: false }
+  if (move) {
+    return { input: { ...input, prefer: move === 'turbo' ? 'avanco' : 'vida' }, contact: false }
+  }
   const found = PROBLEMS[problem]
   const next: CrownInput = { ...input, matrixShift: (input.matrixShift ?? 0) + (found.shift ?? 0) }
   if (found.waterway) next.forceWaterway = found.waterway
@@ -499,26 +541,32 @@ function applyFeedback(
 // Sem saída na própria coroa (ponta da escala, BO ou já em Superflush): falar com o técnico.
 function feedbackDeadEnd(rec: CrownRec, problem: Problem): boolean {
   if (problem === 'outro') return true
-  if (turboMove(rec, problem)) return false
+  if (fieldMove(rec, problem)) return false
   if (problem === 'polindo') return !rec.adjust.up
   if (problem === 'desgaste') return !rec.adjust.down
   return !N_OR_LARGER[rec.size] || rec.waterway.type === 'Lateral/Superflush'
 }
 
 function problemAction(problem: Problem, rec: CrownRec): string {
-  const move = turboMove(rec, problem)
-  if (move === 'vida') return 'Vamos voltar para o canal Standard (mais vida útil), na mesma matriz'
-  if (move === 'avanco') {
+  const move = fieldMove(rec, problem)
+  const version = rec.abrasive ? 'A' : ''
+  if (move === 'standard') {
+    return 'Vamos voltar para o canal Standard (mais vida útil), na mesma matriz'
+  }
+  if (move === 'turbo') {
     return 'Já é a liga mais macia: vamos trocar para o canal Turbo, que corta com menos peso'
+  }
+  if (move === 'abrasiva') {
+    return `Vamos para a versão abrasiva da mesma matriz (${rec.matrix.id}A), que resiste mais ao desgaste`
   }
   if (problem === 'polindo') {
     return rec.adjust.up
-      ? `Vamos subir para a Matriz ${rec.adjust.up} (liga mais macia)`
+      ? `Vamos subir para a Matriz ${rec.adjust.up}${version} (liga mais macia)`
       : 'Já é a liga mais macia: vamos te pôr em contato com o técnico'
   }
   if (problem === 'desgaste') {
     return rec.adjust.down
-      ? `Vamos descer para a Matriz ${rec.adjust.down} (liga mais dura)`
+      ? `Vamos descer para a Matriz ${rec.adjust.down}${version} (liga mais dura)`
       : 'Já é a liga mais dura: vamos te pôr em contato com o técnico'
   }
   if (problem === 'lavando') {
@@ -550,6 +598,8 @@ function makeEntrada(input: CrownInput, rec: CrownRec): Entrada {
     canalForcado: input.forceWaterway ?? null,
     prioridade: input.prefer ?? null,
     granulometria: input.grain ?? null,
+    versaoAbrasiva: input.forceAbrasive ?? null,
+    regra: rec.rules,
   }
 }
 
@@ -564,7 +614,21 @@ function inputFromEntrada(entrada: Entrada): CrownInput {
     forceWaterway: entrada.canalForcado,
     prefer: entrada.prioridade ?? null,
     grain: entrada.granulometria ?? null,
+    forceAbrasive: entrada.versaoAbrasiva ?? null,
+    rules: entrada.regra ?? 1,
   }
+}
+
+/* Painel: o que uma cotação feita na regra antiga viraria com a regra atual. Só para análise:
+   a cotação do cliente não muda. Sem diferença, já na regra atual ou já ajustada em campo: null. */
+function ruleChange(entrada: Entrada): { de: string; para: string } | null {
+  if ((entrada.regra ?? 1) === RULES) return null
+  if (entrada.ajusteMatriz || entrada.versaoAbrasiva || entrada.canalForcado) return null
+  const input = inputFromEntrada(entrada)
+  const before = recommendCrown(input)
+  const after = recommendCrown({ ...input, rules: RULES })
+  if (!before || !after || before.label === after.label) return null
+  return { de: before.label, para: after.label }
 }
 
 /* ---------- Textos ---------- */
@@ -597,7 +661,7 @@ function quoteDocument(
     '*COROA*',
     '• Coroa impregnada Explotools',
     `• Diâmetro: ${rec.size}`,
-    `• Matriz: ${rec.matrix.id} (escala 1–15)`,
+    `• Matriz: ${rec.label} (${rec.abrasive ? 'versão abrasiva · ' : ''}escala 1–15)`,
     `• Canal de água: ${rec.waterway.type}${rec.waterway.options.length > 1 ? ` (prioridade: ${PT.prefer[rec.prefer]})` : ''}`,
     '• Quantidade: (informar)',
   )
@@ -627,6 +691,7 @@ function quoteDocument(
       `• Ajuste de campo: Matriz ${rec.baseMatrix.id} → ${rec.matrix.id} após teste no furo`,
     )
   }
+  if (input.forceAbrasive) lines.push('• Ajuste de campo: versão abrasiva após teste no furo')
   if (input.forceWaterway) lines.push('• Ajuste de campo: canal de água trocado após teste no furo')
   lines.push(
     '',
@@ -644,7 +709,7 @@ function quoteDocument(
 function techText(rec: CrownRec, problem: Problem): string {
   return [
     'Olá, Explotools! Preciso de apoio técnico com esta coroa:',
-    `• Coroa impregnada Explotools ${rec.size} · Matriz ${rec.matrix.id} · Canal ${rec.waterway.type}`,
+    `• Coroa impregnada Explotools ${rec.size} · Matriz ${rec.label} · Canal ${rec.waterway.type}`,
     `• Rocha: ${rec.rock ? rec.rock.n : 'rocha não listada'} (${CLASSES[rec.cls].label}, abrasividade ${PT.abra[rec.abra]})`,
     `• Testemunho: ${PT.cond[rec.cond]}`,
     `• O que aconteceu no furo: ${PROBLEMS[problem].label}`,
@@ -663,6 +728,7 @@ export type {
   OpNumbers,
   Priority,
   Problem,
+  Rules,
   Size,
   Waterway,
   WaterwayChoice,
@@ -674,6 +740,7 @@ export {
   N_OR_LARGER,
   PROBLEMS,
   PT,
+  RULES,
   SIZES,
   TURBO_CLASSES,
   applyFeedback,
@@ -691,6 +758,7 @@ export {
   problemAction,
   quoteDocument,
   recommendCrown,
+  ruleChange,
   selectMatrix,
   selectWaterway,
   startManualH,
