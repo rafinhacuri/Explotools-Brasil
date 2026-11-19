@@ -15,6 +15,7 @@ export interface LeadRow {
     uid: string
     date: string
     rocha: string
+    // matriz = o que foi cotado; novaRegra = a coroa certa hoje, quando a regra mudou depois da cotação
     matriz: string
     diametro: string
     novaRegra: string | null

@@ -17,7 +17,7 @@
     leads: 'Leads',
     users: 'Usuários',
     map: 'Coroas',
-    newRule: 'hoje seria',
+    quoted: 'cotada como',
     total: 'Leads cadastrados',
     wireline: 'Trabalham com wireline',
     recs: 'Recomendações geradas',
@@ -470,13 +470,13 @@
                             <p class="font-semibold">
                               {{ rec.rocha || `Recomendação ${index + 1}` }}
                               <span v-if="rec.matriz" class="font-normal text-muted">
-                                · {{ rec.diametro }} · Matriz {{ rec.matriz }}
+                                · {{ rec.diametro }} · Matriz {{ rec.novaRegra ?? rec.matriz }}
                               </span>
                             </p>
                             <p class="font-mono text-[0.75rem] text-muted">
                               {{ formatDate(rec.date) }}
                               <span v-if="rec.novaRegra" class="text-red">
-                                · {{ text.newRule }} {{ rec.novaRegra }}
+                                · {{ text.quoted }} {{ rec.matriz }}
                               </span>
                             </p>
                           </div>
