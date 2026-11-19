@@ -7,6 +7,9 @@
     total: number
   }
 
+  // Coroa como o painel mostra. `cotada` só vem preenchida quando a cotação saiu diferente do que a tela mostra.
+  type Row = PainelRow & { cotada: string | null }
+
   const text = {
     period: 'Período',
     total: 'Coroas recomendadas',
@@ -22,6 +25,7 @@
     ranking: 'Por estado',
     abrasion: 'Abrasividade das rochas',
     abrasionVersion: 'saíram na versão abrasiva',
+    abrasionVersionToday: 'pedem a versão abrasiva',
     series: 'Séries (matriz)',
     seriesNormal: 'versão normal',
     seriesAbrasive: 'versão abrasiva',
@@ -30,11 +34,18 @@
     cities: 'Cidades com mais coroas',
     byClient: 'Coroas por cliente',
     byClientLede: 'O que cada cliente está pedindo. Toque numa coroa para abrir a recomendação.',
-    rule: 'Cotações antigas × regra nova',
+    view: 'Mostrar as coroas pela',
+    viewNote:
+      'foram cotadas antes da versão abrasiva. Pela regra de hoje, elas entram no painel como a coroa certa agora; a cotação original fica no histórico abaixo.',
+    viewNoteQuoted:
+      'foram cotadas antes da versão abrasiva e aparecem aqui como saíram na época. Pela regra de hoje, a coroa certa é outra.',
+    quoted: 'cotada como',
+    rule: 'Histórico: cotadas antes da versão abrasiva',
     ruleLede:
-      'Estas coroas foram cotadas antes da versão abrasiva. Com a regra de hoje, o resultado seria outro. O cliente continua vendo a coroa que foi cotada: nada foi alterado nem enviado.',
-    ruleNone: 'Nenhuma cotação antiga mudaria com a regra nova.',
-    ruleWould: 'hoje seria',
+      'O que o cliente recebeu na época e qual é a coroa certa pela regra de hoje. A cotação dele não foi alterada e nada foi enviado.',
+    ruleNone: 'Nenhuma cotação antiga mudaria com a regra de hoje.',
+    ruleQuoted: 'cotada',
+    ruleToday: 'hoje',
     empty: 'Nenhuma coroa neste recorte.',
     crowns: 'coroas',
     state: 'Estado',
@@ -58,7 +69,9 @@
     ajustada: 'Precisou ajustar',
   }
 
+  const views = ['Regra de hoje', 'Como foi cotado'] as const
   const periodLabel = ref('Tudo')
+  const view = ref<string>('Regra de hoje')
   const lens = ref<string>('Coroas')
   const serie = ref('')
   const selected = ref<string | null>(null)
@@ -70,12 +83,29 @@
   })
 
   /* ===== Recortes: período e estado ===== */
-  const rows = computed(() => {
+  const inPeriod = computed(() => {
     const days = periods.find((item) => item.label === periodLabel.value)?.days ?? 0
     if (!days) return data.value
     const since = new Date(Date.now() - days * 86_400_000).toISOString()
     return data.value.filter((row) => row.createdAt >= since)
   })
+
+  /* Cotação feita na regra antiga: pela regra de hoje ela conta como a coroa certa agora (10A);
+     "como foi cotado" mostra o que o cliente recebeu (9). */
+  function shown(row: PainelRow): Row {
+    if (view.value !== 'Regra de hoje' || !row.novaRegra) {
+      return { ...row, cotada: null }
+    }
+    return {
+      ...row,
+      matriz: row.novaRegra,
+      serie: row.novaRegra.replace(/A$/u, ''),
+      abrasiva: row.novaRegra.endsWith('A'),
+      cotada: row.matriz,
+    }
+  }
+
+  const rows = computed<Row[]>(() => inPeriod.value.map((row) => shown(row)))
   const scoped = computed(() =>
     selected.value ? rows.value.filter((row) => row.uf === selected.value) : rows.value,
   )
@@ -224,17 +254,27 @@
       }))
       .toSorted((a, b) => b.coroas.length - a.coroas.length),
   )
-  const changed = computed(() => scoped.value.filter((row) => row.novaRegra))
+  // Histórico: sempre a cotação original ao lado da coroa certa hoje, qualquer que seja a chave acima.
+  const changed = computed(() =>
+    inPeriod.value.filter((row) => row.novaRegra && (!selected.value || row.uf === selected.value)),
+  )
 </script>
 
 <template>
   <div class="flex flex-col gap-6">
     <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-      <MatrizSegmented
-        v-model="periodLabel"
-        class="w-full max-w-md"
-        :label="text.period"
-        :options="periods.map((item) => item.label)" />
+      <div class="flex w-full flex-col gap-4 sm:flex-row lg:max-w-3xl">
+        <MatrizSegmented
+          v-model="periodLabel"
+          class="w-full sm:max-w-md"
+          :label="text.period"
+          :options="periods.map((item) => item.label)" />
+        <MatrizSegmented
+          v-model="view"
+          class="w-full sm:max-w-xs"
+          :label="text.view"
+          :options="[...views]" />
+      </div>
       <p
         v-if="selected"
         class="flex flex-wrap items-center gap-3 rounded-full border border-red/40 bg-red/8 py-1.5 pr-1.5 pl-4 text-[0.875rem]">
@@ -250,6 +290,16 @@
         </button>
       </p>
     </div>
+
+    <p
+      v-if="changed.length"
+      class="flex gap-2 rounded-2xl border border-line-strong bg-rocha px-4 py-3 text-[0.875rem] text-fg/85">
+      <Icon name="ph:clock-counter-clockwise" class="mt-0.5 size-4 shrink-0 text-red" />
+      <span>
+        <b class="font-mono">{{ changed.length }}</b> {{ text.crowns }}
+        {{ view === 'Regra de hoje' ? text.viewNote : text.viewNoteQuoted }}
+      </span>
+    </p>
 
     <div class="grid grid-cols-2 gap-3 lg:grid-cols-4">
       <div
@@ -361,7 +411,8 @@
           </li>
         </ul>
         <p class="mt-5 rounded-2xl border border-red/30 bg-red/8 px-4 py-3 text-[0.875rem]">
-          <b class="font-mono text-red">{{ abrasiveVersion }}</b> {{ text.abrasionVersion }} ({{
+          <b class="font-mono text-red">{{ abrasiveVersion }}</b>
+          {{ view === 'Regra de hoje' ? text.abrasionVersionToday : text.abrasionVersion }} ({{
             share(abrasiveVersion, scoped.length)
           }}).
         </p>
@@ -530,6 +581,9 @@
                     <template v-if="coroa.cidade"> · {{ coroa.cidade }}/{{ coroa.uf }}</template>
                     · {{ STATUS[coroa.status] }}
                   </span>
+                  <span v-if="coroa.cotada" class="block font-mono text-[0.6875rem] text-red">
+                    {{ text.quoted }} {{ coroa.cotada }}
+                  </span>
                 </span>
                 <Icon name="ph:arrow-square-out" class="size-4 shrink-0 text-faint" />
               </NuxtLink>
@@ -567,10 +621,12 @@
             </span>
             <span class="shrink-0 text-right">
               <span class="block font-mono text-[0.9375rem] tabular-nums">
-                {{ row.matriz }} <span class="text-faint">→</span>
+                <span class="text-muted">{{ row.matriz }}</span> <span class="text-faint">→</span>
                 <b class="text-red">{{ row.novaRegra }}</b>
               </span>
-              <span class="block text-[0.6875rem] text-faint">{{ text.ruleWould }}</span>
+              <span class="block text-[0.6875rem] text-faint">
+                {{ text.ruleQuoted }} → {{ text.ruleToday }}
+              </span>
             </span>
           </NuxtLink>
         </li>
