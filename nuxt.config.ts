@@ -44,6 +44,14 @@ export default defineNuxtConfig({
   runtimeConfig: {
     mongoUrl: '',
     mongoDbName: 'explotools',
+    mail: {
+      host: 'smtp.resend.com',
+      port: 465,
+      user: 'resend',
+      pass: '',
+      from: 'Site Explotools <site@avisos.explotools.com.br>',
+      to: 'ramoncuri@explotools.com.br',
+    },
     public: { siteUrl: 'https://explotools.com.br' },
   },
   routeRules: {

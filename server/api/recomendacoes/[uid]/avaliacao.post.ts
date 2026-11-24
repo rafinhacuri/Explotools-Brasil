@@ -48,5 +48,36 @@ export default defineEventHandler(async (event): Promise<AvaliacaoResposta> => {
       .catch(() => failed('Não foi possível salvar a coroa ajustada'))
   }
 
+  const quem = await cliente(email)
+  const dados = dadosCoroa(doc)
+  const atendeu = status === 'atendeu'
+  let novaCoroa: string | null = null
+  if (!atendeu) {
+    novaCoroa = ajustada
+      ? `Matriz ${matrizTexto(ajustada)} · Canal ${ajustada.resultado.canal}`
+      : 'Sem ajuste: falar com o técnico'
+  }
+  await avisar({
+    evento: 'Avaliação',
+    assunto: `Coroa ${atendeu ? 'atendeu' : 'precisou ajustar'}: ${dados.rocha} ${dados.diametro} · ${quem.empresa ?? quem.nome}`,
+    titulo: `${quem.nome} avaliou a coroa`,
+    resumo: `${dados.rocha} em ${dados.diametro}, Matriz ${doc.matriz}`,
+    campos: [
+      ['Nome', quem.nome],
+      ['Empresa', quem.empresa],
+      ['Telefone', quem.telefone],
+      ['Rocha', dados.rocha],
+      ['Diâmetro', dados.diametro],
+      ['Matriz testada', dados.matriz],
+      ['Resultado', atendeu ? 'Atendeu' : 'Precisou ajustar'],
+      ['O que aconteceu no furo', problema ? PROBLEMS[problema].label : null],
+      ['Nova coroa', novaCoroa],
+    ],
+    botao: 'Abrir a recomendação',
+    caminho: `/selecao-matriz/${(ajustada ?? doc).uid}`,
+    whatsapp: whatsapp(quem.telefone),
+    responderPara: quem.email,
+  })
+
   return { recomendacao, ajustada }
 })

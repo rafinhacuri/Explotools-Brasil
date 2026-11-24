@@ -6,6 +6,7 @@
   "embeddedLanguageFormatting": "auto",
   "endOfLine": "lf",
   "htmlWhitespaceSensitivity": "css",
+  "ignorePatterns": ["*.hbs"],
   "insertFinalNewline": true,
   "jsxSingleQuote": false,
   "objectWrap": "preserve",

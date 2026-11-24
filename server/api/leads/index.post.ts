@@ -18,5 +18,24 @@ export default defineEventHandler(async (event) => {
     .save()
     .catch(() => failed('Não foi possível salvar o cadastro'))
 
+  await avisar({
+    evento: 'Novo cadastro',
+    assunto: `Novo cadastro: ${lead.nome} · ${lead.empresa}`,
+    titulo: `${lead.nome} se cadastrou`,
+    resumo: `${lead.cargo} na ${lead.empresa}`,
+    campos: [
+      ['Nome', lead.nome],
+      ['Empresa', lead.empresa],
+      ['Cargo', lead.cargo],
+      ['Telefone', telefone],
+      ['E-mail', lead.email],
+      ['Trabalha com wireline', simNao(lead.wireline)],
+    ],
+    botao: 'Abrir o painel',
+    caminho: '/adm',
+    whatsapp: whatsapp(telefone),
+    responderPara: lead.email,
+  })
+
   return 'Cadastro realizado com sucesso'
 })
